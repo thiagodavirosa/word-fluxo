@@ -242,7 +242,7 @@ function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema)
     (c.seta === "inicio" || c.seta === "ambas" ? ` marker-start="url(#seta)"` : "") +
     (c.seta === "fim" || c.seta === "ambas" ? ` marker-end="url(#seta)"` : "");
   const traco = c.traco ?? (c.estilo === "tracejado" ? "tracejado" : "continuo");
-  const marcadorDe = (s: string) => s.replace('url(#seta)', `url(#${idSeta(c.cor)})`);
+  const marcadorDe = (s: string) => s.replaceAll('url(#seta)', `url(#${idSeta(c.cor)})`);
   let svg = `<path d="${caminhoDoConector(d, c)}" fill="none" stroke="${c.cor ?? t.linha}" stroke-width="${num(c.espessura ?? t.espLinha)}"${tracoAttr(traco, t)}${marcadorDe(marcadores)}/>`;
 
   if (c.rotulo) {

@@ -225,3 +225,17 @@ describe("estilos", () => {
     expect(renderSvg(r)).not.toContain("#ff0000");
   });
 });
+
+it("conector com duas setas usa a cor nas duas pontas", () => {
+  const d = validar({
+    schema: "fluxo-word/1.0", id: "s", tipo: "livre", titulo: "s", tela: { largura: 300, altura: 100 },
+    elementos: [
+      { id: "a", forma: "caixa", x: 0, y: 0, w: 80, h: 40, texto: "" },
+      { id: "b", forma: "caixa", x: 200, y: 0, w: 80, h: 40, texto: "" },
+    ],
+    conectores: [{ id: "k", de: "a", para: "b", seta: "ambas", cor: "#d13438" }],
+  });
+  const svg = renderSvg(d);
+  expect(svg).toContain('marker-start="url(#seta-d13438)"');
+  expect(svg).toContain('marker-end="url(#seta-d13438)"');
+});
