@@ -1,13 +1,14 @@
 import dagre from "@dagrejs/dagre";
-import type { Conector, Diagrama, Elemento } from "./esquema";
+import type { Conector, Diagrama, Elemento, EstiloNomeado } from "./esquema";
 import { limites, type Caixa, type Ponto } from "./rotas";
-import { camadas } from "./render";
+import { camadas, elementoEfetivo } from "./render";
+import { FIGURAS, PADROES_FIGURA, ehFigura } from "./figuras";
 
 /** Operações puras sobre o diagrama, usadas pelo editor (cada uma devolve um novo diagrama). */
 
 export type Forma = Elemento["forma"];
 
-const FORMAS_COM_CAIXA: Forma[] = ["caixa", "decisao", "grupo", "raia", "nota", "barra", "retangulo"];
+const FORMAS_COM_CAIXA: Forma[] = [...FIGURAS, "caixa", "decisao", "grupo", "raia", "nota", "barra", "retangulo"];
 export const temCaixa = (e: Elemento): e is Extract<Elemento, { w: number; h: number }> => FORMAS_COM_CAIXA.includes(e.forma);
 
 export function proximoId(d: Diagrama, prefixo: string): string {
@@ -101,6 +102,9 @@ const PADROES: Record<Forma, (id: string, x: number, y: number) => Elemento> = {
   retangulo: (id, x, y) => ({ id, forma: "retangulo", x, y, w: 120, h: 60 }),
   texto: (id, x, y) => ({ id, forma: "texto", x, y, texto: "Texto" }),
   linha: (id, x, y) => ({ id, forma: "linha", x1: x, y1: y, x2: x + 120, y2: y }),
+  ...(Object.fromEntries(
+    FIGURAS.map((f) => [f, (id: string, x: number, y: number) => ({ id, forma: f, x, y, w: PADROES_FIGURA[f].w, h: PADROES_FIGURA[f].h, texto: PADROES_FIGURA[f].texto })]),
+  ) as Record<(typeof FIGURAS)[number], (id: string, x: number, y: number) => Elemento>),
 };
 
 export function adicionar(d: Diagrama, forma: Forma, x: number, y: number): { diagrama: Diagrama; id: string } {
@@ -299,7 +303,7 @@ export function organizar(d: Diagrama, direcao: "horizontal" | "vertical"): Diag
 }
 
 /** Campos de aparência que "copiar estilo" leva de um elemento a outros. */
-export const CAMPOS_ESTILO = ["estilo", "cor", "contorno", "preenchimento", "corTexto", "espessura", "traco", "fonte", "italico", "fundo", "raio", "tamanho", "negrito"] as const;
+export const CAMPOS_ESTILO = ["estilo", "cor", "contorno", "preenchimento", "corTexto", "espessura", "traco", "fonte", "italico", "fundo", "raio", "tamanho", "negrito", "estiloNome"] as const;
 export type EstiloCopiado = Partial<Record<(typeof CAMPOS_ESTILO)[number], unknown>>;
 
 export function estiloDe(e: Elemento): EstiloCopiado {
@@ -327,4 +331,38 @@ export function aplicarEstilo(d: Diagrama, ids: string[], estilo: EstiloCopiado)
 /** Remove todos os ajustes de aparência: o elemento volta ao estilo e ao tema. */
 export function limparEstilo(d: Diagrama, ids: string[]): Diagrama {
   return aplicarEstilo(d, ids, {});
+}
+
+/** Cria ou atualiza um estilo nomeado do diagrama. */
+export function definirEstilo(d: Diagrama, nome: string, def: EstiloNomeado): Diagrama {
+  return { ...d, estilos: { ...d.estilos, [nome]: def } };
+}
+
+/** Aplica o estilo nomeado: os ajustes próprios dos elementos são limpos para o estilo valer por inteiro. */
+export function aplicarEstiloNomeado(d: Diagrama, ids: string[], nome: string): Diagrama {
+  const limpo = aplicarEstilo(d, ids, {});
+  const alvo = new Set(ids);
+  return { ...limpo, elementos: limpo.elementos.map((e) => (alvo.has(e.id) ? ({ ...e, estiloNome: nome } as Elemento) : e)) };
+}
+
+/** Tira o nome do estilo dos elementos, mantendo a aparência que ele dava. */
+export function desvincularEstilo(d: Diagrama, ids: string[]): Diagrama {
+  const alvo = new Set(ids);
+  return {
+    ...d,
+    elementos: d.elementos.map((e) => {
+      if (!alvo.has(e.id) || !e.estiloNome) return e;
+      const { estiloNome, ...resto } = elementoEfetivo(e, d) as Elemento & { estiloNome?: string };
+      void estiloNome;
+      return resto as Elemento;
+    }),
+  };
+}
+
+/** Remove o estilo do diagrama; quem o usava mantém a aparência (fica desvinculado). */
+export function removerEstilo(d: Diagrama, nome: string): Diagrama {
+  const usados = d.elementos.filter((e) => e.estiloNome === nome).map((e) => e.id);
+  const sem = desvincularEstilo(d, usados);
+  const { [nome]: _removido, ...resto } = sem.estilos ?? {};
+  return { ...sem, estilos: Object.keys(resto).length ? resto : undefined };
 }

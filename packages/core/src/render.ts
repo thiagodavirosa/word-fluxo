@@ -1,4 +1,5 @@
 import type { Diagrama, Elemento, LinhaTexto } from "./esquema";
+import { desenharFigura, ehFigura, ajusteTextoFigura } from "./figuras";
 import { controlesDaCurva, pontosDoConector, type Ponto } from "./rotas";
 import { temas, tecnico, type Tema } from "./tema";
 
@@ -131,7 +132,16 @@ function tracoAttr(traco: string | undefined, t: Tema): string {
 }
 
 /** Aplica fonte e itálico próprios do elemento, se houver, sem alterar o desenho padrão. */
-function renderElemento(e: Elemento, d: Diagrama, t: Tema): string {
+/** Elemento com os campos do estilo nomeado aplicados por baixo dos ajustes próprios. */
+export function elementoEfetivo(e: Elemento, d: Diagrama): Elemento {
+  const def = e.estiloNome ? d.estilos?.[e.estiloNome] : undefined;
+  if (!def) return e;
+  const proprios = Object.fromEntries(Object.entries(e).filter(([, v]) => v !== undefined));
+  return { ...def, ...proprios } as Elemento;
+}
+
+function renderElemento(original: Elemento, d: Diagrama, t: Tema): string {
+  const e = elementoEfetivo(original, d);
   const svg = renderElementoBase(e, d, t);
   const fam = e.fonte ? ` font-family="${esc(e.fonte)}"` : "";
   const it = e.italico ? ` font-style="italic"` : "";
@@ -162,6 +172,34 @@ function renderElementoBase(e: Elemento, d: Diagrama, t: Tema): string {
       return (
         `<polygon points="${pts.map(([x, y]) => `${num(x)},${num(y)}`).join(" ")}" ${attrsPintura(p)}/>` +
         blocoCentrado(linhas, e.x + e.w / 2, e.y + e.h / 2 + (e.ajusteY ?? 0), passo)
+      );
+    }
+    case "terminador":
+    case "documento":
+    case "dados":
+    case "cilindro":
+    case "predefinido":
+    case "elipse":
+    case "triangulo":
+    case "hexagono":
+    case "octogono":
+    case "pentagono":
+    case "trapezio":
+    case "estrela":
+    case "cruz":
+    case "nuvem":
+    case "seta":
+    case "setaEsquerda":
+    case "setaDupla":
+    case "chaveEsquerda":
+    case "chaveDireita":
+    case "balao": {
+      const p = pintura(e, t);
+      const { linhas, passo } = rotulos(e, p, t, base);
+      const [tx, ty] = posTexto(e);
+      return (
+        desenharFigura(e.forma, e.x, e.y, e.w, e.h, attrsPintura(p), t.raio) +
+        (ehFigura(e.forma) ? blocoCentrado(linhas, tx, ty + ajusteTextoFigura(e.forma, e.h), passo, e.alinhamento ?? "meio") : "")
       );
     }
     case "marcador": {

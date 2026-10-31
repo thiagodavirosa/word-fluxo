@@ -1,4 +1,5 @@
 import type { Diagrama, Elemento } from "./esquema";
+import { ehFigura } from "./figuras";
 
 /** Largura aproximada de texto Arial (sem medir fontes): suficiente para avisar de estouro e quebrar linhas. */
 export function estimarLargura(texto: string, tamanho: number, negrito = false): number {
@@ -33,6 +34,7 @@ export interface Aviso {
 function areaUtil(e: Elemento): { w: number; h: number; tam: number; negrito: boolean } | null {
   if (e.forma === "caixa") return { w: e.w - 16, h: e.h - 8, tam: e.tamanho ?? 13, negrito: !!(e.negrito ?? e.subtitulo) };
   if (e.forma === "nota") return { w: e.w - 16, h: e.h - 8, tam: 13, negrito: false };
+  if (ehFigura(e.forma) && "w" in e) return { w: e.w * 0.7, h: e.h * 0.7, tam: ("tamanho" in e && e.tamanho) || 13, negrito: false };
   if (e.forma === "decisao") return { w: e.w * 0.6, h: e.h * 0.7, tam: e.tamanho ?? 13, negrito: false };
   return null;
 }

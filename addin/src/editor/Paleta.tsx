@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { adicionar, ajustarTela, renderSvg, validar, type Forma } from "@word-fluxo/core";
+import { adicionar, ajustarTela, PADROES_FIGURA, renderSvg, validar, type Figura, type Forma } from "@word-fluxo/core";
+
+const fig = (...ids: Figura[]): ItemPaleta[] => ids.map((id) => ({ id, nome: PADROES_FIGURA[id].nome, dica: PADROES_FIGURA[id].nome }));
 
 interface ItemPaleta {
   id: string;
@@ -16,6 +18,7 @@ export const GRUPOS_PALETA: { titulo: string; itens: ItemPaleta[] }[] = [
       { id: "caixa", nome: "Caixa", dica: "Etapa ou atividade" },
       { id: "decisao", nome: "Decisão", dica: "Pergunta com saídas" },
       { id: "marcador", nome: "Marcador", dica: "Número ou ponto" },
+      ...fig("terminador", "documento", "dados", "cilindro", "predefinido"),
     ],
   },
   {
@@ -35,6 +38,14 @@ export const GRUPOS_PALETA: { titulo: string; itens: ItemPaleta[] }[] = [
       { id: "nota", nome: "Nota", dica: "Observação tracejada" },
       { id: "texto", nome: "Texto", dica: "Texto livre" },
     ],
+  },
+  {
+    titulo: "Formas",
+    itens: fig("elipse", "triangulo", "hexagono", "octogono", "pentagono", "trapezio", "estrela", "cruz", "nuvem"),
+  },
+  {
+    titulo: "Setas e chaves",
+    itens: fig("seta", "setaEsquerda", "setaDupla", "chaveEsquerda", "chaveDireita", "balao"),
   },
   {
     titulo: "Estrutura",

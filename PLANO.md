@@ -85,7 +85,11 @@ Stack: Node 22 (instalado), pnpm workspaces, Vite, Vitest, Playwright, React + F
 Entregue: grade visível; pontas soltas de conectores em vermelho + "Ligar pontas encostadas" (um conector pode parecer ligado e não estar); arrastar a ponta sobre uma forma prende nela; forma do traçado (ângulos retos, reta, curva) e arrastar trechos internos; camada dos conectores (frente/trás relativa aos elementos); paleta visual de formas (lateral ou superior, arrastar para a tela); texto em vários níveis nas caixas (`linhas`), rótulos de conector gerados pelo conversor, barramentos convertidos em ligações reais.
 ### Fase 4c – Estilos
 Entregue: por elemento, cor da linha, preenchimento, cor do texto, espessura, traço (contínuo/tracejado/pontilhado), cantos arredondados, fonte e itálico; por conector, cor, espessura e traço (a seta acompanha a cor); copiar/colar estilo e restaurar o padrão do tema; paleta agrupada por tipo (Fluxo, Conexões, Contêineres, Anotações, Estrutura) com a ferramenta Conector dentro dela; campos numéricos aceitam apagar e digitar.
-Pendente: estilos nomeados reutilizáveis por tema (ex.: "Etapa crítica"), exportados com o documento.
+Estilos nomeados: um estilo agrupa a aparência (cores, linha, fonte…) sob um nome; fica gravado na própria figura (`estilos`) e na biblioteca do usuário (padrões: Etapa crítica, Atenção, Concluído, Informativo, Sistema externo, Opcional). Mudar o estilo muda todos os elementos que o usam; ajustes próprios do elemento prevalecem. Aba Substituir > "Atualizar estilos em todas as figuras" propaga a biblioteca ao documento.
+
+### Fase 4d – Mais formas (referência: formas do Miro)
+Entregue: terminador, documento, dados (paralelogramo), repositório (cilindro), processo definido, elipse, triângulo, hexágono, octógono, pentágono, trapézio, estrela, cruz, nuvem, setas (direita, esquerda, dupla), chaves e balão. Todas aceitam texto, conectores e os ajustes de aparência.
+Do Miro não adotado: sticky notes, cards e widgets colaborativos (enquetes, votação etc.), por não fazerem sentido em figura de relatório.
 
 ### Fase 5 – IA (opcional)
 `ia-proxy` FastAPI + prompts com saída JSON validada, edição incremental preservando IDs, preview com resumo de mudanças, verificação RF-60 a RF-62 (esta última roda local, sem IA).

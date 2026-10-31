@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Checkbox, Field, Input, Select, Text, makeStyles, tokens } from "@fluentui/react-components";
 import { NOMES_TEMAS, contarOcorrencias, substituirTexto } from "@word-fluxo/core";
 import { aplicarEmTodas, type ResultadoLote } from "../word";
+import { bibliotecaCompleta } from "../estilos";
 
 const useStyles = makeStyles({
   coluna: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalS },
@@ -55,6 +56,17 @@ export function Ferramentas({ desabilitado, onExecutar }: Props) {
       return `Tema aplicado em ${resumo(r)}.`;
     });
 
+  const sincronizarEstilos = () =>
+    onExecutar(async () => {
+      const lib = bibliotecaCompleta();
+      const r = await aplicarEmTodas((f) => {
+        const atuais = f.estilos ?? {};
+        const novos = Object.fromEntries(Object.entries(atuais).map(([n, def]) => [n, lib[n] ?? def]));
+        return JSON.stringify(novos) === JSON.stringify(atuais) ? null : { ...f, estilos: novos };
+      });
+      return `Estilos nomeados atualizados em ${resumo(r)}.`;
+    });
+
   return (
     <div className={s.coluna}>
       <Text weight="semibold">Localizar e substituir em todas as figuras</Text>
@@ -86,6 +98,14 @@ export function Ferramentas({ desabilitado, onExecutar }: Props) {
       </Field>
       <Button size="small" disabled={desabilitado} onClick={trocarTema}>
         Aplicar a todas as figuras
+      </Button>
+
+      <Text weight="semibold" style={{ marginTop: tokens.spacingVerticalM }}>
+        Estilos nomeados
+      </Text>
+      <Text size={200}>Atualiza, em todas as figuras, os estilos que existem na biblioteca (os padrões e os que você salvou).</Text>
+      <Button size="small" disabled={desabilitado} onClick={sincronizarEstilos}>
+        Atualizar estilos em todas as figuras
       </Button>
     </div>
   );

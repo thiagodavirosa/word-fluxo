@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { FIGURAS } from "./figuras";
 
 /** Esquema `fluxo-word/1.0` (item 7.2). Campos novos são sempre opcionais, para não invalidar figuras já gravadas. */
 export const ESQUEMA = "fluxo-word/1.0";
@@ -26,7 +27,27 @@ const base = {
   traco: Traco.optional(),
   fonte: z.string().optional(),
   italico: z.boolean().optional(),
+  /** Estilo nomeado (definido em `estilos` do diagrama); os ajustes do próprio elemento prevalecem sobre ele. */
+  estiloNome: z.string().optional(),
 };
+
+/** Aparência reutilizável: os mesmos campos de ajuste dos elementos, agrupados sob um nome. */
+export const EstiloNomeado = z.object({
+  estilo: Estilo.optional(),
+  cor: Cor.optional(),
+  contorno: Cor.optional(),
+  preenchimento: Cor.optional(),
+  corTexto: Cor.optional(),
+  espessura: z.number().positive().optional(),
+  traco: Traco.optional(),
+  fonte: z.string().optional(),
+  italico: z.boolean().optional(),
+  fundo: Fundo.optional(),
+  raio: z.number().min(0).optional(),
+  tamanho: z.number().positive().optional(),
+  negrito: z.boolean().optional(),
+});
+export type EstiloNomeado = z.infer<typeof EstiloNomeado>;
 
 const Retangular = { x: z.number(), y: z.number(), w: z.number().positive(), h: z.number().positive() };
 
@@ -73,6 +94,22 @@ const Decisao = z.object({
   ajusteY: z.number().optional(),
   tamanho: z.number().positive().optional(),
   espacamento: z.number().positive().optional(),
+  fundo: Fundo.optional(),
+});
+
+/** Formas geométricas e de fluxograma: terminador, documento, cilindro, hexágono, setas, chaves etc. */
+const FiguraEl = z.object({
+  ...base,
+  forma: z.enum(FIGURAS),
+  ...Retangular,
+  texto: z.string().default(""),
+  subtitulo: z.string().optional(),
+  linhas: z.array(LinhaTexto).optional(),
+  ajusteY: z.number().optional(),
+  negrito: z.boolean().optional(),
+  tamanho: z.number().positive().optional(),
+  espacamento: z.number().positive().optional(),
+  alinhamento: Alinhamento.optional(),
   fundo: Fundo.optional(),
 });
 
@@ -146,6 +183,7 @@ const Linha = z.object({
 export const Elemento = z.discriminatedUnion("forma", [
   Caixa,
   Decisao,
+  FiguraEl,
   Marcador,
   Grupo,
   Raia,
@@ -200,6 +238,8 @@ export const Diagrama = z
       altura: z.number().positive(),
       fonteBase: z.number().positive().optional(),
     }),
+    /** Estilos nomeados usados nesta figura (cópia da biblioteca no momento do uso). */
+    estilos: z.record(z.string(), EstiloNomeado).optional(),
     elementos: z.array(Elemento),
     conectores: z.array(Conector).default([]),
     notas: z.string().optional(),

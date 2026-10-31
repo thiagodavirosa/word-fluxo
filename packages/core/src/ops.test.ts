@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo, definirEstilo, aplicarEstiloNomeado, removerEstilo, FIGURAS } from "./index";
 
 const base = () =>
   validar({
@@ -238,4 +238,49 @@ it("conector com duas setas usa a cor nas duas pontas", () => {
   const svg = renderSvg(d);
   expect(svg).toContain('marker-start="url(#seta-d13438)"');
   expect(svg).toContain('marker-end="url(#seta-d13438)"');
+});
+
+describe("estilos nomeados", () => {
+  const base = validar({
+    schema: "fluxo-word/1.0", id: "n", tipo: "livre", titulo: "n", tela: { largura: 300, altura: 100 },
+    estilos: { Critica: { contorno: "#d13438", preenchimento: "#fbe9ea", espessura: 2 } },
+    elementos: [
+      { id: "a", forma: "caixa", x: 0, y: 0, w: 80, h: 40, texto: "A", estiloNome: "Critica" },
+      { id: "b", forma: "caixa", x: 150, y: 0, w: 80, h: 40, texto: "B", estiloNome: "Critica", contorno: "#00aa00" },
+    ],
+  });
+
+  it("o estilo vale e o ajuste próprio prevalece", () => {
+    const svg = renderSvg(base);
+    expect(svg).toContain('fill="#fbe9ea" stroke="#d13438" stroke-width="2"');
+    expect(svg).toContain('fill="#fbe9ea" stroke="#00aa00" stroke-width="2"');
+  });
+
+  it("atualizar o estilo muda todos que o usam", () => {
+    const r = definirEstilo(base, "Critica", { preenchimento: "#ffffff", contorno: "#000000" });
+    expect(renderSvg(r)).toContain('fill="#ffffff" stroke="#000000"');
+  });
+
+  it("aplicar limpa ajustes próprios", () => {
+    const r = aplicarEstiloNomeado(base, ["b"], "Critica");
+    expect(r.elementos[1]).not.toHaveProperty("contorno");
+  });
+
+  it("remover o estilo preserva a aparência", () => {
+    const r = removerEstilo(base, "Critica");
+    expect(r.estilos).toBeUndefined();
+    expect(renderSvg(r)).toContain('stroke="#d13438" stroke-width="2"');
+  });
+});
+
+describe("formas geométricas", () => {
+  it("todas as figuras entram, validam e desenham", () => {
+    let d = validar({ schema: "fluxo-word/1.0", id: "f", tipo: "livre", titulo: "f", tela: { largura: 900, altura: 400 }, elementos: [], conectores: [] });
+    for (const f of FIGURAS) d = adicionar(d, f, 10, 10).diagrama;
+    d = validar(JSON.parse(JSON.stringify(d)));
+    expect(d.elementos).toHaveLength(FIGURAS.length);
+    const svg = renderSvg(d);
+    for (const tag of ["<ellipse", "<polygon", "<path", "rx="]) expect(svg).toContain(tag);
+    expect(svg).not.toContain("NaN");
+  });
 });

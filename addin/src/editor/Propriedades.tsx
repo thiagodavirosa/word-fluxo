@@ -119,7 +119,7 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
         <Text weight="semibold">{elementos.length} elementos selecionados</Text>
         <Opcoes rotulo="Estilo" valor={elementos[0].estilo ?? "normal"} opcoes={ESTILOS} onChange={(v) => mudar({ estilo: v })} />
         <SeletorCor valor={elementos[0].cor} onChange={(cor) => mudar({ cor })} />
-        <Aparencia elementos={elementos} mudar={mudar} aplicarEstilo={(est) => aplicar((x) => aplicarEstilo(x, elementos.map((k) => k.id), est))} />
+        <Aparencia diagrama={d} aplicarD={(f) => aplicar(f)} elementos={elementos} mudar={mudar} aplicarEstilo={(est) => aplicar((x) => aplicarEstilo(x, elementos.map((k) => k.id), est))} />
       </div>
     );
   }
@@ -171,7 +171,7 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
         />
       )}
 
-      <Aparencia elementos={[e]} mudar={mudar} aplicarEstilo={(est) => aplicar((x) => aplicarEstilo(x, [e.id], est))} />
+      <Aparencia diagrama={d} aplicarD={(f) => aplicar(f)} elementos={[e]} mudar={mudar} aplicarEstilo={(est) => aplicar((x) => aplicarEstilo(x, [e.id], est))} />
 
       <Divider />
       {temCaixa(e) ? (
