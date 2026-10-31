@@ -73,9 +73,9 @@ export function miniatura(forma: string): string {
 }
 
 const useStyles = makeStyles({
-  lateral: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalXS, padding: tokens.spacingHorizontalS, overflowY: "auto", width: "208px", background: tokens.colorNeutralBackground1, borderRight: `1px solid ${tokens.colorNeutralStroke2}` },
-  superior: { display: "flex", gap: tokens.spacingHorizontalM, padding: tokens.spacingHorizontalS, overflowX: "auto", background: tokens.colorNeutralBackground1, borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
-  secaoH: { display: "flex", flexDirection: "column", gap: "4px", flexShrink: 0 },
+  lateral: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalXS, padding: tokens.spacingHorizontalS, overflowY: "auto", overflowX: "hidden", width: "208px", background: tokens.colorNeutralBackground1, borderRight: `1px solid ${tokens.colorNeutralStroke2}` },
+  superior: { display: "flex", flexWrap: "wrap", rowGap: tokens.spacingVerticalS, gap: tokens.spacingHorizontalM, padding: tokens.spacingHorizontalS, background: tokens.colorNeutralBackground1, borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
+  secaoH: { display: "flex", flexDirection: "column", gap: "4px", maxWidth: "100%" },
   cabeca: {
     display: "flex",
     alignItems: "center",
@@ -93,7 +93,7 @@ const useStyles = makeStyles({
     ":hover": { color: tokens.colorNeutralForeground1 },
   },
   grade: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" },
-  linhaH: { display: "flex", gap: "6px" },
+  linhaH: { display: "flex", flexWrap: "wrap", gap: "6px" },
   item: {
     display: "flex",
     flexDirection: "column",

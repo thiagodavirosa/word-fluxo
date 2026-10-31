@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
-import { FluentProvider, webLightTheme } from "@fluentui/react-components";
+import { FluentProvider } from "@fluentui/react-components";
+import { temaEis } from "./tema";
 import { validar, type Diagrama } from "@word-fluxo/core";
 import { Editor } from "./editor/Editor";
 
@@ -12,7 +13,7 @@ const raiz = createRoot(document.getElementById("root")!);
 
 function montar(inicial: Diagrama, rotuloAplicar: string, onAplicar: (d: Diagrama) => void, onCancelar: () => void) {
   raiz.render(
-    <FluentProvider theme={webLightTheme} style={{ height: "100%" }}>
+    <FluentProvider theme={temaEis} style={{ height: "100%" }}>
       <Editor inicial={inicial} rotuloAplicar={rotuloAplicar} onAplicar={onAplicar} onCancelar={onCancelar} />
     </FluentProvider>,
   );

@@ -1,10 +1,11 @@
 import { createRoot } from "react-dom/client";
-import { FluentProvider, webLightTheme } from "@fluentui/react-components";
+import { FluentProvider } from "@fluentui/react-components";
+import { temaEis } from "./tema";
 import { App } from "./App";
 
 Office.onReady(() => {
   createRoot(document.getElementById("root")!).render(
-    <FluentProvider theme={webLightTheme}>
+    <FluentProvider theme={temaEis}>
       <App />
     </FluentProvider>,
   );

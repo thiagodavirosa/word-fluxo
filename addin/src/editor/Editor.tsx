@@ -75,13 +75,14 @@ const useStyles = makeStyles({
     padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalM}`,
     background: tokens.colorNeutralBackground1,
     borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
-    overflowX: "auto",
+    flexWrap: "wrap",
+    rowGap: tokens.spacingVerticalXS,
   },
   grupo: { display: "flex", gap: "2px", alignItems: "center", paddingRight: tokens.spacingHorizontalS, marginRight: tokens.spacingHorizontalXS, borderRight: `1px solid ${tokens.colorNeutralStroke2}`, flexShrink: 0 },
   corpo: { display: "grid", minHeight: 0 },
-  area: { overflow: "auto", padding: tokens.spacingHorizontalXXL, background: tokens.colorNeutralBackground3 },
+  area: { overflow: "auto", minWidth: 0, padding: tokens.spacingHorizontalXXL, background: tokens.colorNeutralBackground3 },
   painel: { display: "flex", flexDirection: "column", minHeight: 0, background: tokens.colorNeutralBackground1, borderLeft: `1px solid ${tokens.colorNeutralStroke2}` },
-  painelCorpo: { overflowY: "auto", flex: 1 },
+  painelCorpo: { overflowY: "auto", overflowX: "hidden", flex: 1, minWidth: 0, "& *": { minWidth: 0 } },
   abas: { padding: `0 ${tokens.spacingHorizontalS}`, borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
   espaco: { flex: 1, minWidth: "12px" },
   rodape: {
@@ -515,7 +516,7 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
         </Button>
       </div>
 
-      <div>{paleta === "superior" && <Paleta posicao="superior" ativa={ferramenta} onEscolher={escolherFerramenta} onArrastar={arrastarForma} />}</div>
+      <div style={{ minWidth: 0 }}>{paleta === "superior" && <Paleta posicao="superior" ativa={ferramenta} onEscolher={escolherFerramenta} onArrastar={arrastarForma} />}</div>
       <div className={s.corpo} style={{ gridTemplateColumns: paleta === "lateral" ? "auto 1fr 320px" : "1fr 320px" }}>
         {paleta === "lateral" && <Paleta posicao="lateral" ativa={ferramenta} onEscolher={escolherFerramenta} onArrastar={arrastarForma} />}
         <div className={s.area} ref={areaRef}>
