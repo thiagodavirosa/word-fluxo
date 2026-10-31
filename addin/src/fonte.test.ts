@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { desempacotar, empacotar, extrairDoAlt, extrairDoXml, fonteExemplo, paraAlt, paraXml } from "./fonte";
-import { renderSvg } from "./render";
 
 describe("persistência da fonte", () => {
   it("faz ida e volta pelo pacote gzip+base64 preservando acentos", async () => {
@@ -22,15 +21,7 @@ describe("persistência da fonte", () => {
 
   it("rejeita esquema desconhecido", async () => {
     const f = { ...fonteExemplo(), schema: "outro/9" } as never;
-    await expect(desempacotar(await empacotar(f))).rejects.toThrow(/Esquema/);
+    await expect(desempacotar(await empacotar(f))).rejects.toThrow();
   });
 });
 
-describe("renderSvg", () => {
-  it("escapa texto e gera uma seta por conector", () => {
-    const f = fonteExemplo("A & B <x>");
-    const svg = renderSvg(f);
-    expect(svg).toContain("A &amp; B &lt;x&gt;");
-    expect(svg.match(/marker-end/g)).toHaveLength(2);
-  });
-});

@@ -9,7 +9,8 @@ import {
   paraXml,
   type Fonte,
 } from "./fonte";
-import { renderSvg, svgParaPng } from "./render";
+import { renderSvg } from "@word-fluxo/core";
+import { svgParaPng } from "./render";
 
 /** Largura útil de uma A4 com margens ABNT, em pontos. */
 const LARGURA_PT = 451;

@@ -12,6 +12,7 @@
     "sideload": "office-addin-debugging start manifest.xml desktop --app word --no-debug"
   },
   "dependencies": {
+    "@word-fluxo/core": "*",
     "@fluentui/react-components": "^9.75.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

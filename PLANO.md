@@ -65,6 +65,9 @@ Stack: Node 22 (instalado), pnpm workspaces, Vite, Vitest, Playwright, React + F
 6. **Aceite:** 5 exemplos com diferença visual mínima.
 
 ### Fase 3 – Editor visual (`editor`)
+
+> Requisito do usuário: nada de formulário rígido. O editor abre em **janela grande** (Office Dialog API, bem maior que o painel) com tela livre: arrastar, redimensionar, inserir formas pela barra, trocar o lado de saída/chegada dos conectores, trocar cores (`cor` por elemento, já no esquema), estilos destaque/secundário/atenuado, duplicar e apagar. O painel lateral só abre a janela e mostra a lista de figuras.
+
 1. Seleção, arrastar, redimensionar, edição de texto no lugar, painel de propriedades.
 2. Conectores ortogonais com rótulo, ligados aos elementos.
 3. Auto-layout por tipo, alinhar/distribuir, grade.

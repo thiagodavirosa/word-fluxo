@@ -1,0 +1,158 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-06",
+  "tipo": "estados-raias",
+  "titulo": "Estados e transições do contêiner entre a projetista e a Agência",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 448
+  },
+  "elementos": [
+    {
+      "id": "g1",
+      "forma": "grupo",
+      "x": 24,
+      "y": 56,
+      "w": 712,
+      "h": 124,
+      "texto": "Ambiente da projetista",
+      "alinhamento": "fim"
+    },
+    {
+      "id": "g2",
+      "forma": "grupo",
+      "x": 24,
+      "y": 212,
+      "w": 712,
+      "h": 212,
+      "texto": "CDE da Agência",
+      "alinhamento": "fim"
+    },
+    {
+      "id": "s1",
+      "forma": "caixa",
+      "x": 48,
+      "y": 100,
+      "w": 150,
+      "h": 56,
+      "texto": "Em andamento",
+      "subtitulo": "versões internas",
+      "fundo": "branco"
+    },
+    {
+      "id": "s2",
+      "forma": "caixa",
+      "x": 318,
+      "y": 100,
+      "w": 150,
+      "h": 56,
+      "texto": "Compartilhado",
+      "subtitulo": "aprovado pela equipe",
+      "fundo": "branco"
+    },
+    {
+      "id": "s3",
+      "forma": "caixa",
+      "x": 318,
+      "y": 256,
+      "w": 150,
+      "h": 56,
+      "texto": "Compartilhado",
+      "subtitulo": "submetido à Agência",
+      "fundo": "branco"
+    },
+    {
+      "id": "s4",
+      "forma": "caixa",
+      "x": 548,
+      "y": 256,
+      "w": 150,
+      "h": 56,
+      "texto": "Publicado",
+      "subtitulo": "valor contratual",
+      "fundo": "branco",
+      "estilo": "destaque"
+    },
+    {
+      "id": "s5",
+      "forma": "caixa",
+      "x": 548,
+      "y": 352,
+      "w": 150,
+      "h": 56,
+      "texto": "Arquivado",
+      "subtitulo": "trilha auditável",
+      "fundo": "branco"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "c1",
+      "de": "s1",
+      "para": "s2",
+      "rotulo": {
+        "texto": "checar, revisar,\naprovar",
+        "x": 258,
+        "y": 106
+      }
+    },
+    {
+      "id": "c2",
+      "de": "s2",
+      "para": "s3",
+      "rotulo": {
+        "texto": "autorização e submissão",
+        "x": 401,
+        "y": 200,
+        "alinhamento": "inicio"
+      }
+    },
+    {
+      "id": "c3",
+      "de": "s3",
+      "para": "s4",
+      "rotulo": {
+        "texto": "aceitação",
+        "x": 508,
+        "y": 276
+      }
+    },
+    {
+      "id": "c4",
+      "de": "s4",
+      "para": "s5",
+      "rotulo": {
+        "texto": "arquivamento",
+        "x": 631,
+        "y": 336,
+        "alinhamento": "inicio"
+      }
+    },
+    {
+      "id": "c5",
+      "de": "s3",
+      "para": "s1",
+      "pontos": [
+        [
+          318,
+          284
+        ],
+        [
+          123,
+          284
+        ],
+        [
+          123,
+          156
+        ]
+      ],
+      "rotulo": {
+        "texto": "devolução com pendências",
+        "x": 131,
+        "y": 200,
+        "alinhamento": "inicio"
+      }
+    }
+  ]
+}

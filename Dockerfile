@@ -2,7 +2,9 @@ FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY addin/package.json addin/
+COPY packages/core/package.json packages/core/
 RUN npm ci --no-audit --no-fund
+COPY packages packages
 COPY addin addin
 RUN npm run build -w addin
 

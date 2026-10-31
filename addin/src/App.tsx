@@ -50,8 +50,8 @@ export function App() {
     }
   }
 
-  function alterarTexto(i: number, texto: string) {
-    setSessao((s) => s && { ...s, fonte: { ...s.fonte, elementos: s.fonte.elementos.map((el, k) => (k === i ? { ...el, texto } : el)) } });
+  function alterarTexto(id: string, texto: string) {
+    setSessao((s) => s && { ...s, fonte: { ...s.fonte, elementos: s.fonte.elementos.map((el) => (el.id === id && "texto" in el ? { ...el, texto } : el)) } });
   }
 
   return (
@@ -66,11 +66,15 @@ export function App() {
           <Text weight="semibold">
             Figura {sessao.fonte.id} (revisão {sessao.revisaoBase}, fonte recuperada do {lida.origem === "xml" ? "Custom XML" : "texto alternativo"})
           </Text>
-          {sessao.fonte.elementos.map((el, i) => (
-            <Field key={el.id} label={`Texto de ${el.id}`}>
-              <Input value={el.texto} onChange={(_, d) => alterarTexto(i, d.value)} />
-            </Field>
-          ))}
+          {sessao.fonte.elementos.flatMap((el) =>
+            "texto" in el && (el.forma === "caixa" || el.forma === "decisao")
+              ? [
+                  <Field key={el.id} label={`Texto de ${el.id}`}>
+                    <Input value={el.texto} onChange={(_, d) => alterarTexto(el.id, d.value)} />
+                  </Field>,
+                ]
+              : [],
+          )}
           <Button
             appearance="primary"
             onClick={() =>

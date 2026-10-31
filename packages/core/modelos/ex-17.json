@@ -1,0 +1,442 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-17",
+  "tipo": "cronograma",
+  "titulo": "Sequência proposta de elaboração e implementação",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 392,
+    "fonteBase": 12
+  },
+  "elementos": [
+    {
+      "id": "apos",
+      "forma": "retangulo",
+      "x": 664,
+      "y": 80,
+      "w": 72,
+      "h": 292
+    },
+    {
+      "id": "grade0",
+      "forma": "linha",
+      "x1": 232,
+      "y1": 80,
+      "x2": 232,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade1",
+      "forma": "linha",
+      "x1": 268,
+      "y1": 80,
+      "x2": 268,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade2",
+      "forma": "linha",
+      "x1": 304,
+      "y1": 80,
+      "x2": 304,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade3",
+      "forma": "linha",
+      "x1": 340,
+      "y1": 80,
+      "x2": 340,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade4",
+      "forma": "linha",
+      "x1": 376,
+      "y1": 80,
+      "x2": 376,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade5",
+      "forma": "linha",
+      "x1": 412,
+      "y1": 80,
+      "x2": 412,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade6",
+      "forma": "linha",
+      "x1": 448,
+      "y1": 80,
+      "x2": 448,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade7",
+      "forma": "linha",
+      "x1": 484,
+      "y1": 80,
+      "x2": 484,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade8",
+      "forma": "linha",
+      "x1": 520,
+      "y1": 80,
+      "x2": 520,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade9",
+      "forma": "linha",
+      "x1": 556,
+      "y1": 80,
+      "x2": 556,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade10",
+      "forma": "linha",
+      "x1": 592,
+      "y1": 80,
+      "x2": 592,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade11",
+      "forma": "linha",
+      "x1": 628,
+      "y1": 80,
+      "x2": 628,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "grade12",
+      "forma": "linha",
+      "x1": 664,
+      "y1": 80,
+      "x2": 664,
+      "y2": 372,
+      "espessura": 1,
+      "opacidade": 0.3
+    },
+    {
+      "id": "mes1",
+      "forma": "texto",
+      "x": 250,
+      "y": 72,
+      "texto": "M1",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes2",
+      "forma": "texto",
+      "x": 286,
+      "y": 72,
+      "texto": "M2",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes3",
+      "forma": "texto",
+      "x": 322,
+      "y": 72,
+      "texto": "M3",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes4",
+      "forma": "texto",
+      "x": 358,
+      "y": 72,
+      "texto": "M4",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes5",
+      "forma": "texto",
+      "x": 394,
+      "y": 72,
+      "texto": "M5",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes6",
+      "forma": "texto",
+      "x": 430,
+      "y": 72,
+      "texto": "M6",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes7",
+      "forma": "texto",
+      "x": 466,
+      "y": 72,
+      "texto": "M7",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes8",
+      "forma": "texto",
+      "x": 502,
+      "y": 72,
+      "texto": "M8",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes9",
+      "forma": "texto",
+      "x": 538,
+      "y": 72,
+      "texto": "M9",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes10",
+      "forma": "texto",
+      "x": 574,
+      "y": 72,
+      "texto": "M10",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes11",
+      "forma": "texto",
+      "x": 610,
+      "y": 72,
+      "texto": "M11",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mes12",
+      "forma": "texto",
+      "x": 646,
+      "y": 72,
+      "texto": "M12",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "mesApos",
+      "forma": "texto",
+      "x": 700,
+      "y": 72,
+      "texto": "Após",
+      "tamanho": 11,
+      "estilo": "secundario",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "at1",
+      "forma": "texto",
+      "x": 24,
+      "y": 104,
+      "texto": "Protocolo de apuração"
+    },
+    {
+      "id": "at2",
+      "forma": "texto",
+      "x": 24,
+      "y": 136,
+      "texto": "Especificação do CDE"
+    },
+    {
+      "id": "at3",
+      "forma": "texto",
+      "x": 24,
+      "y": 168,
+      "texto": "Padrão de verificação, Etapa 1"
+    },
+    {
+      "id": "at4",
+      "forma": "texto",
+      "x": 24,
+      "y": 200,
+      "texto": "Caderno de Requisitos"
+    },
+    {
+      "id": "at5",
+      "forma": "texto",
+      "x": 24,
+      "y": 232,
+      "texto": "Portarias dos anexos"
+    },
+    {
+      "id": "at6",
+      "forma": "texto",
+      "x": 24,
+      "y": 264,
+      "texto": "Piloto e expansão, Etapa 1",
+      "negrito": true
+    },
+    {
+      "id": "at7",
+      "forma": "texto",
+      "x": 24,
+      "y": 296,
+      "texto": "Padrão de verificação, Etapa 2"
+    },
+    {
+      "id": "at8",
+      "forma": "texto",
+      "x": 24,
+      "y": 328,
+      "texto": "Piloto BIM, Etapa 2",
+      "negrito": true
+    },
+    {
+      "id": "at9",
+      "forma": "texto",
+      "x": 24,
+      "y": 360,
+      "texto": "Expansão, Etapa 2",
+      "negrito": true
+    },
+    {
+      "id": "bar1",
+      "forma": "barra",
+      "x": 342,
+      "y": 92,
+      "w": 68,
+      "h": 16
+    },
+    {
+      "id": "bar2",
+      "forma": "barra",
+      "x": 342,
+      "y": 124,
+      "w": 140,
+      "h": 16
+    },
+    {
+      "id": "bar3",
+      "forma": "barra",
+      "x": 342,
+      "y": 156,
+      "w": 140,
+      "h": 16
+    },
+    {
+      "id": "bar4",
+      "forma": "barra",
+      "x": 306,
+      "y": 188,
+      "w": 212,
+      "h": 16
+    },
+    {
+      "id": "bar5",
+      "forma": "barra",
+      "x": 450,
+      "y": 220,
+      "w": 68,
+      "h": 16
+    },
+    {
+      "id": "bar6",
+      "forma": "barra",
+      "x": 486,
+      "y": 252,
+      "w": 176,
+      "h": 16,
+      "estilo": "destaque"
+    },
+    {
+      "id": "bar7",
+      "forma": "barra",
+      "x": 666,
+      "y": 252,
+      "w": 68,
+      "h": 16,
+      "estilo": "destaque"
+    },
+    {
+      "id": "bar8",
+      "forma": "barra",
+      "x": 486,
+      "y": 284,
+      "w": 140,
+      "h": 16
+    },
+    {
+      "id": "bar9",
+      "forma": "barra",
+      "x": 522,
+      "y": 316,
+      "w": 140,
+      "h": 16,
+      "estilo": "destaque"
+    },
+    {
+      "id": "bar10",
+      "forma": "barra",
+      "x": 666,
+      "y": 348,
+      "w": 68,
+      "h": 16,
+      "estilo": "destaque"
+    },
+    {
+      "id": "legenda",
+      "forma": "texto",
+      "x": 24,
+      "y": 388,
+      "texto": "Barras escuras: documentos do plano de trabalho. Barras destacadas: implementação.",
+      "tamanho": 11,
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": []
+}

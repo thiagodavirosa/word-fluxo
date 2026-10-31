@@ -1,0 +1,250 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-14",
+  "tipo": "arvore",
+  "titulo": "Estrutura de áreas do projeto-modelo no CDE da Agência",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 372
+  },
+  "elementos": [
+    {
+      "id": "raiz",
+      "forma": "caixa",
+      "x": 24,
+      "y": 154,
+      "w": 200,
+      "h": 56,
+      "texto": "Projeto do\nempreendimento",
+      "negrito": true,
+      "espacamento": 18
+    },
+    {
+      "id": "p1",
+      "forma": "caixa",
+      "x": 288,
+      "y": 64,
+      "w": 448,
+      "h": 44,
+      "texto": ""
+    },
+    {
+      "id": "p1n",
+      "forma": "texto",
+      "x": 304,
+      "y": 91,
+      "texto": "01 Submissões",
+      "negrito": true
+    },
+    {
+      "id": "p1d",
+      "forma": "texto",
+      "x": 440,
+      "y": 91,
+      "texto": "por etapa e disciplina",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "p2",
+      "forma": "caixa",
+      "x": 288,
+      "y": 124,
+      "w": 448,
+      "h": 44,
+      "texto": "",
+      "estilo": "destaque"
+    },
+    {
+      "id": "p2n",
+      "forma": "texto",
+      "x": 304,
+      "y": 151,
+      "texto": "02 Publicados",
+      "negrito": true
+    },
+    {
+      "id": "p2d",
+      "forma": "texto",
+      "x": 440,
+      "y": 151,
+      "texto": "pacotes aceitos, com valor contratual",
+      "tamanho": 11.5,
+      "estilo": "normal"
+    },
+    {
+      "id": "p3",
+      "forma": "caixa",
+      "x": 288,
+      "y": 184,
+      "w": 448,
+      "h": 44,
+      "texto": ""
+    },
+    {
+      "id": "p3n",
+      "forma": "texto",
+      "x": 304,
+      "y": 211,
+      "texto": "03 Agência",
+      "negrito": true
+    },
+    {
+      "id": "p3d",
+      "forma": "texto",
+      "x": 440,
+      "y": 211,
+      "texto": "relatórios de análise, checklists e Termos",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "p4",
+      "forma": "caixa",
+      "x": 288,
+      "y": 244,
+      "w": 448,
+      "h": 44,
+      "texto": ""
+    },
+    {
+      "id": "p4n",
+      "forma": "texto",
+      "x": 304,
+      "y": 271,
+      "texto": "04 Acesso restrito",
+      "negrito": true
+    },
+    {
+      "id": "p4d",
+      "forma": "texto",
+      "x": 440,
+      "y": 271,
+      "texto": "cadastro fundiário, DUP e desapropriação",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "p5",
+      "forma": "caixa",
+      "x": 288,
+      "y": 304,
+      "w": 448,
+      "h": 44,
+      "texto": ""
+    },
+    {
+      "id": "p5n",
+      "forma": "texto",
+      "x": 304,
+      "y": 331,
+      "texto": "05 Arquivo",
+      "negrito": true
+    },
+    {
+      "id": "p5d",
+      "forma": "texto",
+      "x": 440,
+      "y": 331,
+      "texto": "revisões devolvidas e superadas",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "t0",
+      "pontos": [
+        [
+          224,
+          182
+        ],
+        [
+          256,
+          182
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "tronco",
+      "pontos": [
+        [
+          256,
+          86
+        ],
+        [
+          256,
+          326
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "r1",
+      "pontos": [
+        [
+          256,
+          86
+        ],
+        [
+          288,
+          86
+        ]
+      ]
+    },
+    {
+      "id": "r2",
+      "pontos": [
+        [
+          256,
+          146
+        ],
+        [
+          288,
+          146
+        ]
+      ]
+    },
+    {
+      "id": "r3",
+      "pontos": [
+        [
+          256,
+          206
+        ],
+        [
+          288,
+          206
+        ]
+      ]
+    },
+    {
+      "id": "r4",
+      "pontos": [
+        [
+          256,
+          266
+        ],
+        [
+          288,
+          266
+        ]
+      ]
+    },
+    {
+      "id": "r5",
+      "pontos": [
+        [
+          256,
+          326
+        ],
+        [
+          288,
+          326
+        ]
+      ]
+    }
+  ]
+}

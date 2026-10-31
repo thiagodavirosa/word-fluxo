@@ -1,12 +1,12 @@
 {
   "name": "word-fluxo",
   "private": true,
-  "workspaces": ["addin"],
+  "workspaces": ["packages/*", "addin"],
   "scripts": {
     "dev": "npm run dev -w addin",
     "build": "npm run build -w addin",
-    "typecheck": "npm run typecheck -w addin",
-    "test": "npm run test -w addin",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm test --workspaces --if-present",
     "certs": "npx office-addin-dev-certs install",
     "sideload": "npm run sideload -w addin"
   }

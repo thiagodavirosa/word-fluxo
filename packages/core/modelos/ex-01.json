@@ -1,0 +1,97 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-01",
+  "tipo": "fluxo-linear",
+  "titulo": "Sequência de definição do processo, diagnóstico e configuração",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 284
+  },
+  "elementos": [
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 82,
+      "w": 164,
+      "h": 56,
+      "texto": "Modelo de operação",
+      "subtitulo": "processo (Parte II)",
+      "estilo": "destaque"
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 214,
+      "y": 82,
+      "w": 164,
+      "h": 56,
+      "texto": "Diagnóstico",
+      "subtitulo": "aderência (Parte III)"
+    },
+    {
+      "id": "d1",
+      "forma": "decisao",
+      "x": 406,
+      "y": 70,
+      "w": 128,
+      "h": 80,
+      "texto": "Suporta o\nprocesso?",
+      "espacamento": 16
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 568,
+      "y": 82,
+      "w": 164,
+      "h": 56,
+      "texto": "Configuração",
+      "subtitulo": "requisitos (Parte IV)"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 388,
+      "y": 202,
+      "w": 164,
+      "h": 56,
+      "texto": "Lacuna registrada",
+      "subtitulo": "tratamento (Cap. 18)"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "c1",
+      "de": "n1",
+      "para": "n2"
+    },
+    {
+      "id": "c2",
+      "de": "n2",
+      "para": "d1"
+    },
+    {
+      "id": "c3",
+      "de": "d1",
+      "para": "n3",
+      "rotulo": {
+        "texto": "sim",
+        "x": 551,
+        "y": 102
+      }
+    },
+    {
+      "id": "c4",
+      "de": "d1",
+      "para": "n4",
+      "rotulo": {
+        "texto": "não",
+        "x": 480,
+        "y": 174,
+        "alinhamento": "inicio"
+      }
+    }
+  ]
+}

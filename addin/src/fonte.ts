@@ -1,31 +1,7 @@
-/** Fonte editável do diagrama (subconjunto do esquema fluxo-word/1.0, item 7.2 dos requisitos). */
-export interface Elemento {
-  id: string;
-  forma: "caixa";
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  texto: string;
-}
+import { validar, type Diagrama } from "@word-fluxo/core";
 
-export interface Conector {
-  id: string;
-  de: string;
-  para: string;
-}
-
-export interface Fonte {
-  schema: "fluxo-word/1.0";
-  id: string;
-  tipo: string;
-  titulo: string;
-  /** Incrementa a cada gravação; serve para detectar edição concorrente (item 7.3.4). */
-  revisao: number;
-  tela: { largura: number; altura: number };
-  elementos: Elemento[];
-  conectores: Conector[];
-}
+/** A fonte editável é o diagrama do núcleo (esquema fluxo-word/1.0). */
+export type Fonte = Diagrama;
 
 export const TAG_PREFIXO = "fluxo-word:";
 export const nsDe = (id: string) => `urn:fluxo-word:${id}`;
@@ -35,7 +11,7 @@ export function novoId(): string {
 }
 
 export function fonteExemplo(titulo = "Fluxo de teste"): Fonte {
-  return {
+  return validar({
     schema: "fluxo-word/1.0",
     id: novoId(),
     tipo: "fluxo-linear",
@@ -51,7 +27,7 @@ export function fonteExemplo(titulo = "Fluxo de teste"): Fonte {
       { id: "c1", de: "n1", para: "n2" },
       { id: "c2", de: "n2", para: "n3" },
     ],
-  };
+  });
 }
 
 function bytesParaBase64(bytes: Uint8Array): string {
@@ -78,9 +54,7 @@ export async function empacotar(fonte: Fonte): Promise<string> {
 
 export async function desempacotar(b64: string): Promise<Fonte> {
   const json = await transformar(base64ParaBytes(b64), new DecompressionStream("gzip"));
-  const fonte = JSON.parse(new TextDecoder().decode(json)) as Fonte;
-  if (fonte.schema !== "fluxo-word/1.0") throw new Error(`Esquema não suportado: ${fonte.schema}`);
-  return fonte;
+  return validar(JSON.parse(new TextDecoder().decode(json)));
 }
 
 /** Parte XML personalizada: um documento por figura, para que a coedição grave só o que mudou. */
@@ -94,8 +68,10 @@ export function extrairDoXml(xml: string): string | null {
 
 /** Texto alternativo: descrição legível + redundância da fonte (item 7.3.3). */
 export function paraAlt(fonte: Fonte, empacotado: string): string {
-  const etapas = fonte.elementos.map((e) => e.texto).join(", ");
-  return `${fonte.titulo}. Fluxo com ${fonte.elementos.length} etapas: ${etapas}. [fluxo-word:v1:${empacotado}]`;
+  const etapas = fonte.elementos
+    .filter((e) => (e.forma === "caixa" || e.forma === "decisao") && e.texto)
+    .map((e) => (e as { texto: string }).texto.replaceAll("\n", " "));
+  return `${fonte.titulo}. Fluxo com ${etapas.length} etapas: ${etapas.join(", ")}. [fluxo-word:v1:${empacotado}]`;
 }
 
 export function extrairDoAlt(alt: string): string | null {

@@ -1,0 +1,281 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-11",
+  "tipo": "raias",
+  "titulo": "Ciclo atual de entrega e análise de cada Etapa de Acompanhamento",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 476,
+    "fonteBase": 11.5
+  },
+  "elementos": [
+    {
+      "id": "r1",
+      "forma": "raia",
+      "x": 24,
+      "y": 56,
+      "w": 712,
+      "h": 100,
+      "texto": "Projetista"
+    },
+    {
+      "id": "r2",
+      "forma": "raia",
+      "x": 24,
+      "y": 156,
+      "w": 712,
+      "h": 120,
+      "texto": "Gestor do\ncontrato"
+    },
+    {
+      "id": "r3",
+      "forma": "raia",
+      "x": 24,
+      "y": 276,
+      "w": 712,
+      "h": 100,
+      "texto": "Analista ou\ncomissão"
+    },
+    {
+      "id": "r4",
+      "forma": "raia",
+      "x": 24,
+      "y": 376,
+      "w": 712,
+      "h": 80,
+      "texto": "GEVAP"
+    },
+    {
+      "id": "div",
+      "forma": "linha",
+      "x1": 124,
+      "y1": 56,
+      "x2": 124,
+      "y2": 456,
+      "espessura": 1
+    },
+    {
+      "id": "b1",
+      "forma": "caixa",
+      "x": 136,
+      "y": 80,
+      "w": 128,
+      "h": 52,
+      "texto": "Elaborar produtos\nda etapa",
+      "fundo": "branco"
+    },
+    {
+      "id": "b2",
+      "forma": "caixa",
+      "x": 444,
+      "y": 80,
+      "w": 128,
+      "h": 52,
+      "texto": "Corrigir e\nreapresentar",
+      "fundo": "branco"
+    },
+    {
+      "id": "b3",
+      "forma": "caixa",
+      "x": 600,
+      "y": 80,
+      "w": 128,
+      "h": 52,
+      "texto": "Iniciar etapa\nseguinte",
+      "fundo": "branco"
+    },
+    {
+      "id": "b4",
+      "forma": "caixa",
+      "x": 136,
+      "y": 180,
+      "w": 128,
+      "h": 52,
+      "texto": "Acusar recebimento\ne distribuir",
+      "fundo": "branco"
+    },
+    {
+      "id": "d1",
+      "forma": "decisao",
+      "x": 456,
+      "y": 176,
+      "w": 104,
+      "h": 60,
+      "texto": "Etapa\naceita?",
+      "espacamento": 14,
+      "fundo": "branco"
+    },
+    {
+      "id": "b5",
+      "forma": "caixa",
+      "x": 600,
+      "y": 180,
+      "w": 128,
+      "h": 52,
+      "texto": "Inserir no processo\narquivo (SEI)",
+      "fundo": "branco"
+    },
+    {
+      "id": "b6",
+      "forma": "caixa",
+      "x": 290,
+      "y": 300,
+      "w": 128,
+      "h": 52,
+      "texto": "Verificar 1º nível\ne 2º nível",
+      "fundo": "branco"
+    },
+    {
+      "id": "b7",
+      "forma": "caixa",
+      "x": 444,
+      "y": 300,
+      "w": 128,
+      "h": 52,
+      "texto": "Elaborar relatório\nde análise",
+      "fundo": "branco"
+    },
+    {
+      "id": "b8",
+      "forma": "caixa",
+      "x": 290,
+      "y": 392,
+      "w": 128,
+      "h": 48,
+      "texto": "Validar dados\nde entrada",
+      "fundo": "branco"
+    },
+    {
+      "id": "t1",
+      "forma": "texto",
+      "x": 444,
+      "y": 368,
+      "texto": "tarefa no sistema de gestão de demandas",
+      "tamanho": 11,
+      "estilo": "secundario"
+    },
+    {
+      "id": "t2",
+      "forma": "texto",
+      "x": 362,
+      "y": 382,
+      "texto": "topografia, geotecnia, tráfego",
+      "tamanho": 11,
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "c1",
+      "de": "b1",
+      "para": "b4",
+      "rotulo": {
+        "texto": "entrega via Diário",
+        "x": 262,
+        "y": 170,
+        "alinhamento": "inicio"
+      }
+    },
+    {
+      "id": "c2",
+      "de": "b4",
+      "para": "b6",
+      "pontos": [
+        [
+          264,
+          206
+        ],
+        [
+          354,
+          206
+        ],
+        [
+          354,
+          300
+        ]
+      ]
+    },
+    {
+      "id": "c3",
+      "de": "b6",
+      "para": "b8",
+      "seta": "ambas"
+    },
+    {
+      "id": "c4",
+      "de": "b6",
+      "para": "b7"
+    },
+    {
+      "id": "c5",
+      "de": "b7",
+      "para": "d1"
+    },
+    {
+      "id": "c6",
+      "de": "d1",
+      "para": "b5",
+      "rotulo": {
+        "texto": "sim",
+        "x": 580,
+        "y": 198
+      }
+    },
+    {
+      "id": "c7",
+      "de": "b5",
+      "para": "b3",
+      "rotulo": {
+        "texto": "solicitação via Diário",
+        "x": 656,
+        "y": 166,
+        "alinhamento": "fim"
+      }
+    },
+    {
+      "id": "c8",
+      "de": "d1",
+      "para": "b2",
+      "rotulo": {
+        "texto": "não, correção via Diário",
+        "x": 500,
+        "y": 150,
+        "alinhamento": "fim"
+      }
+    },
+    {
+      "id": "c9",
+      "de": "b2",
+      "para": "b4",
+      "pontos": [
+        [
+          444,
+          120
+        ],
+        [
+          288,
+          120
+        ],
+        [
+          288,
+          146
+        ],
+        [
+          250,
+          146
+        ],
+        [
+          250,
+          180
+        ]
+      ],
+      "rotulo": {
+        "texto": "nova revisão",
+        "x": 296,
+        "y": 112,
+        "alinhamento": "inicio"
+      }
+    }
+  ]
+}
