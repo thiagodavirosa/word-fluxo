@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar } from "./index";
 
 const base = () =>
   validar({
@@ -77,5 +77,42 @@ describe("lados do conector e medidas", () => {
     const d = validar({ ...base(), conectores: [], elementos: [{ id: "x", forma: "caixa", x: 0, y: 0, w: 80, h: 40, texto: "Uma frase bem longa demais" }] });
     expect(avisosDeTexto(d)).toHaveLength(1);
     expect(quebrarLinhas("Uma frase bem longa demais", 64, 13).split("\n").length).toBeGreaterThan(1);
+  });
+});
+
+describe("empilhamento, alinhamento e distribuição", () => {
+  const ordem = (d: ReturnType<typeof base>) => d.elementos.map((e) => e.id).join();
+
+  it("reordena para frente/trás e um passo de cada vez, preservando a ordem relativa", () => {
+    const d = base(); // g,a,b,fora
+    expect(ordem(reordenar(d, ["g"], "frente"))).toBe("a,b,fora,g");
+    expect(ordem(reordenar(d, ["fora"], "tras"))).toBe("fora,g,a,b");
+    expect(ordem(reordenar(d, ["a"], "avancar"))).toBe("g,b,a,fora");
+    expect(ordem(reordenar(d, ["b"], "recuar"))).toBe("g,b,a,fora");
+    expect(ordem(reordenar(d, ["a", "b"], "frente"))).toBe("g,fora,a,b");
+  });
+
+  it("alinha pelo topo, pela direita e pelo centro", () => {
+    const d = base();
+    const topo = alinhar(d, ["a", "fora"], "topo");
+    expect(topo.elementos.find((e) => e.id === "fora")).toMatchObject({ y: 40 });
+    const dir = alinhar(d, ["a", "b"], "direita");
+    expect(dir.elementos.find((e) => e.id === "a")).toMatchObject({ x: 200 });
+    const meio = alinhar(d, ["a", "fora"], "centro");
+    expect(meio.elementos.find((e) => e.id === "a")).toMatchObject({ x: 260 });
+  });
+
+  it("distribui com espaços iguais mantendo os extremos", () => {
+    const d = validar({
+      ...base(),
+      conectores: [],
+      elementos: [
+        { id: "p", forma: "caixa", x: 0, y: 0, w: 50, h: 20, texto: "" },
+        { id: "q", forma: "caixa", x: 60, y: 0, w: 50, h: 20, texto: "" },
+        { id: "r", forma: "caixa", x: 300, y: 0, w: 50, h: 20, texto: "" },
+      ],
+    });
+    const r = distribuir(d, ["p", "q", "r"], "horizontal");
+    expect(r.elementos.map((e) => (e as { x: number }).x)).toEqual([0, 150, 300]);
   });
 });

@@ -3,6 +3,11 @@ import { Button, Select, Switch, Text, Tooltip, makeStyles, tokens } from "@flue
 import {
   adicionar,
   ajustarTela,
+  alinhar,
+  distribuir,
+  reordenar,
+  type ModoAlinhar,
+  type ModoOrdem,
   atualizarConector,
   atualizarElemento,
   avisosDeTexto,
@@ -66,6 +71,7 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
   const [grade, setGrade] = useState(true);
   const [editando, setEditando] = useState<{ alvo: Alvo; valor: string } | null>(null);
   const [erro, setErro] = useState("");
+  const [info, setInfo] = useState("");
   const areaRef = useRef<HTMLDivElement>(null);
   const avisos = useMemo(() => new Set(avisosDeTexto(d).map((a) => a.id)), [d]);
 
@@ -151,6 +157,8 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
     setSelecao({ ids: r.ids, conector: null });
   };
 
+  const ordem = (modo: ModoOrdem) => selecao.ids.length > 0 && h.aplicar((x) => reordenar(x, selecao.ids, modo));
+
   const aplicarAoDocumento = () => {
     try {
       onAplicar(validar(d));
@@ -167,6 +175,9 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
       if (ctrl && e.key.toLowerCase() === "z" && !e.shiftKey) h.desfazer();
       else if (ctrl && (e.key.toLowerCase() === "y" || (e.key.toLowerCase() === "z" && e.shiftKey))) h.refazer();
       else if (ctrl && e.key.toLowerCase() === "d") duplicarSelecao();
+      else if (ctrl && e.key === "]") ordem(e.shiftKey ? "frente" : "avancar");
+      else if (ctrl && e.key === "[") ordem(e.shiftKey ? "tras" : "recuar");
+      else if (ctrl && e.key.toLowerCase() === "a") setSelecao({ ids: d.elementos.map((x) => x.id), conector: null });
       else if (e.key === "Delete" || e.key === "Backspace") apagar();
       else if (e.key === "Escape") escolherFerramenta("selecionar");
       else if (e.key.startsWith("Arrow") && selecao.ids.length) {
@@ -231,7 +242,61 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
           </Button>
         </div>
         <div className={s.grupo}>
-          <Select size="small" value="" onChange={(_, v) => v.value && h.aplicar((x) => organizar(x, v.value as "horizontal" | "vertical"))} aria-label="Organizar automaticamente">
+          <Tooltip content="Ctrl+Shift+] / Ctrl+Shift+[" relationship="description">
+            <span style={{ display: "flex", gap: 2 }}>
+              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("frente")}>
+                Frente
+              </Button>
+              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("tras")}>
+                Trás
+              </Button>
+              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("avancar")}>
+                +1
+              </Button>
+              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("recuar")}>
+                −1
+              </Button>
+            </span>
+          </Tooltip>
+        </div>
+        <div className={s.grupo}>
+          <Select
+            size="small"
+            value=""
+            disabled={selecao.ids.length < 2}
+            aria-label="Alinhar elementos selecionados"
+            onChange={(_, v) => v.value && h.aplicar((x) => alinhar(x, selecao.ids, v.value as ModoAlinhar))}
+          >
+            <option value="">Alinhar…</option>
+            <option value="esquerda">À esquerda</option>
+            <option value="centro">Centralizar na horizontal</option>
+            <option value="direita">À direita</option>
+            <option value="topo">Ao topo</option>
+            <option value="meio">Centralizar na vertical</option>
+            <option value="base">À base</option>
+          </Select>
+          <Select
+            size="small"
+            value=""
+            disabled={selecao.ids.length < 3}
+            aria-label="Distribuir elementos selecionados"
+            onChange={(_, v) => v.value && h.aplicar((x) => distribuir(x, selecao.ids, v.value as "horizontal" | "vertical"))}
+          >
+            <option value="">Distribuir…</option>
+            <option value="horizontal">Na horizontal</option>
+            <option value="vertical">Na vertical</option>
+          </Select>
+        </div>
+        <div className={s.grupo}>
+          <Select size="small" value="" onChange={(_, v) => {
+              if (!v.value) return;
+              h.aplicar((x) => organizar(x, v.value as "horizontal" | "vertical"));
+              const fixos = d.elementos.some((e) => e.forma === "grupo" || e.forma === "raia");
+              setInfo(fixos ? "Organizado. Grupos e raias não se movem na organização automática: ajuste-os à mão." : "Organizado. Ctrl+Z desfaz.");
+              setTimeout(() => setInfo(""), 6000);
+            }}
+            aria-label="Organizar automaticamente"
+          >
             <option value="">Organizar…</option>
             <option value="horizontal">Fluxo horizontal</option>
             <option value="vertical">Fluxo vertical</option>
@@ -251,9 +316,9 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
           </Button>
         </div>
         <div className={s.espaco} />
-        {(dica || erro) && (
+        {(dica || erro || info) && (
           <Text size={200} style={{ color: erro ? tokens.colorPaletteRedForeground1 : undefined }}>
-            {erro || dica}
+            {erro || dica || info}
           </Text>
         )}
         <Button size="small" onClick={onCancelar}>

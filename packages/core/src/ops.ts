@@ -147,12 +147,85 @@ export function inverterConector(d: Diagrama, id: string): Diagrama {
   };
 }
 
-/** Ordem de empilhamento: último do array fica por cima. */
-export function reordenar(d: Diagrama, id: string, para: "frente" | "tras"): Diagrama {
-  const e = d.elementos.find((x) => x.id === id);
-  if (!e) return d;
-  const resto = d.elementos.filter((x) => x.id !== id);
-  return { ...d, elementos: para === "frente" ? [...resto, e] : [e, ...resto] };
+/** Ordem de empilhamento: o último do array fica por cima. A ordem relativa dos selecionados é preservada. */
+export type ModoOrdem = "frente" | "tras" | "avancar" | "recuar";
+
+export function reordenar(d: Diagrama, ids: string[], modo: ModoOrdem): Diagrama {
+  const sel = new Set(ids);
+  const arr = [...d.elementos];
+  if (modo === "frente") return { ...d, elementos: [...arr.filter((e) => !sel.has(e.id)), ...arr.filter((e) => sel.has(e.id))] };
+  if (modo === "tras") return { ...d, elementos: [...arr.filter((e) => sel.has(e.id)), ...arr.filter((e) => !sel.has(e.id))] };
+  if (modo === "avancar") {
+    for (let i = arr.length - 2; i >= 0; i--) if (sel.has(arr[i].id) && !sel.has(arr[i + 1].id)) [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+  } else {
+    for (let i = 1; i < arr.length; i++) if (sel.has(arr[i].id) && !sel.has(arr[i - 1].id)) [arr[i], arr[i - 1]] = [arr[i - 1], arr[i]];
+  }
+  return { ...d, elementos: arr };
+}
+
+export type ModoAlinhar = "esquerda" | "centro" | "direita" | "topo" | "meio" | "base";
+
+/** Aplica um deslocamento individual a cada elemento (sem arrastar o conteúdo de grupos); conectores ligados voltam à rota automática. */
+function deslocarCada(d: Diagrama, deltas: Map<string, [number, number]>): Diagrama {
+  return {
+    ...d,
+    elementos: d.elementos.map((e) => {
+      const dl = deltas.get(e.id);
+      return dl && (dl[0] !== 0 || dl[1] !== 0) ? deslocar(e, dl[0], dl[1]) : e;
+    }),
+    conectores: d.conectores.map((c) => {
+      const tocou = (c.de && deltas.has(c.de)) || (c.para && deltas.has(c.para));
+      return tocou && c.de && c.para && c.pontos ? { ...c, pontos: undefined } : c;
+    }),
+  };
+}
+
+/** Alinha os elementos entre si pelo lado, centro ou meio do conjunto (RF-15). */
+export function alinhar(d: Diagrama, ids: string[], modo: ModoAlinhar): Diagrama {
+  const alvo = d.elementos.filter((e) => ids.includes(e.id));
+  if (alvo.length < 2) return d;
+  const caixas = alvo.map((e) => ({ id: e.id, c: limites(e) }));
+  const x1 = Math.min(...caixas.map(({ c }) => c.x));
+  const x2 = Math.max(...caixas.map(({ c }) => c.x + c.w));
+  const y1 = Math.min(...caixas.map(({ c }) => c.y));
+  const y2 = Math.max(...caixas.map(({ c }) => c.y + c.h));
+  const deltas = new Map<string, [number, number]>();
+  for (const { id, c } of caixas) {
+    deltas.set(
+      id,
+      {
+        esquerda: [x1 - c.x, 0],
+        direita: [x2 - (c.x + c.w), 0],
+        centro: [(x1 + x2) / 2 - (c.x + c.w / 2), 0],
+        topo: [0, y1 - c.y],
+        base: [0, y2 - (c.y + c.h)],
+        meio: [0, (y1 + y2) / 2 - (c.y + c.h / 2)],
+      }[modo] as [number, number],
+    );
+  }
+  return deslocarCada(d, deltas);
+}
+
+/** Distribui três ou mais elementos com espaços iguais entre eles, mantendo os dois extremos. */
+export function distribuir(d: Diagrama, ids: string[], eixo: "horizontal" | "vertical"): Diagrama {
+  const h = eixo === "horizontal";
+  const alvo = d.elementos
+    .filter((e) => ids.includes(e.id))
+    .map((e) => ({ id: e.id, c: limites(e) }))
+    .sort((a, b) => (h ? a.c.x - b.c.x : a.c.y - b.c.y));
+  if (alvo.length < 3) return d;
+  const tam = (c: Caixa) => (h ? c.w : c.h);
+  const ini = (c: Caixa) => (h ? c.x : c.y);
+  const ultimo = alvo[alvo.length - 1].c;
+  const livre = ini(ultimo) + tam(ultimo) - ini(alvo[0].c) - alvo.reduce((t, { c }) => t + tam(c), 0);
+  const passo = livre / (alvo.length - 1);
+  const deltas = new Map<string, [number, number]>();
+  let cursor = ini(alvo[0].c);
+  for (const { id, c } of alvo) {
+    deltas.set(id, h ? [cursor - c.x, 0] : [0, cursor - c.y]);
+    cursor += tam(c) + passo;
+  }
+  return deslocarCada(d, deltas);
 }
 
 export function conteudo(d: Diagrama): Caixa {

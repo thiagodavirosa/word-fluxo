@@ -1,4 +1,4 @@
-import { useMemo, useRef, type PointerEvent as PE } from "react";
+import { useMemo, useRef, useState, type PointerEvent as PE } from "react";
 import {
   limites,
   moverConector,
@@ -78,13 +78,20 @@ function novaCaixa(c: Caixa, a: Alca, dx: number, dy: number): Caixa {
 }
 
 type Gesto =
-  | { tipo: "mover"; ids: string[]; conector: string | null; inicio: [number, number]; base: Diagrama }
+  | { tipo: "mover"; ids: string[]; conector: string | null; inicio: [number, number]; base: Diagrama; movido: boolean; tela: [number, number] }
+  | { tipo: "laco"; inicio: [number, number]; somar: string[] }
   | { tipo: "redim"; id: string; alca: Alca; inicio: [number, number]; base: Diagrama; caixa: Caixa };
 
 export function Tela(p: Props) {
   const { diagrama: d, zoom } = p;
   const svgRef = useRef<SVGSVGElement>(null);
   const gesto = useRef<Gesto | null>(null);
+  const [laco, setLacoEstado] = useState<Caixa | null>(null);
+  const lacoRef = useRef<Caixa | null>(null);
+  const setLaco = (c: Caixa | null) => {
+    lacoRef.current = c;
+    setLacoEstado(c);
+  };
   const { largura, altura } = d.tela;
 
   // O SVG exibido é o mesmo que será inserido no Word; só a camada de interação é desenhada à parte.
@@ -109,13 +116,14 @@ export function Tela(p: Props) {
   }
 
   function iniciarMover(e: PE, ids: string[], conector: string | null) {
-    gesto.current = { tipo: "mover", ids, conector, inicio: ponto(e), base: d };
+    gesto.current = { tipo: "mover", ids, conector, inicio: ponto(e), base: d, movido: false, tela: [e.clientX, e.clientY] };
     p.onGestoInicio();
     capturar(e);
   }
 
   function aoPressionarElemento(e: PE, id: string) {
     e.stopPropagation();
+    e.preventDefault();
     if (p.ferramenta === "conectar") return p.onClicarElemento(id);
     if (p.ferramenta !== "selecionar") return;
     const jaSelecionado = p.selecao.ids.includes(id);
@@ -132,6 +140,7 @@ export function Tela(p: Props) {
 
   function aoPressionarConector(e: PE, id: string) {
     e.stopPropagation();
+    e.preventDefault();
     if (p.ferramenta !== "selecionar") return;
     p.onSelecionar({ ids: [], conector: id });
     if (d.conectores.find((c) => c.id === id)?.pontos) iniciarMover(e, [], id);
@@ -151,7 +160,16 @@ export function Tela(p: Props) {
     const [x, y] = ponto(e);
     let dx = x - g.inicio[0];
     let dy = y - g.inicio[1];
+    if (g.tipo === "laco") {
+      setLaco({ x: Math.min(x, g.inicio[0]), y: Math.min(y, g.inicio[1]), w: Math.abs(dx), h: Math.abs(dy) });
+      return;
+    }
     if (g.tipo === "mover") {
+      // Só começa a mover depois de 4 px de arrasto na tela: um clique firme não desloca o elemento.
+      if (!g.movido) {
+        if (Math.hypot(e.clientX - g.tela[0], e.clientY - g.tela[1]) < 4) return;
+        g.movido = true;
+      }
       dx = encaixar(dx);
       dy = encaixar(dy);
       p.onPrever(g.conector ? moverConector(g.base, g.conector, dx, dy) : mover(g.base, g.ids, dx, dy));
@@ -164,13 +182,35 @@ export function Tela(p: Props) {
   }
 
   function aoSoltar() {
-    if (!gesto.current) return;
+    const g = gesto.current;
+    if (!g) return;
     gesto.current = null;
+    if (g.tipo === "laco") {
+      const laco = lacoRef.current;
+      if (laco && (laco.w > 3 || laco.h > 3)) {
+        // Grupos e raias só entram se estiverem inteiros no laço; os demais, se tocarem nele.
+        const dentroTotal = (c: Caixa) => c.x >= laco.x && c.y >= laco.y && c.x + c.w <= laco.x + laco.w && c.y + c.h <= laco.y + laco.h;
+        const toca = (c: Caixa) => c.x < laco.x + laco.w && c.x + c.w > laco.x && c.y < laco.y + laco.h && c.y + c.h > laco.y;
+        const ids = d.elementos
+          .filter((el) => (el.forma === "grupo" || el.forma === "raia" ? dentroTotal(limites(el)) : toca(limites(el))))
+          .map((el) => el.id);
+        p.onSelecionar({ ids: [...new Set([...g.somar, ...ids])], conector: null });
+      }
+      setLaco(null);
+      return;
+    }
     p.onGestoFim();
   }
 
   function aoPressionarFundo(e: PE) {
     const [x, y] = ponto(e);
+    if (p.ferramenta === "selecionar") {
+      // Arrastar no vazio desenha um laço de seleção; um clique simples só limpa a seleção.
+      gesto.current = { tipo: "laco", inicio: [x, y], somar: e.shiftKey ? p.selecao.ids : [] };
+      if (!e.shiftKey) p.onSelecionar({ ids: [], conector: null });
+      capturar(e);
+      return;
+    }
     p.onClicarVazio(x, y);
   }
 
@@ -188,7 +228,7 @@ export function Tela(p: Props) {
   }
 
   return (
-    <div style={{ position: "relative", width: largura * zoom, height: altura * zoom, boxShadow: "0 0 0 1px #c8ccd0, 0 4px 16px rgba(0,0,0,.12)", background: "#fff" }}>
+    <div style={{ position: "relative", userSelect: "none", width: largura * zoom, height: altura * zoom, boxShadow: "0 0 0 1px #c8ccd0, 0 4px 16px rgba(0,0,0,.12)", background: "#fff" }}>
       <div style={{ position: "absolute", inset: 0 }} className="fluxo-svg" dangerouslySetInnerHTML={{ __html: html }} />
       <style>{`.fluxo-svg > svg { width: 100%; height: 100%; display: block; }`}</style>
       <svg
@@ -246,6 +286,8 @@ export function Tela(p: Props) {
             </g>
           );
         })}
+
+        {laco && <rect x={laco.x} y={laco.y} width={laco.w} height={laco.h} fill={AZUL} fillOpacity={0.08} stroke={AZUL} strokeWidth={1 / zoom} strokeDasharray={`${4 / zoom} ${3 / zoom}`} pointerEvents="none" />}
 
         {unico && temCaixa(unico) && p.ferramenta === "selecionar" &&
           ALCAS.map((a) => {

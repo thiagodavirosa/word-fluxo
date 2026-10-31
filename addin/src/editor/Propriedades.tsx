@@ -155,10 +155,10 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
         </div>
       ) : null}
       <div className={s.linha}>
-        <Button size="small" onClick={() => aplicar((x) => reordenar(x, e.id, "frente"))}>
+        <Button size="small" onClick={() => aplicar((x) => reordenar(x, [e.id], "frente"))}>
           Trazer para frente
         </Button>
-        <Button size="small" onClick={() => aplicar((x) => reordenar(x, e.id, "tras"))}>
+        <Button size="small" onClick={() => aplicar((x) => reordenar(x, [e.id], "tras"))}>
           Enviar para trás
         </Button>
       </div>
