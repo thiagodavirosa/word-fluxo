@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo } from "./index";
 
 const base = () =>
   validar({
@@ -189,5 +189,39 @@ describe("conexões", () => {
     const ligado = ligarPorProximidade(base).diagrama;
     const reta = { ...ligado, conectores: [{ ...ligado.conectores[0], pontos: undefined, rota: "curva" as const }] };
     expect(renderSvg(reta)).toContain("C");
+  });
+});
+
+describe("estilos", () => {
+  const base = validar({
+    schema: "fluxo-word/1.0",
+    id: "e",
+    tipo: "livre",
+    titulo: "e",
+    tela: { largura: 300, altura: 100 },
+    elementos: [
+      { id: "a", forma: "caixa", x: 0, y: 0, w: 100, h: 40, texto: "A", contorno: "#ff0000", preenchimento: "#ffeeee", espessura: 3, traco: "pontilhado", corTexto: "#0000ff" },
+      { id: "b", forma: "caixa", x: 150, y: 0, w: 100, h: 40, texto: "B" },
+    ],
+    conectores: [{ id: "k", de: "a", para: "b", cor: "#00aa00", espessura: 2.5, traco: "tracejado" }],
+  });
+
+  it("desenha os ajustes de aparência", () => {
+    const svg = renderSvg(base);
+    expect(svg).toContain('fill="#ffeeee"');
+    expect(svg).toContain('stroke="#ff0000" stroke-width="3" stroke-dasharray="2 3"');
+    expect(svg).toContain('fill="#0000ff"');
+    expect(svg).toContain('stroke="#00aa00" stroke-width="2.5"');
+    expect(svg).toContain('id="seta-00aa00"');
+  });
+
+  it("copia o estilo de uma caixa para outra", () => {
+    const r = aplicarEstilo(base, ["b"], estiloDe(base.elementos[0]));
+    expect(renderSvg(r).match(/stroke="#ff0000"/g)).toHaveLength(2);
+  });
+
+  it("restaurar padrão limpa os ajustes", () => {
+    const r = limparEstilo(base, ["a"]);
+    expect(renderSvg(r)).not.toContain("#ff0000");
   });
 });

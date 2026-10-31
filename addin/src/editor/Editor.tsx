@@ -284,9 +284,6 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
           <Botao id="selecionar" titulo="Selecionar e arrastar">
             Selecionar
           </Botao>
-          <Botao id="conectar" titulo="Ligar dois elementos">
-            Conector
-          </Botao>
           <Select size="small" value={paleta} onChange={(_, v) => setPaleta(v.value as typeof paleta)} aria-label="Posição da paleta de formas">
             <option value="lateral">Formas: lateral</option>
             <option value="superior">Formas: superior</option>

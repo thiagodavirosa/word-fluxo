@@ -33,7 +33,27 @@ const ancora = (a: Alinh = "meio") => ({ inicio: "start", meio: "middle", fim: "
 const corDoFundo = (fundo: string | undefined, t: Tema, padrao: "none" | "grupo" = "none") =>
   ({ nenhum: "none", branco: t.fundo, grupo: t.fundoGrupo })[fundo ?? padrao] ?? "none";
 
-function pintura(e: { estilo?: string; cor?: string; fundo?: string }, t: Tema): Pintura {
+type Ajustes = { contorno?: string; preenchimento?: string; corTexto?: string; espessura?: number; traco?: string };
+
+const TRACOS: Record<string, string | undefined> = { continuo: undefined, pontilhado: "2 3" };
+
+function pintura(e: { estilo?: string; cor?: string; fundo?: string } & Ajustes, t: Tema): Pintura {
+  const p = pinturaBase(e, t);
+  if (e.preenchimento) {
+    p.fill = e.preenchimento;
+    p.fillOp = undefined;
+  }
+  if (e.contorno) p.stroke = e.contorno;
+  if (e.espessura) p.strokeW = e.espessura;
+  if (e.traco) p.dash = e.traco === "tracejado" ? t.tracejado : TRACOS[e.traco];
+  if (e.corTexto) {
+    p.texto = e.corTexto;
+    p.sub = e.corTexto;
+  }
+  return p;
+}
+
+function pinturaBase(e: { estilo?: string; cor?: string; fundo?: string }, t: Tema): Pintura {
   const fundo = corDoFundo(e.fundo, t);
   switch (e.estilo) {
     case "destaque": {
@@ -105,7 +125,20 @@ function rotulos(
   return { linhas: [...titulo, ...sub], passo: e.espacamento ?? (e.subtitulo ? 17 : 15) };
 }
 
+function tracoAttr(traco: string | undefined, t: Tema): string {
+  const v = traco === "tracejado" ? t.tracejado : traco ? TRACOS[traco] : undefined;
+  return v ? ` stroke-dasharray="${v}"` : "";
+}
+
+/** Aplica fonte e itálico próprios do elemento, se houver, sem alterar o desenho padrão. */
 function renderElemento(e: Elemento, d: Diagrama, t: Tema): string {
+  const svg = renderElementoBase(e, d, t);
+  const fam = e.fonte ? ` font-family="${esc(e.fonte)}"` : "";
+  const it = e.italico ? ` font-style="italic"` : "";
+  return fam || it ? `<g${fam}${it}>${svg}</g>` : svg;
+}
+
+function renderElementoBase(e: Elemento, d: Diagrama, t: Tema): string {
   const base = d.tela.fonteBase ?? t.tamRotulo;
   switch (e.forma) {
     case "caixa":
@@ -133,45 +166,45 @@ function renderElemento(e: Elemento, d: Diagrama, t: Tema): string {
     }
     case "marcador": {
       const cor = e.cor ?? t.destaque;
-      const linhas = linhasDe(e.texto).map((s) => ({ t: s, tam: 10, negrito: true, cor: t.textoInverso }));
-      return `<circle cx="${num(e.x)}" cy="${num(e.y)}" r="${e.raio ?? 11}" fill="${cor}"/>` + blocoCentrado(linhas, e.x, e.y, 15);
+      const linhas = linhasDe(e.texto).map((s) => ({ t: s, tam: 10, negrito: true, cor: e.corTexto ?? t.textoInverso }));
+      return `<circle cx="${num(e.x)}" cy="${num(e.y)}" r="${e.raio ?? 11}" fill="${e.preenchimento ?? cor}"${e.contorno ? ` stroke="${e.contorno}" stroke-width="${num(e.espessura ?? 1.5)}"` : ""}/>` + blocoCentrado(linhas, e.x, e.y, 15);
     }
     case "grupo": {
       const a = e.alinhamento ?? "inicio";
       const x = a === "fim" ? e.x + e.w - 16 : e.x + 16;
       return (
-        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="${t.raio}" fill="${corDoFundo(e.fundo, t, "grupo")}" stroke="${e.cor ?? t.linha}" stroke-width="${t.espLinha}"/>` +
-        linhasDe(e.texto).map((s, i) => textoSvg(x, e.y + 24 + i * 15, s, base, t.texto, true, a)).join("")
+        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="${t.raio}" fill="${e.preenchimento ?? corDoFundo(e.fundo, t, "grupo")}" stroke="${e.contorno ?? e.cor ?? t.linha}" stroke-width="${num(e.espessura ?? t.espLinha)}"${tracoAttr(e.traco, t)}/>` +
+        linhasDe(e.texto).map((s, i) => textoSvg(x, e.y + 24 + i * 15, s, base, e.corTexto ?? t.texto, true, a)).join("")
       );
     }
     case "raia": {
       const esp = e.espessura ?? 1;
-      const linhas = linhasDe(e.texto).map((s) => ({ t: s, tam: 12, negrito: true, cor: t.texto }));
+      const linhas = linhasDe(e.texto).map((s) => ({ t: s, tam: 12, negrito: true, cor: e.corTexto ?? t.texto }));
       return (
-        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" fill="${t.fundoGrupo}" stroke="${e.cor ?? t.linha}" stroke-width="${num(esp)}"/>` +
+        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" fill="${e.preenchimento ?? t.fundoGrupo}" stroke="${e.contorno ?? e.cor ?? t.linha}" stroke-width="${num(esp)}"${tracoAttr(e.traco, t)}/>` +
         blocoCentrado(linhas, e.x + 12, e.y + e.h / 2, 15, "inicio")
       );
     }
     case "barra": {
-      const cor = e.estilo === "destaque" ? (e.cor ?? t.destaque) : (e.cor ?? t.linha);
+      const cor = e.preenchimento ?? (e.estilo === "destaque" ? (e.cor ?? t.destaque) : (e.cor ?? t.linha));
       const op = e.estilo === "destaque" ? 0.85 : 0.55;
       return `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="3" fill="${cor}" fill-opacity="${op}"/>`;
     }
     case "retangulo":
       return (
         `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" fill="${e.preenchimento ?? t.fundoGrupo}"` +
-        (e.borda ? ` stroke="${e.cor ?? t.linha}" stroke-width="${t.espLinha}"` : "") +
+        (e.borda || e.contorno ? ` stroke="${e.contorno ?? e.cor ?? t.linha}" stroke-width="${num(e.espessura ?? t.espLinha)}"${tracoAttr(e.traco, t)}` : "") +
         `/>`
       );
     case "texto": {
-      const cor = e.estilo === "secundario" ? t.textoSec : (e.cor ?? t.texto);
+      const cor = e.corTexto ?? (e.estilo === "secundario" ? t.textoSec : (e.cor ?? t.texto));
       return linhasDe(e.texto)
         .map((s, i) => textoSvg(e.x, e.y + i * (e.espacamento ?? 15), s, e.tamanho ?? base, cor, !!e.negrito, e.alinhamento ?? "inicio"))
         .join("");
     }
     case "linha":
       return (
-        `<path d="${caminho([[e.x1, e.y1], [e.x2, e.y2]])}" stroke="${e.cor ?? t.linha}" stroke-width="${num(e.espessura ?? t.espLinha)}"` +
+        `<path d="${caminho([[e.x1, e.y1], [e.x2, e.y2]])}" stroke="${e.contorno ?? e.cor ?? t.linha}" stroke-width="${num(e.espessura ?? t.espLinha)}"${tracoAttr(e.traco, t)}` +
         (e.opacidade !== undefined ? ` stroke-opacity="${e.opacidade}"` : "") +
         ` fill="none"/>`
       );
@@ -199,6 +232,8 @@ export function caminhoDoConector(d: Diagrama, c: Diagrama["conectores"][number]
   return `M${num(pts[0][0])} ${num(pts[0][1])}C${num(ctl[0][0])} ${num(ctl[0][1])} ${num(ctl[1][0])} ${num(ctl[1][1])} ${num(pts[1][0])} ${num(pts[1][1])}`;
 }
 
+const idSeta = (cor?: string) => (cor ? `seta-${cor.slice(1).toLowerCase()}` : "seta");
+
 function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema): string {
   const pts = pontosDoConector(d, c);
   if (pts.length < 2) return "";
@@ -206,8 +241,9 @@ function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema)
   const marcadores =
     (c.seta === "inicio" || c.seta === "ambas" ? ` marker-start="url(#seta)"` : "") +
     (c.seta === "fim" || c.seta === "ambas" ? ` marker-end="url(#seta)"` : "");
-  const tracejado = c.estilo === "tracejado" ? ` stroke-dasharray="${t.tracejado}"` : "";
-  let svg = `<path d="${caminhoDoConector(d, c)}" fill="none" stroke="${t.linha}" stroke-width="${t.espLinha}"${tracejado}${marcadores}/>`;
+  const traco = c.traco ?? (c.estilo === "tracejado" ? "tracejado" : "continuo");
+  const marcadorDe = (s: string) => s.replace('url(#seta)', `url(#${idSeta(c.cor)})`);
+  let svg = `<path d="${caminhoDoConector(d, c)}" fill="none" stroke="${c.cor ?? t.linha}" stroke-width="${num(c.espessura ?? t.espLinha)}"${tracoAttr(traco, t)}${marcadorDe(marcadores)}/>`;
 
   if (c.rotulo) {
     const r = c.rotulo;
@@ -240,7 +276,9 @@ export function renderSvg(d: Diagrama, tema?: Tema): string {
   const base = d.tela.fonteBase ?? t.tamRotulo;
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" font-family="${t.fonte}" viewBox="0 0 ${largura} ${altura}" width="${largura}" height="${altura}" font-size="${base}">` +
-    `<defs><marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${t.linha}"/></marker></defs>` +
+    `<defs>${[undefined, ...new Set(d.conectores.map((c) => c.cor).filter(Boolean))]
+      .map((cor) => `<marker id="${idSeta(cor)}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${cor ?? t.linha}"/></marker>`)
+      .join("")}</defs>` +
     `<rect width="${largura}" height="${altura}" fill="${t.fundo}" data-fundo="1"/>` +
     textoSvg(24, 34, d.titulo, t.tamTitulo, t.texto, true, "inicio") +
     camadas(d)

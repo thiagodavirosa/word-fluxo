@@ -12,10 +12,20 @@ export const Lado = z.enum(["auto", "cima", "baixo", "esquerda", "direita"]);
 export type Lado = z.infer<typeof Lado>;
 
 /** Propriedades comuns: estilo semântico e cor de ênfase própria (substitui o azul do tema). */
+export const Traco = z.enum(["continuo", "tracejado", "pontilhado"]);
+
 const base = {
   id: z.string().min(1),
   estilo: Estilo.optional(),
   cor: Cor.optional(),
+  /** Ajustes finos de aparência; sem valor valem o estilo e o tema. */
+  contorno: Cor.optional(),
+  preenchimento: Cor.optional(),
+  corTexto: Cor.optional(),
+  espessura: z.number().positive().optional(),
+  traco: Traco.optional(),
+  fonte: z.string().optional(),
+  italico: z.boolean().optional(),
 };
 
 const Retangular = { x: z.number(), y: z.number(), w: z.number().positive(), h: z.number().positive() };
@@ -166,6 +176,9 @@ export const Conector = z.object({
   depois: z.string().optional(),
   ladoDe: Lado.optional(),
   ladoPara: Lado.optional(),
+  cor: Cor.optional(),
+  espessura: z.number().positive().optional(),
+  traco: Traco.optional(),
   /** Forma do traçado entre elementos ligados: em ângulos retos (padrão), reta ou curva. */
   rota: z.enum(["ortogonal", "reta", "curva"]).optional(),
   seta: z.enum(["fim", "inicio", "ambas", "nenhuma"]).default("fim"),

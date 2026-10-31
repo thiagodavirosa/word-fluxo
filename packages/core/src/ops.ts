@@ -297,3 +297,34 @@ export function organizar(d: Diagrama, direcao: "horizontal" | "vertical"): Diag
   const conectores = d.conectores.map((c) => (c.de && c.para && ids.has(c.de) && ids.has(c.para) ? { ...c, pontos: undefined } : c));
   return ajustarTela({ ...d, elementos, conectores });
 }
+
+/** Campos de aparência que "copiar estilo" leva de um elemento a outros. */
+export const CAMPOS_ESTILO = ["estilo", "cor", "contorno", "preenchimento", "corTexto", "espessura", "traco", "fonte", "italico", "fundo", "raio", "tamanho", "negrito"] as const;
+export type EstiloCopiado = Partial<Record<(typeof CAMPOS_ESTILO)[number], unknown>>;
+
+export function estiloDe(e: Elemento): EstiloCopiado {
+  const origem = e as unknown as Record<string, unknown>;
+  return Object.fromEntries(CAMPOS_ESTILO.filter((k) => origem[k] !== undefined).map((k) => [k, origem[k]]));
+}
+
+/** Aplica um estilo copiado; os campos que o estilo não tem são limpos, para o resultado ser idêntico ao original. */
+export function aplicarEstilo(d: Diagrama, ids: string[], estilo: EstiloCopiado): Diagrama {
+  const alvo = new Set(ids);
+  return {
+    ...d,
+    elementos: d.elementos.map((e) => {
+      if (!alvo.has(e.id)) return e;
+      const novo = { ...(e as unknown as Record<string, unknown>) };
+      for (const k of CAMPOS_ESTILO) {
+        if (k in estilo) novo[k] = estilo[k];
+        else delete novo[k];
+      }
+      return novo as unknown as Elemento;
+    }),
+  };
+}
+
+/** Remove todos os ajustes de aparência: o elemento volta ao estilo e ao tema. */
+export function limparEstilo(d: Diagrama, ids: string[]): Diagrama {
+  return aplicarEstilo(d, ids, {});
+}

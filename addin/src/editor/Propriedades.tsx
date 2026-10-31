@@ -1,8 +1,9 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Button, Checkbox, Field, Input, Select, Textarea, Text, Divider, makeStyles, tokens } from "@fluentui/react-components";
 import {
   atualizarConector,
   atualizarElemento,
+  aplicarEstilo,
   avisosDeTexto,
   desconectados,
   inverterConector,
@@ -18,6 +19,7 @@ import {
   type Elemento,
 } from "@word-fluxo/core";
 import type { Selecao } from "./Tela";
+import { Aparencia, CampoCor } from "./Aparencia";
 
 const useStyles = makeStyles({
   raiz: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalS, padding: tokens.spacingHorizontalM },
@@ -36,10 +38,27 @@ interface Props {
 
 const PALETA = ["#2f6fdc", "#0f7b6c", "#c4561b", "#b4262f", "#7a3fb5", "#56636d"];
 
-function Num({ rotulo, valor, onChange }: { rotulo: string; valor: number; onChange: (v: number) => void }) {
+/** Campo numérico que aceita apagar e digitar: o valor só é aplicado (e limitado ao mínimo) quando é um número válido; ao sair do campo ele volta ao valor aplicado. */
+function Num({ rotulo, valor, onChange, min }: { rotulo: string; valor: number; onChange: (v: number) => void; min?: number }) {
+  const atual = String(Math.round(valor * 100) / 100);
+  const [texto, setTexto] = useState<string | null>(null);
   return (
     <Field label={rotulo} size="small">
-      <Input type="number" size="small" value={String(Math.round(valor * 100) / 100)} onChange={(_, d) => d.value !== "" && onChange(Number(d.value))} />
+      <Input
+        type="number"
+        size="small"
+        value={texto ?? atual}
+        onChange={(_, d) => {
+          setTexto(d.value);
+          const n = Number(d.value);
+          if (d.value.trim() !== "" && Number.isFinite(n) && (min === undefined || n >= min)) onChange(n);
+        }}
+        onBlur={() => {
+          const n = Number(texto);
+          if (texto !== null && texto.trim() !== "" && Number.isFinite(n) && min !== undefined && n < min) onChange(min);
+          setTexto(null);
+        }}
+      />
     </Field>
   );
 }
@@ -100,6 +119,7 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
         <Text weight="semibold">{elementos.length} elementos selecionados</Text>
         <Opcoes rotulo="Estilo" valor={elementos[0].estilo ?? "normal"} opcoes={ESTILOS} onChange={(v) => mudar({ estilo: v })} />
         <SeletorCor valor={elementos[0].cor} onChange={(cor) => mudar({ cor })} />
+        <Aparencia elementos={elementos} mudar={mudar} aplicarEstilo={(est) => aplicar((x) => aplicarEstilo(x, elementos.map((k) => k.id), est))} />
       </div>
     );
   }
@@ -139,7 +159,7 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
       {(e.forma === "caixa" || e.forma === "texto") && (
         <>
           <Checkbox label="Negrito" checked={!!(e.negrito ?? (e.forma === "caixa" && e.subtitulo))} onChange={(_, v) => mudar({ negrito: !!v.checked })} />
-          <Num rotulo="Tamanho da fonte" valor={e.tamanho ?? d.tela.fonteBase ?? 13} onChange={(tamanho) => mudar({ tamanho }, "tam")} />
+          <Num rotulo="Tamanho da fonte" valor={e.tamanho ?? d.tela.fonteBase ?? 13} min={6} onChange={(tamanho) => mudar({ tamanho }, "tam")} />
         </>
       )}
       {(e.forma === "grupo" || e.forma === "texto" || e.forma === "caixa") && (
@@ -151,13 +171,15 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
         />
       )}
 
+      <Aparencia elementos={[e]} mudar={mudar} aplicarEstilo={(est) => aplicar((x) => aplicarEstilo(x, [e.id], est))} />
+
       <Divider />
       {temCaixa(e) ? (
         <div className={s.linha}>
           <Num rotulo="X" valor={e.x} onChange={(x) => mudar({ x }, "x")} />
           <Num rotulo="Y" valor={e.y} onChange={(y) => mudar({ y }, "y")} />
-          <Num rotulo="Largura" valor={e.w} onChange={(w) => mudar({ w: Math.max(16, w) }, "w")} />
-          <Num rotulo="Altura" valor={e.h} onChange={(h) => mudar({ h: Math.max(16, h) }, "h")} />
+          <Num rotulo="Largura" valor={e.w} min={16} onChange={(w) => mudar({ w }, "w")} />
+          <Num rotulo="Altura" valor={e.h} min={16} onChange={(h) => mudar({ h }, "h")} />
         </div>
       ) : e.forma !== "linha" ? (
         <div className={s.linha}>
@@ -216,7 +238,14 @@ function PropConector({ c, d, aplicar }: { c: Conector; d: Diagrama; aplicar: Ap
         />
       )}
       <Opcoes rotulo="Setas" valor={c.seta} opcoes={[["fim", "No fim"], ["inicio", "No início"], ["ambas", "Nas duas pontas"], ["nenhuma", "Sem seta"]]} onChange={(seta) => mudar({ seta })} />
-      <Opcoes rotulo="Traço" valor={c.estilo} opcoes={[["normal", "Contínuo"], ["tracejado", "Tracejado"]]} onChange={(estilo) => mudar({ estilo })} />
+      <Opcoes
+        rotulo="Traço"
+        valor={c.traco ?? (c.estilo === "tracejado" ? "tracejado" : "continuo")}
+        opcoes={[["continuo", "Contínuo"], ["tracejado", "Tracejado"], ["pontilhado", "Pontilhado"]]}
+        onChange={(traco) => mudar({ traco, estilo: traco === "tracejado" ? "tracejado" : "normal" })}
+      />
+      <CampoCor rotulo="Cor da linha" valor={c.cor} onChange={(cor) => mudar({ cor })} padrao="Padrão do tema" />
+      <Num rotulo="Espessura da linha" valor={c.espessura ?? 1.25} min={0.25} onChange={(espessura) => mudar({ espessura }, "esp")} />
       {ligado && (
         <>
           <Divider />
@@ -268,8 +297,8 @@ function PropDiagrama({ d, aplicar, onAjustarTela }: { d: Diagrama; aplicar: Apl
       <Text weight="semibold">Diagrama</Text>
       {cabecalho}
       <div className={s.linha}>
-        <Num rotulo="Largura da tela" valor={d.tela.largura} onChange={(largura) => tela({ largura: Math.max(200, largura) })} />
-        <Num rotulo="Altura da tela" valor={d.tela.altura} onChange={(altura) => tela({ altura: Math.max(100, altura) })} />
+        <Num rotulo="Largura da tela" valor={d.tela.largura} min={200} onChange={(largura) => tela({ largura })} />
+        <Num rotulo="Altura da tela" valor={d.tela.altura} min={100} onChange={(altura) => tela({ altura })} />
       </div>
       <Button size="small" onClick={onAjustarTela}>
         Ajustar tela ao conteúdo
