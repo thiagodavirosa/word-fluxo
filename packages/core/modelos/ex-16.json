@@ -107,35 +107,12 @@
       "y": 162,
       "w": 176,
       "h": 72,
-      "estilo": "destaque"
-    },
-    {
-      "id": "x1",
-      "forma": "texto",
-      "x": 648,
-      "y": 186,
+      "estilo": "destaque",
       "texto": "Parecer ao analista",
       "tamanho": 13,
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x2",
-      "forma": "texto",
-      "x": 648,
-      "y": 206,
-      "texto": "não impede a transição",
-      "tamanho": 11.5,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x3",
-      "forma": "texto",
-      "x": 648,
-      "y": 222,
-      "texto": "reflete no cartão",
-      "tamanho": 11.5,
-      "alinhamento": "meio"
+      "subtitulo": "não impede a transição\nreflete no cartão",
+      "espacamento": 20,
+      "espacamentoSub": 16
     }
   ],
   "conectores": [

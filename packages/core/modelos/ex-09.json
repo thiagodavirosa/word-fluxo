@@ -24,36 +24,24 @@
       "x": 24,
       "y": 80,
       "w": 184,
-      "h": 96
-    },
-    {
-      "id": "x2",
-      "forma": "texto",
-      "x": 116,
-      "y": 104,
-      "texto": "Ambiente da projetista",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x3",
-      "forma": "texto",
-      "x": 116,
-      "y": 128,
-      "texto": "solução própria",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x4",
-      "forma": "texto",
-      "x": 116,
-      "y": 144,
-      "texto": "versões internas",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
+      "h": 96,
+      "ajusteY": -8,
+      "linhas": [
+        {
+          "texto": "Ambiente da projetista",
+          "negrito": true
+        },
+        {
+          "texto": "solução própria",
+          "secundario": true,
+          "dy": 24
+        },
+        {
+          "texto": "versões internas",
+          "secundario": true,
+          "dy": 16
+        }
+      ]
     },
     {
       "id": "n2",
@@ -61,36 +49,24 @@
       "x": 288,
       "y": 80,
       "w": 184,
-      "h": 96
-    },
-    {
-      "id": "x5",
-      "forma": "texto",
-      "x": 380,
-      "y": 104,
-      "texto": "Pacote de submissão",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x6",
-      "forma": "texto",
-      "x": 380,
-      "y": 128,
-      "texto": "contêineres da revisão",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x7",
-      "forma": "texto",
-      "x": 380,
-      "y": 144,
-      "texto": "metadados ou manifesto",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
+      "h": 96,
+      "ajusteY": -8,
+      "linhas": [
+        {
+          "texto": "Pacote de submissão",
+          "negrito": true
+        },
+        {
+          "texto": "contêineres da revisão",
+          "secundario": true,
+          "dy": 24
+        },
+        {
+          "texto": "metadados ou manifesto",
+          "secundario": true,
+          "dy": 16
+        }
+      ]
     },
     {
       "id": "n3",
@@ -99,37 +75,27 @@
       "y": 80,
       "w": 184,
       "h": 96,
-      "estilo": "destaque"
+      "estilo": "destaque",
+      "ajusteY": -8,
+      "linhas": [
+        {
+          "texto": "CDE da Agência",
+          "negrito": true
+        },
+        {
+          "texto": "área de submissão",
+          "secundario": true,
+          "dy": 24
+        },
+        {
+          "texto": "estado atribuído na entrada",
+          "secundario": true,
+          "dy": 16
+        }
+      ]
     },
     {
-      "id": "x8",
-      "forma": "texto",
-      "x": 644,
-      "y": 104,
-      "texto": "CDE da Agência",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x9",
-      "forma": "texto",
-      "x": 644,
-      "y": 128,
-      "texto": "área de submissão",
-      "tamanho": 11.5,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x10",
-      "forma": "texto",
-      "x": 644,
-      "y": 144,
-      "texto": "estado atribuído na entrada",
-      "tamanho": 11.5,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x11",
+      "id": "x2",
       "forma": "texto",
       "x": 24,
       "y": 220,
@@ -144,26 +110,19 @@
       "y": 232,
       "w": 184,
       "h": 64,
-      "estilo": "secundario"
-    },
-    {
-      "id": "x12",
-      "forma": "texto",
-      "x": 116,
-      "y": 258,
-      "texto": "Canal atual",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x13",
-      "forma": "texto",
-      "x": 116,
-      "y": 278,
-      "texto": "entrega fora do CDE",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
+      "estilo": "secundario",
+      "linhas": [
+        {
+          "texto": "Canal atual",
+          "cor": "#1d2a33",
+          "negrito": true
+        },
+        {
+          "texto": "entrega fora do CDE",
+          "secundario": true,
+          "dy": 20
+        }
+      ]
     },
     {
       "id": "n5",
@@ -172,66 +131,19 @@
       "y": 232,
       "w": 184,
       "h": 64,
-      "estilo": "secundario"
-    },
-    {
-      "id": "x14",
-      "forma": "texto",
-      "x": 380,
-      "y": 258,
-      "texto": "Ingestão interna",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x15",
-      "forma": "texto",
-      "x": 380,
-      "y": 278,
-      "texto": "metadados pela Agência",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x16",
-      "forma": "texto",
-      "x": 248,
-      "y": 120,
-      "texto": "autorização",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x17",
-      "forma": "texto",
-      "x": 512,
-      "y": 104,
-      "texto": "manual",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x18",
-      "forma": "texto",
-      "x": 512,
-      "y": 162,
-      "texto": "automatizado",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x19",
-      "forma": "texto",
-      "x": 558,
-      "y": 256,
-      "texto": "inserção pela Agência",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
+      "estilo": "secundario",
+      "linhas": [
+        {
+          "texto": "Ingestão interna",
+          "cor": "#1d2a33",
+          "negrito": true
+        },
+        {
+          "texto": "metadados pela Agência",
+          "secundario": true,
+          "dy": 20
+        }
+      ]
     }
   ],
   "conectores": [
@@ -251,7 +163,13 @@
       "de": "n1",
       "ladoDe": "direita",
       "para": "n2",
-      "ladoPara": "esquerda"
+      "ladoPara": "esquerda",
+      "rotulo": {
+        "texto": "autorização",
+        "x": 248,
+        "y": 120,
+        "alinhamento": "meio"
+      }
     },
     {
       "id": "k2",
@@ -269,7 +187,13 @@
       "de": "n2",
       "ladoDe": "direita",
       "para": "n3",
-      "ladoPara": "esquerda"
+      "ladoPara": "esquerda",
+      "rotulo": {
+        "texto": "manual",
+        "x": 512,
+        "y": 104,
+        "alinhamento": "meio"
+      }
     },
     {
       "id": "k3",
@@ -288,7 +212,13 @@
       "de": "n2",
       "ladoDe": "direita",
       "para": "n3",
-      "ladoPara": "esquerda"
+      "ladoPara": "esquerda",
+      "rotulo": {
+        "texto": "automatizado",
+        "x": 512,
+        "y": 162,
+        "alinhamento": "meio"
+      }
     },
     {
       "id": "k4",
@@ -328,7 +258,13 @@
       "de": "n5",
       "ladoDe": "direita",
       "para": "n3",
-      "ladoPara": "baixo"
+      "ladoPara": "baixo",
+      "rotulo": {
+        "texto": "inserção pela Agência",
+        "x": 558,
+        "y": 256,
+        "alinhamento": "meio"
+      }
     }
   ]
 }

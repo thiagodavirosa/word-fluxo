@@ -4,7 +4,10 @@ import {
   atualizarConector,
   atualizarElemento,
   avisosDeTexto,
+  desconectados,
   inverterConector,
+  ligarPorProximidade,
+  type LinhaTexto,
   NOMES_TEMAS,
   quebrarLinhas,
   reordenar,
@@ -109,12 +112,19 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
         {e.forma} <Text size={200}>({e.id})</Text>
       </Text>
 
-      {comTexto && (
+      {comTexto && !(("linhas" in e) && e.linhas) && (
         <Field label="Texto (Enter = nova linha)" size="small">
           <Textarea size="small" resize="vertical" value={e.texto} onChange={(_, v) => mudar({ texto: v.value } as Partial<Elemento>, "texto")} />
         </Field>
       )}
-      {e.forma === "caixa" && (
+      {(e.forma === "caixa" || e.forma === "decisao") && e.linhas && (
+        <Linhas
+          linhas={e.linhas}
+          onChange={(linhas) => mudar({ linhas } as Partial<Elemento>, "linhas")}
+          onSimples={() => mudar({ linhas: undefined, ajusteY: undefined, texto: e.linhas!.map((l) => l.texto).join("\n") } as Partial<Elemento>)}
+        />
+      )}
+      {e.forma === "caixa" && !e.linhas && (
         <Field label="Subtítulo" size="small">
           <Textarea size="small" resize="vertical" value={e.subtitulo ?? ""} onChange={(_, v) => mudar({ subtitulo: v.value || undefined }, "sub")} />
         </Field>
@@ -183,10 +193,27 @@ function PropConector({ c, d, aplicar }: { c: Conector; d: Diagrama; aplicar: Ap
       <Text weight="semibold">
         Conector <Text size={200}>({c.id})</Text>
       </Text>
-      {ligado && (
+      {ligado ? (
         <Text size={200}>
           {c.de} → {c.para}
         </Text>
+      ) : (
+        <>
+          <Text size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
+            Desconectado: {[!d.elementos.some((e) => e.id === c.de) && "início", !d.elementos.some((e) => e.id === c.para) && "fim"].filter(Boolean).join(" e ")} sem elemento. Arraste a ponta vermelha sobre uma forma para prender.
+          </Text>
+          <Button size="small" onClick={() => aplicar((x) => ligarPorProximidade(x, c.id, 12).diagrama)}>
+            Ligar pontas encostadas
+          </Button>
+        </>
+      )}
+      {ligado && (
+        <Opcoes
+          rotulo="Forma do traçado"
+          valor={c.rota ?? "ortogonal"}
+          opcoes={[["ortogonal", "Ângulos retos"], ["reta", "Reta"], ["curva", "Curva"]]}
+          onChange={(rota) => mudar({ rota: rota === "ortogonal" ? undefined : rota, pontos: undefined })}
+        />
       )}
       <Opcoes rotulo="Setas" valor={c.seta} opcoes={[["fim", "No fim"], ["inicio", "No início"], ["ambas", "Nas duas pontas"], ["nenhuma", "Sem seta"]]} onChange={(seta) => mudar({ seta })} />
       <Opcoes rotulo="Traço" valor={c.estilo} opcoes={[["normal", "Contínuo"], ["tracejado", "Tracejado"]]} onChange={(estilo) => mudar({ estilo })} />
@@ -227,6 +254,7 @@ function PropConector({ c, d, aplicar }: { c: Conector; d: Diagrama; aplicar: Ap
 function PropDiagrama({ d, aplicar, onAjustarTela }: { d: Diagrama; aplicar: Aplicar; onAjustarTela: () => void }) {
   const s = useStyles();
   const avisos = avisosDeTexto(d);
+  const soltos = desconectados(d);
   const tela = (m: Partial<Diagrama["tela"]>) => aplicar((x) => ({ ...x, tela: { ...x.tela, ...m } }), "tela");
   const legenda = (m: Partial<NonNullable<Diagrama["legenda"]>>) =>
     aplicar((x) => ({ ...x, legenda: { titulo: x.legenda?.titulo ?? x.titulo, fonte: x.legenda?.fonte ?? "Elaboração própria", ...m } }), "legenda");
@@ -265,6 +293,16 @@ function PropDiagrama({ d, aplicar, onAjustarTela }: { d: Diagrama; aplicar: Apl
       </Field>
       <Divider />
       <Text weight="semibold">Verificações</Text>
+      {soltos.length > 0 && (
+        <>
+          <Text size={200} style={{ color: tokens.colorPaletteRedForeground1 }}>
+            {soltos.length} conector(es) com ponta solta: {soltos.map((x) => x.id).join(", ")}. Aparecem com ponta vermelha na tela.
+          </Text>
+          <Button size="small" onClick={() => aplicar((x) => ligarPorProximidade(x, undefined, 12).diagrama)}>
+            Ligar pontas encostadas
+          </Button>
+        </>
+      )}
       {avisos.length === 0 ? (
         <Text size={200}>Todos os textos cabem nas caixas.</Text>
       ) : (
@@ -294,6 +332,35 @@ function PropDiagrama({ d, aplicar, onAjustarTela }: { d: Diagrama; aplicar: Apl
           );
         })
       )}
+    </div>
+  );
+}
+
+/** Editor do texto em vários níveis de uma caixa (sobretítulo, título e detalhes, cada um com seu estilo). */
+function Linhas({ linhas, onChange, onSimples }: { linhas: LinhaTexto[]; onChange: (l: LinhaTexto[]) => void; onSimples: () => void }) {
+  const s = useStyles();
+  const set = (i: number, m: Partial<LinhaTexto>) => onChange(linhas.map((l, k) => (k === i ? { ...l, ...m } : l)));
+  return (
+    <div className={s.raiz} style={{ padding: 0 }}>
+      <Text size={200}>Linhas do texto</Text>
+      {linhas.map((l, i) => (
+        <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr auto auto auto", gap: 4, alignItems: "center" }}>
+          <Input size="small" value={l.texto} aria-label={`Linha ${i + 1}`} onChange={(_, v) => set(i, { texto: v.value })} />
+          <Checkbox label="N" checked={!!l.negrito} onChange={(_, v) => set(i, { negrito: !!v.checked || undefined })} aria-label="Negrito" />
+          <Checkbox label="Sec." checked={!!l.secundario} onChange={(_, v) => set(i, { secundario: !!v.checked || undefined })} aria-label="Cor secundária" />
+          <Button size="small" appearance="subtle" aria-label="Remover linha" disabled={linhas.length <= 1} onClick={() => onChange(linhas.filter((_, k) => k !== i))}>
+            ✕
+          </Button>
+        </div>
+      ))}
+      <div className={s.linha}>
+        <Button size="small" onClick={() => onChange([...linhas, { texto: "Nova linha", secundario: true, tamanho: 11.5 }])}>
+          + Linha
+        </Button>
+        <Button size="small" onClick={onSimples}>
+          Texto simples
+        </Button>
+      </div>
     </div>
   );
 }

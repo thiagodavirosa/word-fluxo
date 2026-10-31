@@ -8,7 +8,7 @@ export interface Caixa {
   w: number;
   h: number;
 }
-type LadoFixo = Exclude<Lado, "auto">;
+export type LadoFixo = Exclude<Lado, "auto">;
 
 /** Retângulo envolvente de um elemento (roteamento, seleção e movimento). Texto livre usa uma estimativa. */
 export function limites(e: Elemento): Caixa {
@@ -31,7 +31,7 @@ export function limites(e: Elemento): Caixa {
   }
 }
 
-const ancora = (c: Caixa, lado: LadoFixo): Ponto =>
+export const ancora = (c: Caixa, lado: LadoFixo): Ponto =>
   ({
     cima: [c.x + c.w / 2, c.y],
     baixo: [c.x + c.w / 2, c.y + c.h],
@@ -39,7 +39,7 @@ const ancora = (c: Caixa, lado: LadoFixo): Ponto =>
     direita: [c.x + c.w, c.y + c.h / 2],
   })[lado] as Ponto;
 
-const saida: Record<LadoFixo, Ponto> = { cima: [0, -1], baixo: [0, 1], esquerda: [-1, 0], direita: [1, 0] };
+export const saida: Record<LadoFixo, Ponto> = { cima: [0, -1], baixo: [0, 1], esquerda: [-1, 0], direita: [1, 0] };
 const horizontal = (l: LadoFixo) => l === "esquerda" || l === "direita";
 
 /** Lados escolhidos quando o autor não fixa nenhum: direção dominante entre os centros. */
@@ -92,9 +92,35 @@ export function rotaAuto(a: Caixa, b: Caixa, ladoA: Lado = "auto", ladoB: Lado =
   return simplificar([p1, s1, ...meio, s2, p2]);
 }
 
+/** Extremos e pontos de controle da curva entre duas caixas (Bézier cúbica saindo perpendicular aos lados). */
+export function rotaCurva(a: Caixa, b: Caixa, ladoA: Lado = "auto", ladoB: Lado = "auto"): [Ponto, Ponto, Ponto, Ponto] {
+  const [autoA, autoB] = ladosAuto(a, b);
+  const la: LadoFixo = ladoA === "auto" ? autoA : ladoA;
+  const lb: LadoFixo = ladoB === "auto" ? autoB : ladoB;
+  const p1 = ancora(a, la);
+  const p2 = ancora(b, lb);
+  const k = Math.max(30, Math.hypot(p2[0] - p1[0], p2[1] - p1[1]) / 2);
+  return [p1, [p1[0] + saida[la][0] * k, p1[1] + saida[la][1] * k], [p2[0] + saida[lb][0] * k, p2[1] + saida[lb][1] * k], p2];
+}
+
 export function pontosDoConector(d: Diagrama, c: Diagrama["conectores"][number]): Ponto[] {
   if (c.pontos) return c.pontos as Ponto[];
   const a = d.elementos.find((e) => e.id === c.de);
   const b = d.elementos.find((e) => e.id === c.para);
-  return a && b ? rotaAuto(limites(a), limites(b), c.ladoDe, c.ladoPara) : [];
+  if (!a || !b) return [];
+  if (c.rota === "reta" || c.rota === "curva") {
+    const [p1, , , p2] = rotaCurva(limites(a), limites(b), c.ladoDe, c.ladoPara);
+    return [p1, p2];
+  }
+  return rotaAuto(limites(a), limites(b), c.ladoDe, c.ladoPara);
+}
+
+/** Controles da Bézier quando o conector é curvo e está ligado nos dois lados (senão, null). */
+export function controlesDaCurva(d: Diagrama, c: Diagrama["conectores"][number]): [Ponto, Ponto] | null {
+  if (c.rota !== "curva" || c.pontos) return null;
+  const a = d.elementos.find((e) => e.id === c.de);
+  const b = d.elementos.find((e) => e.id === c.para);
+  if (!a || !b) return null;
+  const [, c1, c2] = rotaCurva(limites(a), limites(b), c.ladoDe, c.ladoPara);
+  return [c1, c2];
 }

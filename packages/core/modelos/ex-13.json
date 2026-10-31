@@ -16,34 +16,24 @@
       "y": 128,
       "w": 264,
       "h": 112,
-      "estilo": "destaque"
-    },
-    {
-      "id": "x1",
-      "forma": "texto",
-      "x": 156,
-      "y": 164,
-      "texto": "CDE da Agência",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x2",
-      "forma": "texto",
-      "x": 156,
-      "y": 188,
-      "texto": "fonte primária da informação técnica",
-      "tamanho": 11.5,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x3",
-      "forma": "texto",
-      "x": 156,
-      "y": 206,
-      "texto": "contêineres, revisões, estados e trilha",
-      "tamanho": 11.5,
-      "alinhamento": "meio"
+      "estilo": "destaque",
+      "ajusteY": -3,
+      "linhas": [
+        {
+          "texto": "CDE da Agência",
+          "negrito": true
+        },
+        {
+          "texto": "fonte primária da informação técnica",
+          "secundario": true,
+          "dy": 24
+        },
+        {
+          "texto": "contêineres, revisões, estados e trilha",
+          "secundario": true,
+          "dy": 18
+        }
+      ]
     },
     {
       "id": "n2",
@@ -51,36 +41,11 @@
       "x": 448,
       "y": 56,
       "w": 288,
-      "h": 72
-    },
-    {
-      "id": "x4",
-      "forma": "texto",
-      "x": 592,
-      "y": 80,
+      "h": 72,
       "texto": "Diário de Projetos",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x5",
-      "forma": "texto",
-      "x": 592,
-      "y": 100,
-      "texto": "registro oficial das comunicações",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x6",
-      "forma": "texto",
-      "x": 592,
-      "y": 116,
-      "texto": "recebe as notificações de entrega e devolutiva",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
+      "subtitulo": "registro oficial das comunicações\nrecebe as notificações de entrega e devolutiva",
+      "espacamento": 20,
+      "espacamentoSub": 16
     },
     {
       "id": "n3",
@@ -88,36 +53,11 @@
       "x": 448,
       "y": 148,
       "w": 288,
-      "h": 72
-    },
-    {
-      "id": "x7",
-      "forma": "texto",
-      "x": 592,
-      "y": 172,
+      "h": 72,
       "texto": "Processo arquivo do SEI",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x8",
-      "forma": "texto",
-      "x": 592,
-      "y": 192,
-      "texto": "registro formal dos produtos aceitos",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x9",
-      "forma": "texto",
-      "x": 592,
-      "y": 208,
-      "texto": "etapas concluídas, volumes finais e Termos",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
+      "subtitulo": "registro formal dos produtos aceitos\netapas concluídas, volumes finais e Termos",
+      "espacamento": 20,
+      "espacamentoSub": 16
     },
     {
       "id": "n4",
@@ -125,36 +65,11 @@
       "x": 448,
       "y": 240,
       "w": 288,
-      "h": 72
-    },
-    {
-      "id": "x10",
-      "forma": "texto",
-      "x": 592,
-      "y": 264,
+      "h": 72,
       "texto": "Sistema de gestão de demandas",
-      "negrito": true,
-      "alinhamento": "meio"
-    },
-    {
-      "id": "x11",
-      "forma": "texto",
-      "x": 592,
-      "y": 284,
-      "texto": "organização da tarefa de análise",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x12",
-      "forma": "texto",
-      "x": 592,
-      "y": 300,
-      "texto": "reflete estados e eventos do CDE",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
+      "subtitulo": "organização da tarefa de análise\nreflete estados e eventos do CDE",
+      "espacamento": 20,
+      "espacamentoSub": 16
     }
   ],
   "conectores": [

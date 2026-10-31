@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg } from "./index";
 
 const base = () =>
   validar({
@@ -151,4 +151,43 @@ describe("camada dos conectores", () => {
   it("começa acima de tudo", () => expect(ordemDeDesenho(base)).toBe("abck"));
   it("elemento levado à frente cobre o conector", () => expect(ordemDeDesenho(reordenar(base, ["a"], "frente"))).toBe("bcka"));
   it("conector enviado para trás fica sob os elementos", () => expect(ordemDeDesenho(reordenarConector(base, "k", "tras"))).toBe("kabc"));
+});
+
+describe("conexões", () => {
+  const base = validar({
+    schema: "fluxo-word/1.0",
+    id: "c",
+    tipo: "livre",
+    titulo: "c",
+    tela: { largura: 500, altura: 200 },
+    elementos: [
+      { id: "a", forma: "caixa", x: 0, y: 0, w: 100, h: 40, texto: "A" },
+      { id: "b", forma: "caixa", x: 300, y: 0, w: 100, h: 40, texto: "B" },
+    ],
+    conectores: [{ id: "k", pontos: [[100, 20], [300, 20]] }],
+  });
+
+  it("aponta conector solto", () => expect(desconectados(base).map((c) => c.id)).toEqual(["k"]));
+
+  it("religa pontas encostadas nos elementos", () => {
+    const r = ligarPorProximidade(base);
+    expect(r.ligadas).toBe(2);
+    const k = r.diagrama.conectores[0];
+    expect([k.de, k.para, k.ladoDe, k.ladoPara]).toEqual(["a", "b", "direita", "esquerda"]);
+    expect(desconectados(r.diagrama)).toEqual([]);
+  });
+
+  it("soltar a ponta longe de tudo desliga só essa ponta", () => {
+    const ligado = ligarPorProximidade(base).diagrama;
+    const solto = moverExtremidade(ligado, "k", "para", 450, 150);
+    expect(solto.conectores[0].de).toBe("a");
+    expect(solto.conectores[0].para).toBeUndefined();
+    expect(desconectados(solto)).toHaveLength(1);
+  });
+
+  it("curva e reta usam duas pontas", () => {
+    const ligado = ligarPorProximidade(base).diagrama;
+    const reta = { ...ligado, conectores: [{ ...ligado.conectores[0], pontos: undefined, rota: "curva" as const }] };
+    expect(renderSvg(reta)).toContain("C");
+  });
 });

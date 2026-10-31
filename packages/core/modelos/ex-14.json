@@ -10,7 +10,7 @@
   },
   "elementos": [
     {
-      "id": "raiz",
+      "id": "n1",
       "forma": "caixa",
       "x": 24,
       "y": 154,
@@ -21,24 +21,18 @@
       "espacamento": 18
     },
     {
-      "id": "p1",
+      "id": "n2",
       "forma": "caixa",
       "x": 288,
       "y": 64,
       "w": 448,
       "h": 44,
-      "texto": ""
-    },
-    {
-      "id": "p1n",
-      "forma": "texto",
-      "x": 304,
-      "y": 91,
       "texto": "01 Submissões",
-      "negrito": true
+      "negrito": true,
+      "alinhamento": "inicio"
     },
     {
-      "id": "p1d",
+      "id": "x1",
       "forma": "texto",
       "x": 440,
       "y": 91,
@@ -47,51 +41,38 @@
       "estilo": "secundario"
     },
     {
-      "id": "p2",
+      "id": "n3",
       "forma": "caixa",
       "x": 288,
       "y": 124,
       "w": 448,
       "h": 44,
-      "texto": "",
-      "estilo": "destaque"
-    },
-    {
-      "id": "p2n",
-      "forma": "texto",
-      "x": 304,
-      "y": 151,
+      "estilo": "destaque",
       "texto": "02 Publicados",
-      "negrito": true
+      "negrito": true,
+      "alinhamento": "inicio"
     },
     {
-      "id": "p2d",
+      "id": "x2",
       "forma": "texto",
       "x": 440,
       "y": 151,
       "texto": "pacotes aceitos, com valor contratual",
-      "tamanho": 11.5,
-      "estilo": "normal"
+      "tamanho": 11.5
     },
     {
-      "id": "p3",
+      "id": "n4",
       "forma": "caixa",
       "x": 288,
       "y": 184,
       "w": 448,
       "h": 44,
-      "texto": ""
-    },
-    {
-      "id": "p3n",
-      "forma": "texto",
-      "x": 304,
-      "y": 211,
       "texto": "03 Agência",
-      "negrito": true
+      "negrito": true,
+      "alinhamento": "inicio"
     },
     {
-      "id": "p3d",
+      "id": "x3",
       "forma": "texto",
       "x": 440,
       "y": 211,
@@ -100,24 +81,18 @@
       "estilo": "secundario"
     },
     {
-      "id": "p4",
+      "id": "n5",
       "forma": "caixa",
       "x": 288,
       "y": 244,
       "w": 448,
       "h": 44,
-      "texto": ""
-    },
-    {
-      "id": "p4n",
-      "forma": "texto",
-      "x": 304,
-      "y": 271,
       "texto": "04 Acesso restrito",
-      "negrito": true
+      "negrito": true,
+      "alinhamento": "inicio"
     },
     {
-      "id": "p4d",
+      "id": "x4",
       "forma": "texto",
       "x": 440,
       "y": 271,
@@ -126,24 +101,18 @@
       "estilo": "secundario"
     },
     {
-      "id": "p5",
+      "id": "n6",
       "forma": "caixa",
       "x": 288,
       "y": 304,
       "w": 448,
       "h": 44,
-      "texto": ""
-    },
-    {
-      "id": "p5n",
-      "forma": "texto",
-      "x": 304,
-      "y": 331,
       "texto": "05 Arquivo",
-      "negrito": true
+      "negrito": true,
+      "alinhamento": "inicio"
     },
     {
-      "id": "p5d",
+      "id": "x5",
       "forma": "texto",
       "x": 440,
       "y": 331,
@@ -154,7 +123,11 @@
   ],
   "conectores": [
     {
-      "id": "t0",
+      "id": "k8",
+      "de": "n1",
+      "para": "n2",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
         [
           224,
@@ -163,27 +136,7 @@
         [
           256,
           182
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "tronco",
-      "pontos": [
-        [
-          256,
-          86
         ],
-        [
-          256,
-          326
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "r1",
-      "pontos": [
         [
           256,
           86
@@ -192,11 +145,24 @@
           288,
           86
         ]
-      ]
+      ],
+      "seta": "fim"
     },
     {
-      "id": "r2",
+      "id": "k9",
+      "de": "n1",
+      "para": "n3",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          224,
+          182
+        ],
+        [
+          256,
+          182
+        ],
         [
           256,
           146
@@ -205,11 +171,24 @@
           288,
           146
         ]
-      ]
+      ],
+      "seta": "fim"
     },
     {
-      "id": "r3",
+      "id": "k10",
+      "de": "n1",
+      "para": "n4",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          224,
+          182
+        ],
+        [
+          256,
+          182
+        ],
         [
           256,
           206
@@ -218,11 +197,24 @@
           288,
           206
         ]
-      ]
+      ],
+      "seta": "fim"
     },
     {
-      "id": "r4",
+      "id": "k11",
+      "de": "n1",
+      "para": "n5",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          224,
+          182
+        ],
+        [
+          256,
+          182
+        ],
         [
           256,
           266
@@ -231,11 +223,24 @@
           288,
           266
         ]
-      ]
+      ],
+      "seta": "fim"
     },
     {
-      "id": "r5",
+      "id": "k12",
+      "de": "n1",
+      "para": "n6",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          224,
+          182
+        ],
+        [
+          256,
+          182
+        ],
         [
           256,
           326
@@ -244,7 +249,8 @@
           288,
           326
         ]
-      ]
+      ],
+      "seta": "fim"
     }
   ]
 }

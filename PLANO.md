@@ -81,6 +81,10 @@ Stack: Node 22 (instalado), pnpm workspaces, Vite, Vitest, Playwright, React + F
 4. Exportar SVG/PNG/PDF/JSON, importar JSON.
 5. **Aceite:** índice de figuras do Word correto.
 
+### Fase 4b – Refino do editor (feedback do teste da Fase 4)
+Entregue: grade visível; pontas soltas de conectores em vermelho + "Ligar pontas encostadas" (um conector pode parecer ligado e não estar); arrastar a ponta sobre uma forma prende nela; forma do traçado (ângulos retos, reta, curva) e arrastar trechos internos; camada dos conectores (frente/trás relativa aos elementos); paleta visual de formas (lateral ou superior, arrastar para a tela); texto em vários níveis nas caixas (`linhas`), rótulos de conector gerados pelo conversor, barramentos convertidos em ligações reais.
+Pendente (estilo, discutido com o usuário): editar por elemento cor da linha, preenchimento, espessura, cor do texto, tracejado e fonte; presets de estilo reutilizáveis por tema.
+
 ### Fase 5 – IA (opcional)
 `ia-proxy` FastAPI + prompts com saída JSON validada, edição incremental preservando IDs, preview com resumo de mudanças, verificação RF-60 a RF-62 (esta última roda local, sem IA).
 

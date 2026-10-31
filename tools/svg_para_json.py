@@ -186,6 +186,46 @@ class Conversor:
                 if alinh != "meio":
                     el["alinhamento"] = alinh
                 return
+        for alinh in ("meio", "inicio", "fim") if el["forma"] == "caixa" else ("meio",):
+            if self._linhas(f, el, estilo, alinh):
+                if alinh != "meio":
+                    el["alinhamento"] = alinh
+                return
+
+    def _linhas(self, f: Forma, el: dict, estilo: str | None, alinh: str) -> bool:
+        """Texto em vários níveis (sobretítulo, título, detalhes): cada linha com seu tamanho, peso, cor e distância."""
+        blocos = self.candidatos(f, True, alinh)
+        todos = [b for b in self.blocos if not b.usado and all(dentro(f, ln.x, ln.y, 0.5) for ln in b.linhas)]
+        if not blocos or len(blocos) != len(todos):
+            return False
+        linhas = sorted(((ln, b) for b in blocos for ln in b.linhas), key=lambda t: t[0].y)
+        cor_titulo = SEC if estilo == "secundario" else TEXTO
+        cor_sub = TEXTO if estilo == "destaque" else SEC
+        ys = [ln.y for ln, _ in linhas]
+        total = ys[-1] - ys[0]
+        saida = []
+        for i, (ln, b) in enumerate(linhas):
+            item: dict = {"texto": ln.s}
+            sec = b.cor == cor_sub and (b.cor != cor_titulo or abs(b.tam - 11.5) < 0.01)
+            if sec:
+                item["secundario"] = True
+            elif b.cor != cor_titulo:
+                item["cor"] = b.cor if b.cor.startswith("#") else "#ffffff"
+            padrao_tam = 11.5 if sec else self.base
+            if abs(b.tam - padrao_tam) > 0.01:
+                item["tamanho"] = limpo(b.tam)
+            if b.peso == "600":
+                item["negrito"] = True
+            if i > 0 and abs(ys[i] - ys[i - 1] - 15) > 0.01:
+                item["dy"] = limpo(round(ys[i] - ys[i - 1], 2))
+            saida.append(item)
+        ajuste = ys[0] - (f.y + f.h / 2 - total / 2 + 4)
+        if abs(ajuste) > 0.01:
+            el["ajusteY"] = limpo(round(ajuste, 2))
+        el["linhas"] = saida
+        for _, b in linhas:
+            b.usado = True
+        return True
 
     def _rotulo(self, f: Forma, el: dict, estilo: str | None, alinh: str) -> bool:
         blocos = sorted(self.candidatos(f, True, alinh), key=lambda b: b.linhas[0].y)
@@ -206,11 +246,15 @@ class Conversor:
         if len(tams) != 1 or len(pesos) != 1 or any(b.cor != cor_titulo for _, b in titulo):
             return False
         ys = [ln.y for ln, _ in linhas]
-        passos = {round(b - a, 2) for a, b in zip(ys, ys[1:])}
-        if len(passos) > 1:
+        gaps = [round(y2 - y1, 2) for y1, y2 in zip(ys, ys[1:])]
+        n_alto = max(n_titulo - 1, 0) + (1 if sub and titulo else 0)  # lacunas que seguem o espaçamento do título
+        g_alto, g_sub = gaps[:n_alto], gaps[n_alto:]
+        if len(set(g_alto)) > 1 or len(set(g_sub)) > 1:
             return False
-        passo = passos.pop() if passos else (17 if sub else 15)
-        previsto = f.y + f.h / 2 - (len(ys) - 1) * passo / 2 + 4
+        padrao = 17 if sub else 15
+        passo = g_alto[0] if g_alto else padrao
+        passo_sub = g_sub[0] if g_sub else passo
+        previsto = f.y + f.h / 2 - sum(gaps) / 2 + 4
         if abs(ys[0] - previsto) > TOL_Y:
             return False
         tam, peso = tams.pop(), pesos.pop()
@@ -225,6 +269,8 @@ class Conversor:
             el["negrito"] = True
         if passo != (17 if sub else 15):
             el["espacamento"] = limpo(passo)
+        if sub and len(sub) > 1 and passo_sub != passo:
+            el["espacamentoSub"] = limpo(passo_sub)
         for _, b in linhas:
             b.usado = True
         return True
@@ -471,6 +517,48 @@ class Conversor:
                     fila.append([*cam, v])
         return None
 
+    def rotulos_de_conectores(self) -> None:
+        """Textos secundários junto a um conector (fora de qualquer caixa) viram o rótulo dele."""
+
+        def dist(x, y, a, b):
+            px = min(max(x, min(a[0], b[0])), max(a[0], b[0]))
+            py = min(max(y, min(a[1], b[1])), max(a[1], b[1]))
+            return ((x - px) ** 2 + (y - py) ** 2) ** 0.5
+
+        restantes = []
+        for ordem, el in self.elementos:
+            if el["forma"] != "texto" or el.get("estilo") != "secundario" or el.get("negrito") or chr(10) in el["texto"]:
+                restantes.append((ordem, el))
+                continue
+            x, y = el["x"], el["y"]
+            if any(dentro(f, x, y, 0) for f, _ in self.nos):
+                restantes.append((ordem, el))
+                continue
+            melhor = None
+            for _, c in self.conectores:
+                if "rotulo" in c:
+                    continue
+                for a, b in zip(c["pontos"], c["pontos"][1:]):
+                    d = dist(x, y - 4, a, b)
+                    if d <= 14 and (melhor is None or d < melhor[0]):
+                        melhor = (d, c)
+            if not melhor:
+                restantes.append((ordem, el))
+                continue
+            c = melhor[1]
+            tam = el.get("tamanho", 11.5)
+            alinh = el.get("alinhamento", "inicio")
+            pts = c["pontos"]
+            i = (len(pts) - 1) // 2
+            ax, ay = (pts[i][0] + pts[i + 1][0]) / 2, (pts[i][1] + pts[i + 1][1]) / 2 - 6
+            rot = {"texto": el["texto"]}
+            if not (alinh == "meio" and tam == 11.5 and abs(ax - x) <= 0.6 and abs(ay - y) <= 0.6):
+                rot.update({"x": x, "y": y, "alinhamento": alinh})
+                if tam != 11.5:
+                    rot["tamanho"] = tam
+            c["rotulo"] = rot
+        self.elementos = restantes
+
     def converter(self) -> dict:
         self.titulo = ""
         self.conectores: list[tuple[int, dict]] = []
@@ -478,6 +566,7 @@ class Conversor:
         self.converter_textos()
         self.converter_caminhos()
         self.barramentos()
+        self.rotulos_de_conectores()
         tela = {"largura": limpo(self.vb[2]), "altura": limpo(self.vb[3])}
         if abs(self.base - 13) > 0.01:
             tela["fonteBase"] = limpo(self.base)

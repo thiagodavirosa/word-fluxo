@@ -12,6 +12,7 @@ function mapearTextos(d: Diagrama, fn: (s: string) => string): Diagrama {
     const novo: Record<string, unknown> = { ...e };
     if ("texto" in e && typeof e.texto === "string") novo.texto = fn(e.texto);
     if (e.forma === "caixa" && e.subtitulo) novo.subtitulo = fn(e.subtitulo);
+    if ("linhas" in e && e.linhas) novo.linhas = e.linhas.map((l) => ({ ...l, texto: fn(l.texto) }));
     return novo as Elemento;
   });
   return {

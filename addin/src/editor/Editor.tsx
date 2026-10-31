@@ -14,6 +14,7 @@ import {
   avisosDeTexto,
   conectar,
   duplicar,
+  limites,
   mover,
   organizar,
   remover,
@@ -25,10 +26,11 @@ import {
 import { svgParaPng } from "../render";
 import { useHistorico } from "./historico";
 import { Propriedades } from "./Propriedades";
+import { Paleta } from "./Paleta";
 import { Tela, type Alvo, type Selecao } from "./Tela";
 
 const useStyles = makeStyles({
-  raiz: { display: "grid", gridTemplateRows: "auto 1fr", height: "100vh", background: tokens.colorNeutralBackground2, fontFamily: tokens.fontFamilyBase },
+  raiz: { display: "grid", gridTemplateRows: "auto auto 1fr", height: "100vh", background: tokens.colorNeutralBackground2, fontFamily: tokens.fontFamilyBase },
   barra: {
     display: "flex",
     flexWrap: "wrap",
@@ -72,6 +74,7 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
   const [origem, setOrigem] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const [grade, setGrade] = useState(true);
+  const [paleta, setPaleta] = useState<"lateral" | "superior" | "oculta">("lateral");
   const [editando, setEditando] = useState<{ alvo: Alvo; valor: string } | null>(null);
   const [erro, setErro] = useState("");
   const [info, setInfo] = useState("");
@@ -111,6 +114,17 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
     const gy = grade ? Math.round(y / 4) * 4 : y;
     const { diagrama, id } = adicionar(d, ferramenta as Forma, gx, gy);
     h.aplicar(() => diagrama);
+    setSelecao({ ids: [id], conector: null });
+    escolherFerramenta("selecionar");
+  }
+
+  function soltarForma(forma: string, x: number, y: number) {
+    const { diagrama, id } = adicionar(d, forma as Forma, 0, 0);
+    const novo = diagrama.elementos.find((e) => e.id === id)!;
+    const c = limites(novo);
+    const gx = grade ? Math.round((x - c.w / 2) / 4) * 4 : x - c.w / 2;
+    const gy = grade ? Math.round((y - c.h / 2) / 4) * 4 : y - c.h / 2;
+    h.aplicar(() => mover(diagrama, [id], gx - c.x, gy - c.y));
     setSelecao({ ids: [id], conector: null });
     escolherFerramenta("selecionar");
   }
@@ -270,14 +284,14 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
           <Botao id="selecionar" titulo="Selecionar e arrastar">
             Selecionar
           </Botao>
-          {FORMAS.map(([f, t]) => (
-            <Botao key={f} id={f} titulo={`Inserir ${t.toLowerCase()}`}>
-              {t}
-            </Botao>
-          ))}
           <Botao id="conectar" titulo="Ligar dois elementos">
             Conector
           </Botao>
+          <Select size="small" value={paleta} onChange={(_, v) => setPaleta(v.value as typeof paleta)} aria-label="Posição da paleta de formas">
+            <option value="lateral">Formas: lateral</option>
+            <option value="superior">Formas: superior</option>
+            <option value="oculta">Formas: ocultas</option>
+          </Select>
         </div>
         <div className={s.grupo}>
           <Button size="small" onClick={duplicarSelecao} disabled={selecao.ids.length === 0}>
@@ -387,7 +401,9 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
         </Button>
       </div>
 
-      <div className={s.corpo}>
+      <div>{paleta === "superior" && <Paleta posicao="superior" ativa={ferramenta} onEscolher={escolherFerramenta} />}</div>
+      <div className={s.corpo} style={{ gridTemplateColumns: paleta === "lateral" ? "auto 1fr 300px" : "1fr 300px" }}>
+        {paleta === "lateral" && <Paleta posicao="lateral" ativa={ferramenta} onEscolher={escolherFerramenta} />}
         <div className={s.area} ref={areaRef}>
           <Tela
             diagrama={d}
@@ -403,6 +419,7 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
             onPrever={h.prever}
             onGestoFim={h.finalizar}
             onClicarVazio={aoClicarVazio}
+            onSoltarForma={soltarForma}
             onClicarElemento={aoClicarElemento}
             onEditar={iniciarEdicao}
             onValorEdicao={(valor) => setEditando((e) => e && { ...e, valor })}

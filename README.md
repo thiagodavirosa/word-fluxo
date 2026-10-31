@@ -69,6 +69,14 @@ Abrir http://localhost:3101/editor.html?demo=11 (qualquer modelo `ex-NN` de `pac
 - **Editor**: seletor de tema, exportar SVG/PNG/JSON e importar JSON.
 - Pendente de teste no Word: numeração SEQ, legendas e operações em lote (dependem de WordApi 1.5).
 
+## Editor (Fase 4b)
+
+- **Paleta de formas**: miniaturas à esquerda (ou no alto, ou ocultas); arraste a forma para a tela ou clique nela e depois na tela.
+- **Grade**: o botão "Grade" mostra a malha e encaixa elementos nela.
+- **Conectores**: ponta vermelha = não está presa a nenhum elemento. Arraste a ponta sobre uma forma para prender; "Ligar pontas encostadas" religa as que já tocam uma forma. Forma do traçado: ângulos retos, reta ou curva; quadrados azuis movem os trechos internos.
+- **Camadas**: Frente/Trás valem para elementos e conectores.
+- **Texto em vários níveis**: caixas com sobretítulo/título/detalhes aparecem no painel como lista de linhas editáveis.
+
 ## Fase 1 – como testar a persistência no Word
 
 1. No painel, **Inserir diagrama de teste**: insere a imagem num content control com tag `fluxo-word:<id>`, grava a fonte em Custom XML e no texto alternativo.

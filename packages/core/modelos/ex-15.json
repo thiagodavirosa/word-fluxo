@@ -94,24 +94,6 @@
       "texto": "E3"
     },
     {
-      "id": "x2",
-      "forma": "texto",
-      "x": 548,
-      "y": 84,
-      "texto": "aceito",
-      "alinhamento": "fim",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x3",
-      "forma": "texto",
-      "x": 548,
-      "y": 176,
-      "texto": "devolvido",
-      "alinhamento": "fim",
-      "estilo": "secundario"
-    },
-    {
       "id": "x4",
       "forma": "texto",
       "x": 576,
@@ -313,7 +295,13 @@
       "de": "d1",
       "ladoDe": "direita",
       "para": "n4",
-      "ladoPara": "esquerda"
+      "ladoPara": "esquerda",
+      "rotulo": {
+        "texto": "aceito",
+        "x": 548,
+        "y": 84,
+        "alinhamento": "fim"
+      }
     },
     {
       "id": "k5",
@@ -331,7 +319,13 @@
           164
         ]
       ],
-      "seta": "fim"
+      "seta": "fim",
+      "rotulo": {
+        "texto": "devolvido",
+        "x": 548,
+        "y": 176,
+        "alinhamento": "fim"
+      }
     }
   ]
 }

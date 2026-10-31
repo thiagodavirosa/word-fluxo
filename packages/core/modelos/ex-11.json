@@ -47,7 +47,7 @@
       "texto": "GEVAP"
     },
     {
-      "id": "div",
+      "id": "l1",
       "forma": "linha",
       "x1": 124,
       "y1": 56,
@@ -56,44 +56,44 @@
       "espessura": 1
     },
     {
-      "id": "b1",
+      "id": "n1",
       "forma": "caixa",
       "x": 136,
       "y": 80,
       "w": 128,
       "h": 52,
-      "texto": "Elaborar produtos\nda etapa",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Elaborar produtos\nda etapa"
     },
     {
-      "id": "b2",
+      "id": "n2",
       "forma": "caixa",
       "x": 444,
       "y": 80,
       "w": 128,
       "h": 52,
-      "texto": "Corrigir e\nreapresentar",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Corrigir e\nreapresentar"
     },
     {
-      "id": "b3",
+      "id": "n3",
       "forma": "caixa",
       "x": 600,
       "y": 80,
       "w": 128,
       "h": 52,
-      "texto": "Iniciar etapa\nseguinte",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Iniciar etapa\nseguinte"
     },
     {
-      "id": "b4",
+      "id": "n4",
       "forma": "caixa",
       "x": 136,
       "y": 180,
       "w": 128,
       "h": 52,
-      "texto": "Acusar recebimento\ne distribuir",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Acusar recebimento\ne distribuir"
     },
     {
       "id": "d1",
@@ -102,52 +102,52 @@
       "y": 176,
       "w": 104,
       "h": 60,
+      "fundo": "branco",
       "texto": "Etapa\naceita?",
-      "espacamento": 14,
-      "fundo": "branco"
+      "espacamento": 14
     },
     {
-      "id": "b5",
+      "id": "n5",
       "forma": "caixa",
       "x": 600,
       "y": 180,
       "w": 128,
       "h": 52,
-      "texto": "Inserir no processo\narquivo (SEI)",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Inserir no processo\narquivo (SEI)"
     },
     {
-      "id": "b6",
+      "id": "n6",
       "forma": "caixa",
       "x": 290,
       "y": 300,
       "w": 128,
       "h": 52,
-      "texto": "Verificar 1º nível\ne 2º nível",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Verificar 1º nível\ne 2º nível"
     },
     {
-      "id": "b7",
+      "id": "n7",
       "forma": "caixa",
       "x": 444,
       "y": 300,
       "w": 128,
       "h": 52,
-      "texto": "Elaborar relatório\nde análise",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Elaborar relatório\nde análise"
     },
     {
-      "id": "b8",
+      "id": "n8",
       "forma": "caixa",
       "x": 290,
       "y": 392,
       "w": 128,
       "h": 48,
-      "texto": "Validar dados\nde entrada",
-      "fundo": "branco"
+      "fundo": "branco",
+      "texto": "Validar dados\nde entrada"
     },
     {
-      "id": "t1",
+      "id": "x1",
       "forma": "texto",
       "x": 444,
       "y": 368,
@@ -156,31 +156,35 @@
       "estilo": "secundario"
     },
     {
-      "id": "t2",
+      "id": "x6",
       "forma": "texto",
-      "x": 362,
-      "y": 382,
-      "texto": "topografia, geotecnia, tráfego",
-      "tamanho": 11,
+      "x": 296,
+      "y": 112,
+      "texto": "nova revisão",
       "estilo": "secundario"
     }
   ],
   "conectores": [
     {
-      "id": "c1",
-      "de": "b1",
-      "para": "b4",
-      "rotulo": {
-        "texto": "entrega via Diário",
-        "x": 262,
-        "y": 170,
-        "alinhamento": "inicio"
-      }
+      "id": "k1",
+      "pontos": [
+        [
+          200,
+          132
+        ],
+        [
+          200,
+          180
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "baixo",
+      "para": "n4",
+      "ladoPara": "cima"
     },
     {
-      "id": "c2",
-      "de": "b4",
-      "para": "b6",
+      "id": "k2",
       "pontos": [
         [
           264,
@@ -194,38 +198,115 @@
           354,
           300
         ]
-      ]
+      ],
+      "seta": "fim",
+      "de": "n4",
+      "ladoDe": "direita",
+      "para": "n6",
+      "ladoPara": "cima"
     },
     {
-      "id": "c3",
-      "de": "b6",
-      "para": "b8",
-      "seta": "ambas"
-    },
-    {
-      "id": "c4",
-      "de": "b6",
-      "para": "b7"
-    },
-    {
-      "id": "c5",
-      "de": "b7",
-      "para": "d1"
-    },
-    {
-      "id": "c6",
-      "de": "d1",
-      "para": "b5",
+      "id": "k3",
+      "pontos": [
+        [
+          354,
+          352
+        ],
+        [
+          354,
+          392
+        ]
+      ],
+      "seta": "ambas",
+      "de": "n6",
+      "ladoDe": "baixo",
+      "para": "n8",
+      "ladoPara": "cima",
       "rotulo": {
-        "texto": "sim",
-        "x": 580,
-        "y": 198
+        "texto": "topografia, geotecnia, tráfego",
+        "x": 362,
+        "y": 382,
+        "alinhamento": "inicio",
+        "tamanho": 11
       }
     },
     {
-      "id": "c7",
-      "de": "b5",
-      "para": "b3",
+      "id": "k4",
+      "pontos": [
+        [
+          418,
+          326
+        ],
+        [
+          444,
+          326
+        ]
+      ],
+      "seta": "fim",
+      "de": "n6",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          508,
+          300
+        ],
+        [
+          508,
+          236
+        ]
+      ],
+      "seta": "fim",
+      "de": "n7",
+      "ladoDe": "cima",
+      "para": "d1",
+      "ladoPara": "baixo"
+    },
+    {
+      "id": "k6",
+      "pontos": [
+        [
+          560,
+          206
+        ],
+        [
+          600,
+          206
+        ]
+      ],
+      "seta": "fim",
+      "de": "d1",
+      "ladoDe": "direita",
+      "para": "n5",
+      "ladoPara": "esquerda",
+      "rotulo": {
+        "texto": "sim",
+        "x": 580,
+        "y": 198,
+        "alinhamento": "meio"
+      }
+    },
+    {
+      "id": "k7",
+      "pontos": [
+        [
+          664,
+          180
+        ],
+        [
+          664,
+          132
+        ]
+      ],
+      "seta": "fim",
+      "de": "n5",
+      "ladoDe": "cima",
+      "para": "n3",
+      "ladoPara": "baixo",
       "rotulo": {
         "texto": "solicitação via Diário",
         "x": 656,
@@ -234,9 +315,22 @@
       }
     },
     {
-      "id": "c8",
+      "id": "k8",
+      "pontos": [
+        [
+          508,
+          176
+        ],
+        [
+          508,
+          132
+        ]
+      ],
+      "seta": "fim",
       "de": "d1",
-      "para": "b2",
+      "ladoDe": "cima",
+      "para": "n2",
+      "ladoPara": "baixo",
       "rotulo": {
         "texto": "não, correção via Diário",
         "x": 500,
@@ -245,9 +339,7 @@
       }
     },
     {
-      "id": "c9",
-      "de": "b2",
-      "para": "b4",
+      "id": "k9",
       "pontos": [
         [
           444,
@@ -270,10 +362,15 @@
           180
         ]
       ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "esquerda",
+      "para": "n4",
+      "ladoPara": "cima",
       "rotulo": {
-        "texto": "nova revisão",
-        "x": 296,
-        "y": 112,
+        "texto": "entrega via Diário",
+        "x": 262,
+        "y": 170,
         "alinhamento": "inicio"
       }
     }

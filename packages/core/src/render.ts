@@ -1,5 +1,5 @@
-import type { Diagrama, Elemento } from "./esquema";
-import { pontosDoConector, type Ponto } from "./rotas";
+import type { Diagrama, Elemento, LinhaTexto } from "./esquema";
+import { controlesDaCurva, pontosDoConector, type Ponto } from "./rotas";
 import { temas, tecnico, type Tema } from "./tema";
 
 const num = (n: number) => String(+n.toFixed(2));
@@ -12,6 +12,8 @@ interface Linha {
   tam: number;
   negrito: boolean;
   cor: string;
+  /** Distância da linha anterior; sem valor usa o passo do bloco. */
+  dy?: number;
 }
 
 interface Pintura {
@@ -69,25 +71,37 @@ function textoSvg(x: number, y: number, s: string, tam: number, cor: string, neg
 
 /** Bloco de linhas centrado verticalmente em `cy` (a linha de base fica ~4 px abaixo do centro da linha). */
 function blocoCentrado(linhas: Linha[], cx: number, cy: number, passo: number, a: Alinh = "meio"): string {
-  const y0 = cy - ((linhas.length - 1) * passo) / 2 + 4;
-  return linhas.map((l, i) => textoSvg(cx, y0 + i * passo, l.t, l.tam, l.cor, l.negrito, a)).join("");
+  const gaps = linhas.map((l, i) => (i === 0 ? 0 : (l.dy ?? passo)));
+  const total = gaps.reduce((x, y) => x + y, 0);
+  let y = cy - total / 2 + 4;
+  return linhas.map((l, i) => textoSvg(cx, (y += gaps[i]), l.t, l.tam, l.cor, l.negrito, a)).join("");
 }
 
 /** Ponto de ancoragem do texto de uma caixa conforme o alinhamento (margem de 16 px, como nos grupos). */
-function posTexto(e: { x: number; y: number; w: number; h: number; alinhamento?: Alinh }): [number, number] {
+function posTexto(e: { x: number; y: number; w: number; h: number; alinhamento?: Alinh; ajusteY?: number }): [number, number] {
   const x = e.alinhamento === "inicio" ? e.x + 16 : e.alinhamento === "fim" ? e.x + e.w - 16 : e.x + e.w / 2;
-  return [x, e.y + e.h / 2];
+  return [x, e.y + e.h / 2 + (e.ajusteY ?? 0)];
 }
 
 function rotulos(
-  e: { texto: string; subtitulo?: string; negrito?: boolean; tamanho?: number; espacamento?: number },
+  e: { texto: string; subtitulo?: string; negrito?: boolean; tamanho?: number; espacamento?: number; espacamentoSub?: number; linhas?: LinhaTexto[] },
   p: Pintura,
   t: Tema,
   base: number,
 ): { linhas: Linha[]; passo: number } {
+  if (e.linhas?.length) {
+    const ls = e.linhas.map((l, i) => ({
+      t: l.texto,
+      tam: l.tamanho ?? (l.secundario ? t.tamSub : base),
+      negrito: !!l.negrito,
+      cor: l.cor ?? (l.secundario ? p.sub : p.texto),
+      dy: i > 0 ? (l.dy ?? 15) : undefined,
+    }));
+    return { linhas: ls, passo: 15 };
+  }
   const tam = e.tamanho ?? base;
   const titulo = linhasDe(e.texto).map((s) => ({ t: s, tam, negrito: !!(e.negrito ?? e.subtitulo), cor: p.texto }));
-  const sub = linhasDe(e.subtitulo).map((s) => ({ t: s, tam: t.tamSub, negrito: false, cor: p.sub }));
+  const sub = linhasDe(e.subtitulo).map((s, i) => ({ t: s, tam: t.tamSub, negrito: false, cor: p.sub, dy: i > 0 ? e.espacamentoSub : undefined }));
   return { linhas: [...titulo, ...sub], passo: e.espacamento ?? (e.subtitulo ? 17 : 15) };
 }
 
@@ -114,7 +128,7 @@ function renderElemento(e: Elemento, d: Diagrama, t: Tema): string {
       ];
       return (
         `<polygon points="${pts.map(([x, y]) => `${num(x)},${num(y)}`).join(" ")}" ${attrsPintura(p)}/>` +
-        blocoCentrado(linhas, e.x + e.w / 2, e.y + e.h / 2, passo)
+        blocoCentrado(linhas, e.x + e.w / 2, e.y + e.h / 2 + (e.ajusteY ?? 0), passo)
       );
     }
     case "marcador": {
@@ -177,6 +191,14 @@ export function caminho(pts: Ponto[]): string {
     .join("");
 }
 
+/** Caminho SVG de um conector (polilinha ortogonal/reta ou curva). */
+export function caminhoDoConector(d: Diagrama, c: Diagrama["conectores"][number]): string {
+  const pts = pontosDoConector(d, c);
+  const ctl = controlesDaCurva(d, c);
+  if (!ctl || pts.length !== 2) return caminho(pts);
+  return `M${num(pts[0][0])} ${num(pts[0][1])}C${num(ctl[0][0])} ${num(ctl[0][1])} ${num(ctl[1][0])} ${num(ctl[1][1])} ${num(pts[1][0])} ${num(pts[1][1])}`;
+}
+
 function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema): string {
   const pts = pontosDoConector(d, c);
   if (pts.length < 2) return "";
@@ -185,7 +207,7 @@ function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema)
     (c.seta === "inicio" || c.seta === "ambas" ? ` marker-start="url(#seta)"` : "") +
     (c.seta === "fim" || c.seta === "ambas" ? ` marker-end="url(#seta)"` : "");
   const tracejado = c.estilo === "tracejado" ? ` stroke-dasharray="${t.tracejado}"` : "";
-  let svg = `<path d="${caminho(pts)}" fill="none" stroke="${t.linha}" stroke-width="${t.espLinha}"${tracejado}${marcadores}/>`;
+  let svg = `<path d="${caminhoDoConector(d, c)}" fill="none" stroke="${t.linha}" stroke-width="${t.espLinha}"${tracejado}${marcadores}/>`;
 
   if (c.rotulo) {
     const r = c.rotulo;

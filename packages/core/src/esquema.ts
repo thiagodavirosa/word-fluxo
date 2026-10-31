@@ -20,15 +20,33 @@ const base = {
 
 const Retangular = { x: z.number(), y: z.number(), w: z.number().positive(), h: z.number().positive() };
 
+/** Linha de um texto em vários níveis (sobretítulo, título, detalhes), dentro de uma caixa ou decisão. */
+export const LinhaTexto = z.object({
+  texto: z.string(),
+  tamanho: z.number().positive().optional(),
+  negrito: z.boolean().optional(),
+  /** Cor secundária do tema (subtítulos e legendas). */
+  secundario: z.boolean().optional(),
+  cor: Cor.optional(),
+  /** Distância da linha anterior; padrão 15. */
+  dy: z.number().optional(),
+});
+
 const Caixa = z.object({
   ...base,
   forma: z.literal("caixa"),
   ...Retangular,
   texto: z.string().default(""),
   subtitulo: z.string().optional(),
+  /** Texto em vários níveis; quando presente substitui texto/subtítulo. */
+  linhas: z.array(LinhaTexto).optional(),
+  /** Deslocamento vertical do bloco de texto em relação ao centro. */
+  ajusteY: z.number().optional(),
   negrito: z.boolean().optional(),
   tamanho: z.number().positive().optional(),
   espacamento: z.number().positive().optional(),
+  /** Distância entre as linhas do subtítulo, se diferente do espaçamento do título. */
+  espacamentoSub: z.number().positive().optional(),
   /** Posição do texto na caixa; padrão: centralizado. */
   alinhamento: Alinhamento.optional(),
   fundo: Fundo.optional(),
@@ -41,6 +59,8 @@ const Decisao = z.object({
   forma: z.literal("decisao"),
   ...Retangular,
   texto: z.string().default(""),
+  linhas: z.array(LinhaTexto).optional(),
+  ajusteY: z.number().optional(),
   tamanho: z.number().positive().optional(),
   espacamento: z.number().positive().optional(),
   fundo: Fundo.optional(),
@@ -146,6 +166,8 @@ export const Conector = z.object({
   depois: z.string().optional(),
   ladoDe: Lado.optional(),
   ladoPara: Lado.optional(),
+  /** Forma do traçado entre elementos ligados: em ângulos retos (padrão), reta ou curva. */
+  rota: z.enum(["ortogonal", "reta", "curva"]).optional(),
   seta: z.enum(["fim", "inicio", "ambas", "nenhuma"]).default("fim"),
   estilo: z.enum(["normal", "tracejado"]).default("normal"),
   rotulo: Rotulo.optional(),
@@ -187,6 +209,7 @@ export const Diagrama = z
 
 export type Elemento = z.infer<typeof Elemento>;
 export type Conector = z.infer<typeof Conector>;
+export type LinhaTexto = z.infer<typeof LinhaTexto>;
 export type Diagrama = z.infer<typeof Diagrama>;
 export type Estilo = z.infer<typeof Estilo>;
 

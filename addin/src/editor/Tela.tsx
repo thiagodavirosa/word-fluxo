@@ -1,13 +1,17 @@
 import { useMemo, useRef, useState, type PointerEvent as PE } from "react";
 import {
+  caminhoDoConector,
+  elementoNoPonto,
+  ligarExtremidade,
   limites,
   moverConector,
+  moverExtremidade,
+  moverSegmento,
   mover,
   pontosDoConector,
   redimensionar,
   renderSvg,
   temCaixa,
-  caminho,
   type Caixa,
   type Diagrama,
 } from "@word-fluxo/core";
@@ -35,6 +39,8 @@ interface Props {
   onPrever: (d: Diagrama) => void;
   onGestoFim: () => void;
   onClicarVazio: (x: number, y: number) => void;
+  /** Forma arrastada da paleta e solta na tela. */
+  onSoltarForma: (forma: string, x: number, y: number) => void;
   onClicarElemento: (id: string) => void;
   onEditar: (alvo: Alvo) => void;
   onValorEdicao: (v: string) => void;
@@ -80,6 +86,8 @@ function novaCaixa(c: Caixa, a: Alca, dx: number, dy: number): Caixa {
 type Gesto =
   | { tipo: "mover"; ids: string[]; conector: string | null; inicio: [number, number]; base: Diagrama; movido: boolean; tela: [number, number] }
   | { tipo: "laco"; inicio: [number, number]; somar: string[] }
+  | { tipo: "ponta"; id: string; ponta: "de" | "para"; base: Diagrama; ultimo: [number, number] }
+  | { tipo: "segmento"; id: string; i: number; inicio: [number, number]; base: Diagrama }
   | { tipo: "redim"; id: string; alca: Alca; inicio: [number, number]; base: Diagrama; caixa: Caixa };
 
 export function Tela(p: Props) {
@@ -146,6 +154,22 @@ export function Tela(p: Props) {
     if (d.conectores.find((c) => c.id === id)?.pontos) iniciarMover(e, [], id);
   }
 
+  function aoPressionarPonta(e: PE, id: string, ponta: "de" | "para") {
+    e.stopPropagation();
+    e.preventDefault();
+    gesto.current = { tipo: "ponta", id, ponta, base: d, ultimo: ponto(e) };
+    p.onGestoInicio();
+    capturar(e);
+  }
+
+  function aoPressionarSegmento(e: PE, id: string, i: number) {
+    e.stopPropagation();
+    e.preventDefault();
+    gesto.current = { tipo: "segmento", id, i, inicio: ponto(e), base: d };
+    p.onGestoInicio();
+    capturar(e);
+  }
+
   function aoPressionarAlca(e: PE, id: string, alca: Alca) {
     e.stopPropagation();
     const el = d.elementos.find((x) => x.id === id)!;
@@ -158,8 +182,17 @@ export function Tela(p: Props) {
     const g = gesto.current;
     if (!g) return;
     const [x, y] = ponto(e);
+    if (g.tipo === "ponta") {
+      g.ultimo = [x, y];
+      p.onPrever(moverExtremidade(g.base, g.id, g.ponta, encaixar(x), encaixar(y)));
+      return;
+    }
     let dx = x - g.inicio[0];
     let dy = y - g.inicio[1];
+    if (g.tipo === "segmento") {
+      p.onPrever(moverSegmento(g.base, g.id, g.i, encaixar(dx), encaixar(dy)));
+      return;
+    }
     if (g.tipo === "laco") {
       setLaco({ x: Math.min(x, g.inicio[0]), y: Math.min(y, g.inicio[1]), w: Math.abs(dx), h: Math.abs(dy) });
       return;
@@ -185,6 +218,17 @@ export function Tela(p: Props) {
     const g = gesto.current;
     if (!g) return;
     gesto.current = null;
+    if (g.tipo === "ponta") {
+      // Soltar sobre um elemento prende a ponta nele (no lado mais próximo); no vazio, a ponta fica solta.
+      const [x, y] = g.ultimo;
+      const c = g.base.conectores.find((k) => k.id === g.id);
+      const outro = c ? (g.ponta === "de" ? c.para : c.de) : undefined;
+      const el = elementoNoPonto(g.base, x, y, 8, outro ? [outro] : []);
+      const solto = moverExtremidade(g.base, g.id, g.ponta, encaixar(x), encaixar(y));
+      p.onPrever(el ? ligarExtremidade(solto, g.id, g.ponta, el.id, [x, y]) : solto);
+      p.onGestoFim();
+      return;
+    }
     if (g.tipo === "laco") {
       const laco = lacoRef.current;
       if (laco && (laco.w > 3 || laco.h > 3)) {
@@ -229,6 +273,17 @@ export function Tela(p: Props) {
 
   return (
     <div style={{ position: "relative", userSelect: "none", width: largura * zoom, height: altura * zoom, boxShadow: "0 0 0 1px #c8ccd0, 0 4px 16px rgba(0,0,0,.12)", background: "#fff" }}>
+      <div
+        style={{ position: "absolute", inset: 0 }}
+        onDragOver={(e) => e.dataTransfer.types.includes("application/x-fluxo-forma") && (e.preventDefault(), (e.dataTransfer.dropEffect = "copy"))}
+        onDrop={(e) => {
+          const forma = e.dataTransfer.getData("application/x-fluxo-forma");
+          if (!forma) return;
+          e.preventDefault();
+          const [x, y] = ponto(e as unknown as PE);
+          p.onSoltarForma(forma, x, y);
+        }}
+      />
       <div style={{ position: "absolute", inset: 0 }} className="fluxo-svg" dangerouslySetInnerHTML={{ __html: html }} />
       <style>{`.fluxo-svg > svg { width: 100%; height: 100%; display: block; }`}</style>
       <svg
@@ -240,6 +295,16 @@ export function Tela(p: Props) {
         onPointerUp={aoSoltar}
         onPointerCancel={aoSoltar}
       >
+        {p.grade && (
+          <>
+            <defs>
+              <pattern id="fluxo-grade" width={GRADE * 5} height={GRADE * 5} patternUnits="userSpaceOnUse">
+                <path d={`M${GRADE * 5} 0H0V${GRADE * 5}`} fill="none" stroke="#2f6fdc" strokeOpacity={0.32} strokeWidth={0.8} />
+              </pattern>
+            </defs>
+            <rect width={largura} height={altura} fill="url(#fluxo-grade)" pointerEvents="none" />
+          </>
+        )}
         {d.elementos.map((e) => {
           const c = limites(e);
           const sel = p.selecao.ids.includes(e.id);
@@ -271,11 +336,20 @@ export function Tela(p: Props) {
           const pts = pontosDoConector(d, c);
           if (pts.length < 2) return null;
           const sel = p.selecao.conector === c.id;
+          const trajeto = caminhoDoConector(d, c);
+          const ligadoDe = d.elementos.some((e) => e.id === c.de);
+          const ligadoPara = d.elementos.some((e) => e.id === c.para);
+          const pontas: ["de" | "para", [number, number], boolean][] = [
+            ["de", pts[0], ligadoDe],
+            ["para", pts[pts.length - 1], ligadoPara],
+          ];
+          const r = 5 / zoom;
           return (
             <g key={c.id}>
-              {sel && <path d={caminho(pts)} fill="none" stroke={AZUL} strokeWidth={4} strokeOpacity={0.35} />}
+              {sel && <path d={trajeto} fill="none" stroke={AZUL} strokeWidth={4} strokeOpacity={0.35} />}
+              {(!ligadoDe || !ligadoPara) && !sel && <path d={trajeto} fill="none" stroke="#d13438" strokeWidth={5} strokeOpacity={0.18} strokeDasharray="6 4" pointerEvents="none" />}
               <path
-                d={caminho(pts)}
+                d={trajeto}
                 fill="none"
                 stroke="transparent"
                 strokeWidth={12}
@@ -283,6 +357,43 @@ export function Tela(p: Props) {
                 onPointerDown={(e) => aoPressionarConector(e, c.id)}
                 onDoubleClick={() => p.onEditar({ tipo: "c", id: c.id })}
               />
+              {pontas.map(([ponta, [x, y], ligada]) =>
+                !ligada || sel ? (
+                  <circle
+                    key={ponta}
+                    cx={x}
+                    cy={y}
+                    r={r}
+                    fill={ligada ? "#fff" : "#d13438"}
+                    stroke={ligada ? AZUL : "#fff"}
+                    strokeWidth={1.5 / zoom}
+                    style={{ cursor: "move" }}
+                    aria-label={`${ligada ? "Ponta ligada" : "Ponta solta"} (${ponta === "de" ? "início" : "fim"}) do conector ${c.id}`}
+                    onPointerDown={(e) => p.ferramenta === "selecionar" && (p.onSelecionar({ ids: [], conector: c.id }), aoPressionarPonta(e, c.id, ponta))}
+                  />
+                ) : null,
+              )}
+              {sel &&
+                !c.rota?.startsWith("c") &&
+                pts.slice(1, -2).map(([x1, y1], k) => {
+                  const [x2, y2] = pts[k + 2];
+                  const i = k + 1;
+                  const horizontal = y1 === y2;
+                  return (
+                    <rect
+                      key={i}
+                      x={(x1 + x2) / 2 - r}
+                      y={(y1 + y2) / 2 - r}
+                      width={2 * r}
+                      height={2 * r}
+                      fill={AZUL}
+                      fillOpacity={0.85}
+                      style={{ cursor: horizontal ? "ns-resize" : "ew-resize" }}
+                      aria-label={`Mover trecho ${i} do conector ${c.id}`}
+                      onPointerDown={(e) => aoPressionarSegmento(e, c.id, i)}
+                    />
+                  );
+                })}
             </g>
           );
         })}

@@ -97,26 +97,6 @@
       "espacamento": 16
     },
     {
-      "id": "x1",
-      "forma": "texto",
-      "x": 236,
-      "y": 116,
-      "texto": "submissão",
-      "tamanho": 11,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x2",
-      "forma": "texto",
-      "x": 236,
-      "y": 168,
-      "texto": "devolução",
-      "tamanho": 11,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
       "id": "x3",
       "forma": "texto",
       "x": 420,
@@ -134,34 +114,6 @@
       "texto": "arquivamento",
       "tamanho": 11.5,
       "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x5",
-      "forma": "texto",
-      "x": 350,
-      "y": 244,
-      "texto": "eventos e decisões",
-      "tamanho": 11.5,
-      "estilo": "secundario"
-    },
-    {
-      "id": "x6",
-      "forma": "texto",
-      "x": 215,
-      "y": 220,
-      "texto": "leitura por interface",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x7",
-      "forma": "texto",
-      "x": 506,
-      "y": 244,
-      "texto": "na aceitação da etapa",
-      "tamanho": 11.5,
       "estilo": "secundario"
     }
   ],
@@ -182,7 +134,14 @@
       "de": "n1",
       "ladoDe": "direita",
       "para": "n2",
-      "ladoPara": "esquerda"
+      "ladoPara": "esquerda",
+      "rotulo": {
+        "texto": "submissão",
+        "x": 236,
+        "y": 116,
+        "alinhamento": "meio",
+        "tamanho": 11
+      }
     },
     {
       "id": "k2",
@@ -200,7 +159,14 @@
       "de": "n2",
       "ladoDe": "esquerda",
       "para": "n1",
-      "ladoPara": "direita"
+      "ladoPara": "direita",
+      "rotulo": {
+        "texto": "devolução",
+        "x": 236,
+        "y": 168,
+        "alinhamento": "meio",
+        "tamanho": 11
+      }
     },
     {
       "id": "k3",
@@ -254,7 +220,13 @@
       "de": "n2",
       "ladoDe": "baixo",
       "para": "n6",
-      "ladoPara": "cima"
+      "ladoPara": "cima",
+      "rotulo": {
+        "texto": "eventos e decisões",
+        "x": 350,
+        "y": 244,
+        "alinhamento": "inicio"
+      }
     },
     {
       "id": "k6",
@@ -280,7 +252,13 @@
       "de": "n2",
       "ladoDe": "baixo",
       "para": "n5",
-      "ladoPara": "cima"
+      "ladoPara": "cima",
+      "rotulo": {
+        "texto": "leitura por interface",
+        "x": 215,
+        "y": 220,
+        "alinhamento": "meio"
+      }
     },
     {
       "id": "k7",
@@ -316,7 +294,13 @@
       "de": "n3",
       "ladoDe": "baixo",
       "para": "n7",
-      "ladoPara": "cima"
+      "ladoPara": "cima",
+      "rotulo": {
+        "texto": "na aceitação da etapa",
+        "x": 506,
+        "y": 244,
+        "alinhamento": "inicio"
+      }
     }
   ]
 }

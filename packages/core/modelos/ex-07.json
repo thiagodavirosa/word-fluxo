@@ -117,34 +117,6 @@
       "negrito": true
     },
     {
-      "id": "x1",
-      "forma": "texto",
-      "x": 248,
-      "y": 176,
-      "texto": "compartilhamento",
-      "tamanho": 11.5,
-      "estilo": "secundario"
-    },
-    {
-      "id": "x2",
-      "forma": "texto",
-      "x": 382,
-      "y": 236,
-      "texto": "devolução com pendências",
-      "tamanho": 11.5,
-      "alinhamento": "meio",
-      "estilo": "secundario"
-    },
-    {
-      "id": "x3",
-      "forma": "texto",
-      "x": 552,
-      "y": 176,
-      "texto": "compartilhamento",
-      "tamanho": 11.5,
-      "estilo": "secundario"
-    },
-    {
       "id": "x4",
       "forma": "texto",
       "x": 24,
@@ -225,7 +197,13 @@
       "de": "n3",
       "ladoDe": "baixo",
       "para": "n6",
-      "ladoPara": "cima"
+      "ladoPara": "cima",
+      "rotulo": {
+        "texto": "compartilhamento",
+        "x": 248,
+        "y": 176,
+        "alinhamento": "inicio"
+      }
     },
     {
       "id": "k5",
@@ -243,7 +221,13 @@
       "de": "n5",
       "ladoDe": "baixo",
       "para": "n7",
-      "ladoPara": "cima"
+      "ladoPara": "cima",
+      "rotulo": {
+        "texto": "compartilhamento",
+        "x": 552,
+        "y": 176,
+        "alinhamento": "inicio"
+      }
     },
     {
       "id": "k6",
@@ -265,7 +249,13 @@
       "de": "n6",
       "ladoDe": "direita",
       "para": "n4",
-      "ladoPara": "baixo"
+      "ladoPara": "baixo",
+      "rotulo": {
+        "texto": "devolução com pendências",
+        "x": 382,
+        "y": 236,
+        "alinhamento": "meio"
+      }
     },
     {
       "id": "k7",

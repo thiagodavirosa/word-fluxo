@@ -93,75 +93,49 @@
       "x": 400,
       "y": 88,
       "w": 336,
-      "h": 264
-    },
-    {
-      "id": "x3",
-      "forma": "texto",
-      "x": 416,
-      "y": 112,
-      "texto": "Parte IV: Requisitos funcionais",
-      "negrito": true
-    },
-    {
-      "id": "x4",
-      "forma": "texto",
-      "x": 416,
-      "y": 140,
-      "texto": "Cap. 19 Gerenciamento de contêineres"
-    },
-    {
-      "id": "x5",
-      "forma": "texto",
-      "x": 416,
-      "y": 164,
-      "texto": "Cap. 20 Gerenciamento de processos"
-    },
-    {
-      "id": "x6",
-      "forma": "texto",
-      "x": 416,
-      "y": 188,
-      "texto": "Cap. 21 Gerenciamento das comunicações"
-    },
-    {
-      "id": "x7",
-      "forma": "texto",
-      "x": 416,
-      "y": 212,
-      "texto": "Cap. 22 Administração e acesso"
-    },
-    {
-      "id": "x8",
-      "forma": "texto",
-      "x": 416,
-      "y": 236,
-      "texto": "Caps. 23 e 24 Segurança, retenção e SEI"
-    },
-    {
-      "id": "x9",
-      "forma": "texto",
-      "x": 416,
-      "y": 260,
-      "texto": "Cap. 25 Gestão de modelos"
-    },
-    {
-      "id": "x10",
-      "forma": "texto",
-      "x": 416,
-      "y": 300,
-      "texto": "Caps. 19 a 24 nas Etapas 1 e 2",
-      "tamanho": 11.5,
-      "estilo": "secundario"
-    },
-    {
-      "id": "x11",
-      "forma": "texto",
-      "x": 416,
-      "y": 318,
-      "texto": "Cap. 25 a partir da Etapa 2",
-      "tamanho": 11.5,
-      "estilo": "secundario"
+      "h": 264,
+      "ajusteY": -9,
+      "linhas": [
+        {
+          "texto": "Parte IV: Requisitos funcionais",
+          "negrito": true
+        },
+        {
+          "texto": "Cap. 19 Gerenciamento de contêineres",
+          "dy": 28
+        },
+        {
+          "texto": "Cap. 20 Gerenciamento de processos",
+          "dy": 24
+        },
+        {
+          "texto": "Cap. 21 Gerenciamento das comunicações",
+          "dy": 24
+        },
+        {
+          "texto": "Cap. 22 Administração e acesso",
+          "dy": 24
+        },
+        {
+          "texto": "Caps. 23 e 24 Segurança, retenção e SEI",
+          "dy": 24
+        },
+        {
+          "texto": "Cap. 25 Gestão de modelos",
+          "dy": 24
+        },
+        {
+          "texto": "Caps. 19 a 24 nas Etapas 1 e 2",
+          "secundario": true,
+          "dy": 40
+        },
+        {
+          "texto": "Cap. 25 a partir da Etapa 2",
+          "secundario": true,
+          "dy": 18
+        }
+      ],
+      "alinhamento": "inicio"
     },
     {
       "id": "n8",
@@ -169,29 +143,22 @@
       "x": 400,
       "y": 364,
       "w": 336,
-      "h": 88
-    },
-    {
-      "id": "x12",
-      "forma": "texto",
-      "x": 416,
-      "y": 388,
-      "texto": "Parte V: Interfaces",
-      "negrito": true
-    },
-    {
-      "id": "x13",
-      "forma": "texto",
-      "x": 416,
-      "y": 412,
-      "texto": "Cap. 26 Sistema de gestão de demandas"
-    },
-    {
-      "id": "x14",
-      "forma": "texto",
-      "x": 416,
-      "y": 436,
-      "texto": "Cap. 27 Verificação assistida"
+      "h": 88,
+      "linhas": [
+        {
+          "texto": "Parte V: Interfaces",
+          "negrito": true
+        },
+        {
+          "texto": "Cap. 26 Sistema de gestão de demandas",
+          "dy": 24
+        },
+        {
+          "texto": "Cap. 27 Verificação assistida",
+          "dy": 24
+        }
+      ],
+      "alinhamento": "inicio"
     }
   ],
   "conectores": [
