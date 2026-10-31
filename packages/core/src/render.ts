@@ -296,6 +296,46 @@ function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema)
   return svg;
 }
 
+function misturar(frente: string, opacidade: number, fundo: string): string {
+  const h = (c: string) => (/^#[0-9a-f]{6}$/i.test(c) ? [0, 2, 4].map((i) => parseInt(c.slice(1 + i, 3 + i), 16)) : null);
+  const a = h(frente);
+  const b = h(fundo);
+  if (!a || !b) return frente;
+  return "#" + a.map((v, i) => Math.round(v * opacidade + b[i] * (1 - opacidade)).toString(16).padStart(2, "0")).join("");
+}
+
+/** Cor do texto e cor efetiva do fundo atrás dele, para conferir o contraste (RF-53). Null se o elemento não tem texto. */
+export function corDoTexto(original: Elemento, d: Diagrama, t: Tema): { texto: string; fundo: string } | null {
+  const e = elementoEfetivo(original, d);
+  const r = e as unknown as { texto?: string; linhas?: unknown[] };
+  if (!r.texto && !r.linhas?.length) return null;
+  const sobre = (p: Pintura) => (p.fill === "none" ? t.fundo : p.fillOp !== undefined ? misturar(p.fill, p.fillOp, t.fundo) : p.fill);
+  switch (e.forma) {
+    case "grupo":
+      return { texto: e.corTexto ?? t.texto, fundo: e.preenchimento ?? (corDoFundo(e.fundo, t, "grupo") === "none" ? t.fundo : corDoFundo(e.fundo, t, "grupo")) };
+    case "raia":
+      return { texto: e.corTexto ?? t.texto, fundo: e.preenchimento ?? t.fundoGrupo };
+    case "marcador":
+      return { texto: e.corTexto ?? t.textoInverso, fundo: e.preenchimento ?? e.cor ?? t.destaque };
+    case "texto":
+      return { texto: e.corTexto ?? (e.estilo === "secundario" ? t.textoSec : (e.cor ?? t.texto)), fundo: t.fundo };
+    case "nota": {
+      const p = pintura({ ...e, estilo: e.estilo ?? "secundario" }, t);
+      return { texto: p.texto, fundo: sobre(p) };
+    }
+    case "barra":
+    case "retangulo":
+    case "linha":
+    case "chaveEsquerda":
+    case "chaveDireita":
+      return null;
+    default: {
+      const p = pintura(e, t);
+      return { texto: p.texto, fundo: sobre(p) };
+    }
+  }
+}
+
 /** Ordem de desenho: elementos na ordem do array, com cada conector logo após o elemento indicado em `depois`. */
 export function camadas(d: Diagrama): (Diagrama["elementos"][number] | Diagrama["conectores"][number])[] {
   const ids = new Set(d.elementos.map((e) => e.id));

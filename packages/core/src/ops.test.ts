@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo, definirEstilo, aplicarEstiloNomeado, removerEstilo, FIGURAS } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo, definirEstilo, aplicarEstiloNomeado, removerEstilo, FIGURAS, contraste, verificar, lerVocabulario, referenciasEm, conferirLegendas } from "./index";
 
 const base = () =>
   validar({
@@ -282,5 +282,40 @@ describe("formas geométricas", () => {
     const svg = renderSvg(d);
     for (const tag of ["<ellipse", "<polygon", "<path", "rx="]) expect(svg).toContain(tag);
     expect(svg).not.toContain("NaN");
+  });
+});
+
+describe("verificações", () => {
+  const d = validar({
+    schema: "fluxo-word/1.0", id: "v", tipo: "livre", titulo: "Implantação do CDE", tela: { largura: 400, altura: 200 },
+    elementos: [
+      { id: "a", forma: "caixa", x: 0, y: 0, w: 120, h: 40, texto: "Ver Cap. 19 e Tabela 18", corTexto: "#cccccc", preenchimento: "#ffffff" },
+      { id: "b", forma: "caixa", x: 200, y: 0, w: 120, h: 40, texto: "B" },
+    ],
+    conectores: [{ id: "k", pontos: [[120, 20], [200, 20]] }],
+  });
+  const doc = { itens: new Set(["19"]), tabelas: new Set<string>(), figuras: new Set<string>() };
+
+  it("calcula contraste WCAG", () => {
+    expect(contraste("#000000", "#ffffff")).toBeCloseTo(21, 0);
+    expect(contraste("#cccccc", "#ffffff")!).toBeLessThan(4.5);
+  });
+
+  it("aponta conector solto, contraste, vocabulário e remissão inexistente", () => {
+    const tipos = verificar(d, { vocabulario: lerVocabulario("implantação → implementação"), documento: doc }).map((a) => a.tipo);
+    expect(tipos).toEqual(expect.arrayContaining(["conector", "contraste", "vocabulario", "referencia"]));
+    const refs = verificar(d, { documento: doc }).filter((a) => a.tipo === "referencia");
+    expect(refs).toHaveLength(1);
+    expect(refs[0].mensagem).toContain("Tabela 18");
+  });
+
+  it("detecta remissões", () => {
+    expect(referenciasEm("conforme item 20.2, Cap. 19 e Figura 3").map((r) => `${r.tipo}:${r.numero}`)).toEqual(["capitulo:19", "item:20.2", "figura:3"]);
+  });
+
+  it("confere legendas", () => {
+    const a = conferirLegendas([1, 3], new Set(["1"]));
+    expect(a.map((x) => x.mensagem).join("|")).toContain("Figura 3 não é citada");
+    expect(conferirLegendas([1, 2], new Set(["1", "2"]))).toEqual([]);
   });
 });

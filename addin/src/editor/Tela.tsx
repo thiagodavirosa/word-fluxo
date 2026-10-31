@@ -39,8 +39,8 @@ interface Props {
   onPrever: (d: Diagrama) => void;
   onGestoFim: () => void;
   onClicarVazio: (x: number, y: number) => void;
-  /** Forma arrastada da paleta e solta na tela. */
-  onSoltarForma: (forma: string, x: number, y: number) => void;
+  /** Preenchido pela tela: converte coordenadas da janela em coordenadas do diagrama (null fora da tela). */
+  conversorRef: { current: ((cx: number, cy: number) => [number, number] | null) | null };
   onClicarElemento: (id: string) => void;
   onEditar: (alvo: Alvo) => void;
   onValorEdicao: (v: string) => void;
@@ -113,6 +113,13 @@ export function Tela(p: Props) {
     const q = pt.matrixTransform(svg.getScreenCTM()!.inverse());
     return [q.x, q.y];
   }
+  p.conversorRef.current = (cx, cy) => {
+    const svg = svgRef.current;
+    if (!svg) return null;
+    const r = svg.getBoundingClientRect();
+    if (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
+    return [((cx - r.left) / r.width) * largura, ((cy - r.top) / r.height) * altura];
+  };
   const encaixar = (v: number) => (p.grade ? Math.round(v / GRADE) * GRADE : v);
 
   function capturar(e: PE) {
@@ -273,17 +280,6 @@ export function Tela(p: Props) {
 
   return (
     <div style={{ position: "relative", userSelect: "none", width: largura * zoom, height: altura * zoom, boxShadow: "0 0 0 1px #c8ccd0, 0 4px 16px rgba(0,0,0,.12)", background: "#fff" }}>
-      <div
-        style={{ position: "absolute", inset: 0 }}
-        onDragOver={(e) => e.dataTransfer.types.includes("application/x-fluxo-forma") && (e.preventDefault(), (e.dataTransfer.dropEffect = "copy"))}
-        onDrop={(e) => {
-          const forma = e.dataTransfer.getData("application/x-fluxo-forma");
-          if (!forma) return;
-          e.preventDefault();
-          const [x, y] = ponto(e as unknown as PE);
-          p.onSoltarForma(forma, x, y);
-        }}
-      />
       <div style={{ position: "absolute", inset: 0 }} className="fluxo-svg" dangerouslySetInnerHTML={{ __html: html }} />
       <style>{`.fluxo-svg > svg { width: 100%; height: 100%; display: block; }`}</style>
       <svg

@@ -1,14 +1,15 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Text, makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { ChevronDown12Regular, ChevronRight12Regular } from "@fluentui/react-icons";
 import { adicionar, ajustarTela, PADROES_FIGURA, renderSvg, validar, type Figura, type Forma } from "@word-fluxo/core";
-
-const fig = (...ids: Figura[]): ItemPaleta[] => ids.map((id) => ({ id, nome: PADROES_FIGURA[id].nome, dica: PADROES_FIGURA[id].nome }));
 
 interface ItemPaleta {
   id: string;
   nome: string;
   dica: string;
 }
+
+const fig = (...ids: Figura[]): ItemPaleta[] => ids.map((id) => ({ id, nome: PADROES_FIGURA[id].nome, dica: PADROES_FIGURA[id].nome }));
 
 /** Itens agrupados por tipo; o item "conectar" é a ferramenta de ligar dois elementos. */
 export const GRUPOS_PALETA: { titulo: string; itens: ItemPaleta[] }[] = [
@@ -21,10 +22,7 @@ export const GRUPOS_PALETA: { titulo: string; itens: ItemPaleta[] }[] = [
       ...fig("terminador", "documento", "dados", "cilindro", "predefinido"),
     ],
   },
-  {
-    titulo: "Conexões",
-    itens: [{ id: "conectar", nome: "Conector", dica: "Clique em dois elementos para ligá-los" }],
-  },
+  { titulo: "Conexões", itens: [{ id: "conectar", nome: "Conector", dica: "Clique em dois elementos para ligá-los" }] },
   {
     titulo: "Contêineres",
     itens: [
@@ -39,14 +37,8 @@ export const GRUPOS_PALETA: { titulo: string; itens: ItemPaleta[] }[] = [
       { id: "texto", nome: "Texto", dica: "Texto livre" },
     ],
   },
-  {
-    titulo: "Formas",
-    itens: fig("elipse", "triangulo", "hexagono", "octogono", "pentagono", "trapezio", "estrela", "cruz", "nuvem"),
-  },
-  {
-    titulo: "Setas e chaves",
-    itens: fig("seta", "setaEsquerda", "setaDupla", "chaveEsquerda", "chaveDireita", "balao"),
-  },
+  { titulo: "Formas", itens: fig("elipse", "triangulo", "hexagono", "octogono", "pentagono", "trapezio", "estrela", "cruz", "nuvem") },
+  { titulo: "Setas e chaves", itens: fig("seta", "setaEsquerda", "setaDupla", "chaveEsquerda", "chaveDireita", "balao") },
   {
     titulo: "Estrutura",
     itens: [
@@ -56,8 +48,10 @@ export const GRUPOS_PALETA: { titulo: string; itens: ItemPaleta[] }[] = [
   },
 ];
 
+const SEM_TITULO = /<text x="24" y="34"[^>]*><\/text>/;
+
 /** Miniatura SVG da forma, desenhada pelo mesmo renderizador do diagrama. */
-function miniatura(forma: string): string {
+export function miniatura(forma: string): string {
   if (forma === "conectar") {
     const ligado = validar({
       schema: "fluxo-word/1.0",
@@ -71,85 +65,161 @@ function miniatura(forma: string): string {
       ],
       conectores: [{ id: "k", de: "a", para: "b" }],
     });
-    return renderSvg(ligado).replace(/<text x="24" y="34"[^>]*><\/text>/, "");
+    return renderSvg(ligado).replace(SEM_TITULO, "");
   }
   const vazio = validar({ schema: "fluxo-word/1.0", id: "p", tipo: "livre", titulo: "", tela: { largura: 100, altura: 100 }, elementos: [], conectores: [] });
   const { diagrama } = adicionar(vazio, forma as Forma, 12, 24);
-  const aj = ajustarTela(diagrama);
-  const svg = renderSvg({ ...aj, titulo: "" });
-  return svg.replace(/<text x="24" y="34"[^>]*><\/text>/, "");
+  return renderSvg({ ...ajustarTela(diagrama), titulo: "" }).replace(SEM_TITULO, "");
 }
 
 const useStyles = makeStyles({
-  lateral: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalS, padding: tokens.spacingHorizontalS, overflow: "auto", width: "148px", background: tokens.colorNeutralBackground1, borderRight: `1px solid ${tokens.colorNeutralStroke2}` },
-  superior: { display: "flex", gap: tokens.spacingHorizontalS, padding: tokens.spacingHorizontalS, overflowX: "auto", background: tokens.colorNeutralBackground1, borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
+  lateral: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalXS, padding: tokens.spacingHorizontalS, overflowY: "auto", width: "208px", background: tokens.colorNeutralBackground1, borderRight: `1px solid ${tokens.colorNeutralStroke2}` },
+  superior: { display: "flex", gap: tokens.spacingHorizontalM, padding: tokens.spacingHorizontalS, overflowX: "auto", background: tokens.colorNeutralBackground1, borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
+  secaoH: { display: "flex", flexDirection: "column", gap: "4px", flexShrink: 0 },
+  cabeca: {
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+    padding: "4px 2px",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    color: tokens.colorNeutralForeground2,
+    fontFamily: tokens.fontFamilyMonospace,
+    fontSize: tokens.fontSizeBase100,
+    fontWeight: tokens.fontWeightRegular,
+    textTransform: "uppercase",
+    letterSpacing: "0.04em",
+    ":hover": { color: tokens.colorNeutralForeground1 },
+  },
+  grade: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" },
+  linhaH: { display: "flex", gap: "6px" },
   item: {
     display: "flex",
     flexDirection: "column",
     alignItems: "stretch",
     gap: "2px",
-    flexShrink: 0,
-    padding: tokens.spacingHorizontalXS,
+    padding: "6px 4px 4px",
     cursor: "grab",
-    background: tokens.colorNeutralBackground2,
+    touchAction: "none",
+    userSelect: "none",
+    background: tokens.colorNeutralBackground1,
     ...shorthands.border("1px", "solid", tokens.colorNeutralStroke2),
     borderRadius: tokens.borderRadiusMedium,
-    ":hover": { ...shorthands.borderColor(tokens.colorBrandStroke1) },
+    fontFamily: "inherit",
+    ":hover": { ...shorthands.borderColor(tokens.colorBrandStroke1), background: tokens.colorNeutralBackground1Hover },
     ":focus-visible": { outline: `2px solid ${tokens.colorBrandStroke1}` },
   },
   ativo: { ...shorthands.borderColor(tokens.colorBrandStroke1), background: tokens.colorBrandBackground2 },
-  secao: { display: "flex", flexDirection: "column", gap: "4px" },
-  secaoH: { display: "flex", flexDirection: "column", gap: "2px", flexShrink: 0, paddingRight: tokens.spacingHorizontalS, borderRight: `1px solid ${tokens.colorNeutralStroke2}` },
-  titulo: { color: tokens.colorNeutralForeground3, letterSpacing: "0.05em" },
-  itens: { display: "flex", flexDirection: "column", gap: "4px" },
-  itensH: { display: "flex", gap: "4px" },
-  img: { height: "52px", display: "flex", alignItems: "center", justifyContent: "center", background: "#fff", "& svg": { maxWidth: "100%", maxHeight: "52px", width: "auto", height: "auto" } },
+  img: { height: "40px", display: "flex", alignItems: "center", justifyContent: "center", "& svg": { maxWidth: "100%", maxHeight: "40px", width: "auto", height: "auto" } },
+  nome: { textAlign: "center", lineHeight: 1.15, color: tokens.colorNeutralForeground2 },
+  dica: { padding: "4px 2px", color: tokens.colorNeutralForeground3 },
 });
+
+export interface InfoArrasto {
+  id: string;
+  svg: string;
+  x: number;
+  y: number;
+}
 
 interface Props {
   posicao: "lateral" | "superior";
-  /** Forma armada para inserir com um clique na tela. */
+  /** Item armado para inserir com um clique na tela. */
   ativa: string;
   onEscolher: (id: string) => void;
+  /** Arrasto em andamento (fim = false) ou concluído (fim = true), em coordenadas da janela. */
+  onArrastar: (info: InfoArrasto, fim: boolean) => void;
 }
 
-/** Paleta visual: arraste a forma para a tela ou clique nela e depois clique na tela. */
-export function Paleta({ posicao, ativa, onEscolher }: Props) {
+/** Paleta visual: arraste a forma para a tela, ou clique nela e depois clique na tela. */
+export function Paleta({ posicao, ativa, onEscolher, onArrastar }: Props) {
   const s = useStyles();
   const grupos = useMemo(() => GRUPOS_PALETA.map((g) => ({ ...g, itens: g.itens.map((f) => ({ ...f, svg: miniatura(f.id) })) })), []);
+  const [fechados, setFechados] = useState<Set<string>>(new Set());
   const lateral = posicao === "lateral";
+  const arrasto = useRef<{ id: string; svg: string; x0: number; y0: number; ativo: boolean } | null>(null);
+  const ignorarClique = useRef(false);
+  const callback = useRef(onArrastar);
+  callback.current = onArrastar;
+
+  useEffect(() => {
+    const mover = (e: PointerEvent) => {
+      const a = arrasto.current;
+      if (!a) return;
+      if (!a.ativo && Math.hypot(e.clientX - a.x0, e.clientY - a.y0) > 5) a.ativo = true;
+      if (a.ativo) callback.current({ id: a.id, svg: a.svg, x: e.clientX, y: e.clientY }, false);
+    };
+    const soltar = (e: PointerEvent) => {
+      const a = arrasto.current;
+      arrasto.current = null;
+      if (!a?.ativo) return;
+      ignorarClique.current = true;
+      setTimeout(() => (ignorarClique.current = false), 0);
+      callback.current({ id: a.id, svg: a.svg, x: e.clientX, y: e.clientY }, true);
+    };
+    window.addEventListener("pointermove", mover);
+    window.addEventListener("pointerup", soltar);
+    window.addEventListener("pointercancel", soltar);
+    return () => {
+      window.removeEventListener("pointermove", mover);
+      window.removeEventListener("pointerup", soltar);
+      window.removeEventListener("pointercancel", soltar);
+    };
+  }, []);
+
+  const alternar = (t: string) =>
+    setFechados((f) => {
+      const n = new Set(f);
+      if (!n.delete(t)) n.add(t);
+      return n;
+    });
+
+  const botao = (f: { id: string; nome: string; dica: string; svg: string }) => (
+    <button
+      key={f.id}
+      className={`${s.item} ${ativa === f.id ? s.ativo : ""}`}
+      style={{ width: lateral ? undefined : 96 }}
+      title={f.id === "conectar" ? f.dica : `${f.dica}: arraste para a tela ou clique para inserir`}
+      aria-label={f.id === "conectar" ? "Ferramenta conector" : `Inserir ${f.nome.toLowerCase()}`}
+      aria-pressed={ativa === f.id}
+      onPointerDown={(e) => {
+        if (e.button === 0 && f.id !== "conectar") arrasto.current = { id: f.id, svg: f.svg, x0: e.clientX, y0: e.clientY, ativo: false };
+      }}
+      onClick={() => !ignorarClique.current && onEscolher(f.id)}
+    >
+      <div className={s.img} dangerouslySetInnerHTML={{ __html: f.svg }} />
+      <Text size={100} className={s.nome}>
+        {f.nome}
+      </Text>
+    </button>
+  );
+
   return (
     <div className={lateral ? s.lateral : s.superior} role="toolbar" aria-label="Formas">
-      {grupos.map((g) => (
-        <section key={g.titulo} className={lateral ? s.secao : s.secaoH} aria-label={g.titulo}>
-          <Text size={100} weight="semibold" className={s.titulo}>
-            {g.titulo.toUpperCase()}
-          </Text>
-          <div className={lateral ? s.itens : s.itensH}>
-            {g.itens.map((f) => (
-              <button
-                key={f.id}
-                className={`${s.item} ${ativa === f.id ? s.ativo : ""}`}
-                style={{ width: lateral ? undefined : 104 }}
-                draggable={f.id !== "conectar"}
-                title={f.id === "conectar" ? f.dica : `${f.dica} — arraste para a tela`}
-                aria-label={f.id === "conectar" ? "Ferramenta conector" : `Inserir ${f.nome.toLowerCase()}`}
-                aria-pressed={ativa === f.id}
-                onDragStart={(e) => {
-                  e.dataTransfer.setData("application/x-fluxo-forma", f.id);
-                  e.dataTransfer.effectAllowed = "copy";
-                }}
-                onClick={() => onEscolher(f.id)}
-              >
-                <div className={s.img} dangerouslySetInnerHTML={{ __html: f.svg }} />
-                <Text size={200} align="center">
-                  {f.nome}
-                </Text>
+      {lateral && (
+        <Text size={200} className={s.dica}>
+          Arraste uma forma para a tela.
+        </Text>
+      )}
+      {grupos.map((g) => {
+        const fechado = lateral && fechados.has(g.titulo);
+        return (
+          <section key={g.titulo} className={lateral ? undefined : s.secaoH} aria-label={g.titulo}>
+            {lateral ? (
+              <button className={s.cabeca} aria-expanded={!fechado} onClick={() => alternar(g.titulo)}>
+                {fechado ? <ChevronRight12Regular /> : <ChevronDown12Regular />}
+                {g.titulo}
               </button>
-            ))}
-          </div>
-        </section>
-      ))}
+            ) : (
+              <Text size={100} weight="semibold" className={s.cabeca}>
+                {g.titulo}
+              </Text>
+            )}
+            {!fechado && <div className={lateral ? s.grade : s.linhaH}>{g.itens.map(botao)}</div>}
+          </section>
+        );
+      })}
     </div>
   );
 }

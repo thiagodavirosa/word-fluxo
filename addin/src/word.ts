@@ -268,3 +268,22 @@ export function abrirEditor(fonte: Fonte, rotuloAplicar: string): Promise<Fonte 
     });
   });
 }
+
+export interface TextoDoc {
+  texto: string;
+  /** Numeração de lista do parágrafo ("20.2."), quando houver. */
+  numeracao?: string;
+}
+
+/** Parágrafos do corpo do documento, com a numeração de listas (capítulos e itens). */
+export async function lerParagrafos(): Promise<TextoDoc[]> {
+  return Word.run(async (ctx) => {
+    const ps = ctx.document.body.paragraphs;
+    ps.load("items/text,items/isListItem");
+    await ctx.sync();
+    const itens = ps.items.map((p) => (p.isListItem ? p.listItem : null));
+    itens.forEach((li) => li?.load("listString"));
+    await ctx.sync();
+    return ps.items.map((p, i) => ({ texto: p.text, numeracao: itens[i]?.listString || undefined }));
+  });
+}

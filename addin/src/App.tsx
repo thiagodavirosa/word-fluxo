@@ -5,6 +5,7 @@ import { abrirEditor, aoMudarSelecao, atualizarFigura, inserirFigura, lerSelecao
 import { Galeria } from "./painel/Galeria";
 import { Figuras } from "./painel/Figuras";
 import { Ferramentas } from "./painel/Ferramentas";
+import { Verificar } from "./painel/Verificar";
 
 const useStyles = makeStyles({
   raiz: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles({
   },
 });
 
-type Aba = "galeria" | "figuras" | "ferramentas";
+type Aba = "galeria" | "figuras" | "ferramentas" | "verificar";
 
 export function App() {
   const s = useStyles();
@@ -89,11 +90,14 @@ export function App() {
         <Tab value="galeria">Novo</Tab>
         <Tab value="figuras">Figuras</Tab>
         <Tab value="ferramentas">Substituir</Tab>
+        <Tab value="verificar">Verificar</Tab>
       </TabList>
 
       {aba === "galeria" && <Galeria desabilitado={ocupado} onEscolher={criar} />}
       {aba === "figuras" && <Figuras desabilitado={ocupado} onExecutar={executar} />}
       {aba === "ferramentas" && <Ferramentas desabilitado={ocupado} onExecutar={executar} />}
+
+      {aba === "verificar" && <Verificar desabilitado={ocupado} />}
 
       {status && <Text role="status">{status}</Text>}
     </div>

@@ -91,6 +91,10 @@ Estilos nomeados: um estilo agrupa a aparência (cores, linha, fonte…) sob um 
 Entregue: terminador, documento, dados (paralelogramo), repositório (cilindro), processo definido, elipse, triângulo, hexágono, octógono, pentágono, trapézio, estrela, cruz, nuvem, setas (direita, esquerda, dupla), chaves e balão. Todas aceitam texto, conectores e os ajustes de aparência.
 Do Miro não adotado: sticky notes, cards e widgets colaborativos (enquetes, votação etc.), por não fazerem sentido em figura de relatório.
 
+### Fase 4e – UX do editor e verificações
+Entregue: formas arrastadas do painel direto para a tela (ou clique e clique); barra com ícones (desfazer/refazer, selecionar, duplicar, excluir), menu Organizar (camada, alinhar, distribuir, automático), zoom compacto, Grade como alternador, menu Mais (exportar/importar, posição do painel), barra de status e abas Propriedades | Verificar. Visual inspirado em eis-ds: neutros frios, linhas de 1px, rótulos em mono, sem sombras.
+Verificações: conectores soltos, texto que não cabe, contraste ≥ 4,5:1 (RF-53), vocabulário controlado (RF-61), remissões a capítulos/itens/tabelas/figuras (RF-60) e numeração/citação de legendas (RF-62). No editor valem para a figura; a aba Verificar do painel confere o documento todo (vocabulário configurável, "evitar → usar").
+
 ### Fase 5 – IA (opcional)
 `ia-proxy` FastAPI + prompts com saída JSON validada, edição incremental preservando IDs, preview com resumo de mudanças, verificação RF-60 a RF-62 (esta última roda local, sem IA).
 
