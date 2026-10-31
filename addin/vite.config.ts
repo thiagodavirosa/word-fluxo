@@ -14,7 +14,9 @@ const https =
     ? { key: fs.readFileSync(key), cert: fs.readFileSync(cert) }
     : undefined;
 
+// BASE_PATH: subpasta de publicação (ex.: /word-fluxo/ no GitHub Pages); local fica na raiz.
 export default defineConfig({
+  base: process.env.BASE_PATH ?? "/",
   plugins: [react()],
   server: { host: true, port: Number(process.env.PORT ?? 3100), strictPort: true, https },
   build: {

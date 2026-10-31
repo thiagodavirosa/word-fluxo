@@ -243,7 +243,7 @@ export function aoMudarSelecao(cb: () => void): () => void {
  */
 export function abrirEditor(fonte: Fonte, rotuloAplicar: string): Promise<Fonte | null> {
   return new Promise((resolve, reject) => {
-    const url = `${location.origin}/editor.html`;
+    const url = new URL(`${import.meta.env.BASE_URL}editor.html`, location.origin).href;
     Office.context.ui.displayDialogAsync(url, { height: 92, width: 92, displayInIframe: false }, (r) => {
       if (r.status !== Office.AsyncResultStatus.Succeeded) return reject(new Error(r.error.message));
       const dialogo = r.value;

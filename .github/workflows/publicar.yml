@@ -1,0 +1,41 @@
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - name: Compilar
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+        run: npm run build -w addin
+      - name: Manifesto para o endereço publicado
+        run: node tools/gerar_manifesto.mjs "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" addin/dist/manifest.xml
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: addin/dist
+      - id: deploy
+        uses: actions/deploy-pages@v4
