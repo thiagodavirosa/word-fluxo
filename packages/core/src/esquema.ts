@@ -7,6 +7,8 @@ const Estilo = z.enum(["normal", "destaque", "secundario", "atenuado"]);
 const Cor = z.string().regex(/^#[0-9a-fA-F]{6}$/, "cor deve ser #rrggbb");
 const Alinhamento = z.enum(["inicio", "meio", "fim"]);
 const Ponto = z.tuple([z.number(), z.number()]);
+export const Lado = z.enum(["auto", "cima", "baixo", "esquerda", "direita"]);
+export type Lado = z.infer<typeof Lado>;
 
 /** Propriedades comuns: estilo semântico e cor de ênfase própria (substitui o azul do tema). */
 const base = {
@@ -133,6 +135,9 @@ export const Conector = z.object({
   para: z.string().optional(),
   /** Rota manual; sem ela o conector é roteado entre `de` e `para`. */
   pontos: z.array(Ponto).min(2).optional(),
+  /** Lado de saída/chegada na rota automática; "auto" (padrão) escolhe pela posição relativa. */
+  ladoDe: Lado.optional(),
+  ladoPara: Lado.optional(),
   seta: z.enum(["fim", "inicio", "ambas", "nenhuma"]).default("fim"),
   estilo: z.enum(["normal", "tracejado"]).default("normal"),
   rotulo: Rotulo.optional(),

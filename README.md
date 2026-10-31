@@ -40,6 +40,26 @@ npm run typecheck
 npm run build
 ```
 
+## Editor visual (Fase 3)
+
+No painel: **Novo diagrama** abre o editor numa janela grande; com uma figura selecionada no documento, **Editar fluxo** abre a mesma janela com a fonte da figura. **Aplicar** insere ou atualiza a figura no mesmo lugar.
+
+No editor:
+- Arrastar para mover (grupos e raias levam o conteúdo); alças para redimensionar; Shift seleciona vários; setas do teclado ajustam de 1 px (Shift: 8 px).
+- Barra de formas (caixa, decisão, grupo, raia, marcador, nota, texto, barra) e **Conector** (clique na origem e no destino).
+- Painel de propriedades: texto, subtítulo, estilo (normal, destaque, secundário, atenuado), **cor** (paleta ou qualquer cor), fonte, posição e tamanho, ordem de empilhamento.
+- Conector selecionado: setas (fim, início, ambas, nenhuma), traço, **lado de saída e de chegada**, inverter sentido, rótulo.
+- Duplo clique edita o texto no lugar; Ctrl+Z / Ctrl+Y desfazem e refazem; Ctrl+D duplica; Delete exclui.
+- **Organizar** (horizontal ou vertical), grade magnética, zoom, ajustar tela ao conteúdo, aviso de texto que não cabe (com "Quebrar linhas").
+
+Pré-visualizar o editor fora do Word (sem Office.js), em http comum:
+
+```bash
+SEM_HTTPS=1 npm run dev -w addin -- --port 3101
+```
+
+Abrir http://localhost:3101/editor.html?demo=11 (qualquer modelo `ex-NN` de `packages/core/modelos`).
+
 ## Fase 1 – como testar a persistência no Word
 
 1. No painel, **Inserir diagrama de teste**: insere a imagem num content control com tag `fluxo-word:<id>`, grava a fonte em Custom XML e no texto alternativo.

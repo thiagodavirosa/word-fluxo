@@ -9,7 +9,7 @@ import {
   paraXml,
   type Fonte,
 } from "./fonte";
-import { renderSvg } from "@word-fluxo/core";
+import { renderSvg, validar } from "@word-fluxo/core";
 import { svgParaPng } from "./render";
 
 /** Largura útil de uma A4 com margens ABNT, em pontos. */
@@ -115,4 +115,36 @@ export function aoMudarSelecao(cb: () => void): () => void {
   const tipo = Office.EventType.DocumentSelectionChanged;
   Office.context.document.addHandlerAsync(tipo, cb);
   return () => Office.context.document.removeHandlerAsync(tipo, { handler: cb });
+}
+
+/**
+ * Abre o editor numa janela grande (Dialog API). Resolve com o diagrama editado,
+ * ou null se o usuário cancelar ou fechar a janela.
+ */
+export function abrirEditor(fonte: Fonte, rotuloAplicar: string): Promise<Fonte | null> {
+  return new Promise((resolve, reject) => {
+    const url = `${location.origin}/editor.html`;
+    Office.context.ui.displayDialogAsync(url, { height: 92, width: 92, displayInIframe: false }, (r) => {
+      if (r.status !== Office.AsyncResultStatus.Succeeded) return reject(new Error(r.error.message));
+      const dialogo = r.value;
+      let concluido = false;
+      const fim = (valor: Fonte | null) => {
+        if (concluido) return;
+        concluido = true;
+        try {
+          dialogo.close();
+        } catch {
+          /* janela já fechada */
+        }
+        resolve(valor);
+      };
+      dialogo.addEventHandler(Office.EventType.DialogMessageReceived, (arg) => {
+        const msg = JSON.parse((arg as { message: string }).message);
+        if (msg.tipo === "pronto") dialogo.messageChild(JSON.stringify({ tipo: "abrir", fonte, rotulo: rotuloAplicar }));
+        else if (msg.tipo === "aplicar") fim(validar(msg.fonte));
+        else if (msg.tipo === "cancelar") fim(null);
+      });
+      dialogo.addEventHandler(Office.EventType.DialogEventReceived, () => fim(null));
+    });
+  });
 }

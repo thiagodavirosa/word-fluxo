@@ -17,11 +17,11 @@ export function fonteExemplo(titulo = "Fluxo de teste"): Fonte {
     tipo: "fluxo-linear",
     titulo,
     revisao: 1,
-    tela: { largura: 760, altura: 140 },
+    tela: { largura: 760, altura: 280 },
     elementos: [
-      { id: "n1", forma: "caixa", x: 24, y: 60, w: 200, h: 56, texto: "Etapa 1" },
-      { id: "n2", forma: "caixa", x: 280, y: 60, w: 200, h: 56, texto: "Etapa 2" },
-      { id: "n3", forma: "caixa", x: 536, y: 60, w: 200, h: 56, texto: "Etapa 3" },
+      { id: "n1", forma: "caixa", x: 24, y: 80, w: 200, h: 56, texto: "Etapa 1" },
+      { id: "n2", forma: "caixa", x: 280, y: 80, w: 200, h: 56, texto: "Etapa 2" },
+      { id: "n3", forma: "caixa", x: 536, y: 80, w: 200, h: 56, texto: "Etapa 3" },
     ],
     conectores: [
       { id: "c1", de: "n1", para: "n2" },
