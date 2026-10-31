@@ -1,0 +1,30 @@
+# Painel do suplemento em https://localhost:3100 (certificado de `npm run certs`).
+#   docker compose up -d --build        -> versão compilada (nginx), reinicia sozinha com o Docker
+#   docker compose --profile dev up dev -> servidor Vite com recarga automática (usa a mesma porta)
+services:
+  painel:
+    build: .
+    ports:
+      - "127.0.0.1:3100:443"
+    volumes:
+      - ${USERPROFILE}/.office-addin-dev-certs:/certs:ro
+    restart: unless-stopped
+
+  dev:
+    profiles: ["dev"]
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install --no-audit --no-fund && npm run dev -w addin"
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "127.0.0.1:3100:3100"
+    volumes:
+      - .:/app
+      - node_modules_raiz:/app/node_modules
+      - node_modules_addin:/app/addin/node_modules
+      - ${USERPROFILE}/.office-addin-dev-certs:/root/.office-addin-dev-certs:ro
+
+volumes:
+  node_modules_raiz:
+  node_modules_addin:

@@ -15,7 +15,7 @@ const https =
 
 export default defineConfig({
   plugins: [react()],
-  server: { port: 3000, strictPort: true, https },
+  server: { host: true, port: 3100, strictPort: true, https },
   build: {
     rollupOptions: { input: { taskpane: "taskpane.html" } },
   },
