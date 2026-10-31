@@ -1,0 +1,168 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-05",
+  "tipo": "decomposicao",
+  "titulo": "Composição do contêiner de informação: identificador e atributos",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 308
+  },
+  "elementos": [
+    {
+      "id": "g1",
+      "forma": "grupo",
+      "x": 16,
+      "y": 56,
+      "w": 728,
+      "h": 212,
+      "fundo": "nenhum",
+      "texto": "Contêiner de informação"
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 32,
+      "y": 104,
+      "texto": "Identificador único no nome do arquivo (Codificação DPJ), ex.: GO-139-0085-C-PE-HIDR-MD-001",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 32,
+      "y": 114,
+      "w": 94,
+      "h": 44,
+      "fundo": "grupo",
+      "raio": 6,
+      "texto": "Rodovia",
+      "tamanho": 11
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 132,
+      "y": 114,
+      "w": 94,
+      "h": 44,
+      "fundo": "grupo",
+      "raio": 6,
+      "texto": "Empreendimento",
+      "tamanho": 10
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 232,
+      "y": 114,
+      "w": 94,
+      "h": 44,
+      "fundo": "grupo",
+      "raio": 6,
+      "texto": "Intervenção",
+      "tamanho": 11
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 332,
+      "y": 114,
+      "w": 94,
+      "h": 44,
+      "fundo": "grupo",
+      "raio": 6,
+      "texto": "Nível",
+      "tamanho": 11
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 432,
+      "y": 114,
+      "w": 94,
+      "h": 44,
+      "fundo": "grupo",
+      "raio": 6,
+      "texto": "Disciplina",
+      "tamanho": 11
+    },
+    {
+      "id": "n6",
+      "forma": "caixa",
+      "x": 532,
+      "y": 114,
+      "w": 94,
+      "h": 44,
+      "fundo": "grupo",
+      "raio": 6,
+      "texto": "Descrição",
+      "tamanho": 11
+    },
+    {
+      "id": "n7",
+      "forma": "caixa",
+      "x": 632,
+      "y": 114,
+      "w": 94,
+      "h": 44,
+      "fundo": "grupo",
+      "raio": 6,
+      "texto": "Número",
+      "tamanho": 11
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 32,
+      "y": 186,
+      "texto": "Atributos associados",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "n8",
+      "forma": "caixa",
+      "x": 32,
+      "y": 196,
+      "w": 218,
+      "h": 56,
+      "texto": "Estado (adequabilidade)",
+      "subtitulo": "registrado no CDE",
+      "espacamento": 16
+    },
+    {
+      "id": "n9",
+      "forma": "caixa",
+      "x": 270,
+      "y": 196,
+      "w": 218,
+      "h": 56,
+      "texto": "Revisão (Rnn)",
+      "subtitulo": "no CDE; sufixo só na exportação",
+      "espacamento": 16
+    },
+    {
+      "id": "n10",
+      "forma": "caixa",
+      "x": 508,
+      "y": 196,
+      "w": 218,
+      "h": 56,
+      "texto": "Classificação (5I)",
+      "subtitulo": "derivada da sigla de descrição",
+      "espacamento": 16
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 24,
+      "y": 292,
+      "texto": "A ordem, os valores dos campos e as siglas de descrição constam do item 19.2 e do Apêndice F.",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": []
+}

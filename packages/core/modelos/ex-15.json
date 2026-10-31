@@ -1,0 +1,337 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-15",
+  "tipo": "fluxo-eventos",
+  "titulo": "Fluxo de submissão e revisão de um pacote de disciplina",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 352,
+    "fonteBase": 11.5
+  },
+  "elementos": [
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 102,
+      "w": 112,
+      "h": 48,
+      "texto": "Submeter pacote\ncompleto"
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 168,
+      "y": 102,
+      "w": 112,
+      "h": 48,
+      "texto": "Receber e\ndistribuir"
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 312,
+      "y": 102,
+      "w": 112,
+      "h": 48,
+      "texto": "Analisar e\nvalidar"
+    },
+    {
+      "id": "d1",
+      "forma": "decisao",
+      "x": 448,
+      "y": 96,
+      "w": 88,
+      "h": 60,
+      "texto": "Desfecho"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 576,
+      "y": 64,
+      "w": 160,
+      "h": 48,
+      "estilo": "destaque"
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 656,
+      "y": 84,
+      "texto": "Publicar pacote\nda disciplina",
+      "alinhamento": "meio"
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 576,
+      "y": 140,
+      "w": 160,
+      "h": 48,
+      "texto": "Arquivar revisão\ncom relatório"
+    },
+    {
+      "id": "m1",
+      "forma": "marcador",
+      "x": 152,
+      "y": 126,
+      "texto": "E1"
+    },
+    {
+      "id": "m2",
+      "forma": "marcador",
+      "x": 556,
+      "y": 126,
+      "texto": "E2"
+    },
+    {
+      "id": "m3",
+      "forma": "marcador",
+      "x": 728,
+      "y": 64,
+      "texto": "E3"
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 548,
+      "y": 84,
+      "texto": "aceito",
+      "alinhamento": "fim",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 548,
+      "y": 176,
+      "texto": "devolvido",
+      "alinhamento": "fim",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 576,
+      "y": 54,
+      "texto": "quando a etapa se completa",
+      "estilo": "secundario"
+    },
+    {
+      "id": "g1",
+      "forma": "grupo",
+      "x": 24,
+      "y": 236,
+      "w": 232,
+      "h": 100
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 40,
+      "y": 260,
+      "texto": "E1 Submissão do pacote",
+      "tamanho": 13,
+      "negrito": true
+    },
+    {
+      "id": "x6",
+      "forma": "texto",
+      "x": 40,
+      "y": 282,
+      "texto": "notificação ao Diário (entrega)"
+    },
+    {
+      "id": "x7",
+      "forma": "texto",
+      "x": 40,
+      "y": 300,
+      "texto": "cartão no sistema de demandas"
+    },
+    {
+      "id": "x8",
+      "forma": "texto",
+      "x": 40,
+      "y": 318,
+      "texto": "ganchos da verificação assistida"
+    },
+    {
+      "id": "g2",
+      "forma": "grupo",
+      "x": 264,
+      "y": 236,
+      "w": 232,
+      "h": 100
+    },
+    {
+      "id": "x9",
+      "forma": "texto",
+      "x": 280,
+      "y": 260,
+      "texto": "E2 Conclusão da revisão",
+      "tamanho": 13,
+      "negrito": true
+    },
+    {
+      "id": "x10",
+      "forma": "texto",
+      "x": 280,
+      "y": 282,
+      "texto": "notificação ao Diário (devolutiva)"
+    },
+    {
+      "id": "x11",
+      "forma": "texto",
+      "x": 280,
+      "y": 300,
+      "texto": "atualização do cartão"
+    },
+    {
+      "id": "x12",
+      "forma": "texto",
+      "x": 280,
+      "y": 318,
+      "texto": "início da contagem de prazo"
+    },
+    {
+      "id": "g3",
+      "forma": "grupo",
+      "x": 504,
+      "y": 236,
+      "w": 232,
+      "h": 100
+    },
+    {
+      "id": "x13",
+      "forma": "texto",
+      "x": 520,
+      "y": 260,
+      "texto": "E3 Conclusão da etapa",
+      "tamanho": 13,
+      "negrito": true
+    },
+    {
+      "id": "x14",
+      "forma": "texto",
+      "x": 520,
+      "y": 282,
+      "texto": "registro no processo arquivo"
+    },
+    {
+      "id": "x15",
+      "forma": "texto",
+      "x": 520,
+      "y": 300,
+      "texto": "conclusão do cartão de gestão"
+    },
+    {
+      "id": "x16",
+      "forma": "texto",
+      "x": 520,
+      "y": 318,
+      "texto": "atualização do quadro"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          136,
+          126
+        ],
+        [
+          168,
+          126
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n2",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          280,
+          126
+        ],
+        [
+          312,
+          126
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          424,
+          126
+        ],
+        [
+          448,
+          126
+        ]
+      ],
+      "seta": "fim",
+      "de": "n3",
+      "ladoDe": "direita",
+      "para": "d1",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          536,
+          126
+        ],
+        [
+          556,
+          126
+        ],
+        [
+          556,
+          88
+        ],
+        [
+          576,
+          88
+        ]
+      ],
+      "seta": "fim",
+      "de": "d1",
+      "ladoDe": "direita",
+      "para": "n4",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          556,
+          126
+        ],
+        [
+          556,
+          164
+        ],
+        [
+          576,
+          164
+        ]
+      ],
+      "seta": "fim"
+    }
+  ]
+}

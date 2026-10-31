@@ -1,0 +1,334 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-09",
+  "tipo": "fluxo-modalidades",
+  "titulo": "Transferência de contêineres para o CDE da Agência",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 320
+  },
+  "elementos": [
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 24,
+      "y": 66,
+      "texto": "Novos contratos e projetos com adesão",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 80,
+      "w": 184,
+      "h": 96
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 116,
+      "y": 104,
+      "texto": "Ambiente da projetista",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 116,
+      "y": 128,
+      "texto": "solução própria",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 116,
+      "y": 144,
+      "texto": "versões internas",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 288,
+      "y": 80,
+      "w": 184,
+      "h": 96
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 380,
+      "y": 104,
+      "texto": "Pacote de submissão",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x6",
+      "forma": "texto",
+      "x": 380,
+      "y": 128,
+      "texto": "contêineres da revisão",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x7",
+      "forma": "texto",
+      "x": 380,
+      "y": 144,
+      "texto": "metadados ou manifesto",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 552,
+      "y": 80,
+      "w": 184,
+      "h": 96,
+      "estilo": "destaque"
+    },
+    {
+      "id": "x8",
+      "forma": "texto",
+      "x": 644,
+      "y": 104,
+      "texto": "CDE da Agência",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x9",
+      "forma": "texto",
+      "x": 644,
+      "y": 128,
+      "texto": "área de submissão",
+      "tamanho": 11.5,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x10",
+      "forma": "texto",
+      "x": 644,
+      "y": 144,
+      "texto": "estado atribuído na entrada",
+      "tamanho": 11.5,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x11",
+      "forma": "texto",
+      "x": 24,
+      "y": 220,
+      "texto": "Projetos em andamento sem adesão",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 24,
+      "y": 232,
+      "w": 184,
+      "h": 64,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x12",
+      "forma": "texto",
+      "x": 116,
+      "y": 258,
+      "texto": "Canal atual",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x13",
+      "forma": "texto",
+      "x": 116,
+      "y": 278,
+      "texto": "entrega fora do CDE",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 288,
+      "y": 232,
+      "w": 184,
+      "h": 64,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x14",
+      "forma": "texto",
+      "x": 380,
+      "y": 258,
+      "texto": "Ingestão interna",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x15",
+      "forma": "texto",
+      "x": 380,
+      "y": 278,
+      "texto": "metadados pela Agência",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x16",
+      "forma": "texto",
+      "x": 248,
+      "y": 120,
+      "texto": "autorização",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x17",
+      "forma": "texto",
+      "x": 512,
+      "y": 104,
+      "texto": "manual",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x18",
+      "forma": "texto",
+      "x": 512,
+      "y": 162,
+      "texto": "automatizado",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x19",
+      "forma": "texto",
+      "x": 558,
+      "y": 256,
+      "texto": "inserção pela Agência",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          208,
+          128
+        ],
+        [
+          288,
+          128
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n2",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          472,
+          112
+        ],
+        [
+          552,
+          112
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          472,
+          144
+        ],
+        [
+          552,
+          144
+        ]
+      ],
+      "seta": "fim",
+      "estilo": "tracejado",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          208,
+          264
+        ],
+        [
+          288,
+          264
+        ]
+      ],
+      "seta": "fim",
+      "de": "n4",
+      "ladoDe": "direita",
+      "para": "n5",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          472,
+          264
+        ],
+        [
+          644,
+          264
+        ],
+        [
+          644,
+          176
+        ]
+      ],
+      "seta": "fim",
+      "de": "n5",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "baixo"
+    }
+  ]
+}

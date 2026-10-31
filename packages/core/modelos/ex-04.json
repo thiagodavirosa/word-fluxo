@@ -1,0 +1,307 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-04",
+  "tipo": "mapeamento",
+  "titulo": "Correspondência entre as funções do CDE e a estrutura do documento",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 468
+  },
+  "elementos": [
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 24,
+      "y": 72,
+      "texto": "Funções e grupos (ABNT PR 1015)",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 400,
+      "y": 72,
+      "texto": "Estrutura do presente documento",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 96,
+      "w": 260,
+      "h": 40,
+      "texto": "Gerenciamento de contêineres",
+      "negrito": true
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 24,
+      "y": 148,
+      "w": 260,
+      "h": 40,
+      "texto": "Gerenciamento de processos",
+      "negrito": true
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 24,
+      "y": 200,
+      "w": 260,
+      "h": 40,
+      "texto": "Gerenciamento das comunicações",
+      "negrito": true
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 24,
+      "y": 252,
+      "w": 260,
+      "h": 40,
+      "texto": "Administração",
+      "negrito": true
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 24,
+      "y": 304,
+      "w": 260,
+      "h": 40,
+      "texto": "Gestão de modelos BIM",
+      "negrito": true
+    },
+    {
+      "id": "n6",
+      "forma": "caixa",
+      "x": 24,
+      "y": 388,
+      "w": 260,
+      "h": 40,
+      "texto": "Integrações",
+      "negrito": true
+    },
+    {
+      "id": "n7",
+      "forma": "caixa",
+      "x": 400,
+      "y": 88,
+      "w": 336,
+      "h": 264
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 416,
+      "y": 112,
+      "texto": "Parte IV: Requisitos funcionais",
+      "negrito": true
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 416,
+      "y": 140,
+      "texto": "Cap. 19 Gerenciamento de contêineres"
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 416,
+      "y": 164,
+      "texto": "Cap. 20 Gerenciamento de processos"
+    },
+    {
+      "id": "x6",
+      "forma": "texto",
+      "x": 416,
+      "y": 188,
+      "texto": "Cap. 21 Gerenciamento das comunicações"
+    },
+    {
+      "id": "x7",
+      "forma": "texto",
+      "x": 416,
+      "y": 212,
+      "texto": "Cap. 22 Administração e acesso"
+    },
+    {
+      "id": "x8",
+      "forma": "texto",
+      "x": 416,
+      "y": 236,
+      "texto": "Caps. 23 e 24 Segurança, retenção e SEI"
+    },
+    {
+      "id": "x9",
+      "forma": "texto",
+      "x": 416,
+      "y": 260,
+      "texto": "Cap. 25 Gestão de modelos"
+    },
+    {
+      "id": "x10",
+      "forma": "texto",
+      "x": 416,
+      "y": 300,
+      "texto": "Caps. 19 a 24 nas Etapas 1 e 2",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x11",
+      "forma": "texto",
+      "x": 416,
+      "y": 318,
+      "texto": "Cap. 25 a partir da Etapa 2",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "n8",
+      "forma": "caixa",
+      "x": 400,
+      "y": 364,
+      "w": 336,
+      "h": 88
+    },
+    {
+      "id": "x12",
+      "forma": "texto",
+      "x": 416,
+      "y": 388,
+      "texto": "Parte V: Interfaces",
+      "negrito": true
+    },
+    {
+      "id": "x13",
+      "forma": "texto",
+      "x": 416,
+      "y": 412,
+      "texto": "Cap. 26 Sistema de gestão de demandas"
+    },
+    {
+      "id": "x14",
+      "forma": "texto",
+      "x": 416,
+      "y": 436,
+      "texto": "Cap. 27 Verificação assistida"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          284,
+          116
+        ],
+        [
+          400,
+          116
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          284,
+          168
+        ],
+        [
+          400,
+          168
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          284,
+          220
+        ],
+        [
+          400,
+          220
+        ]
+      ],
+      "seta": "fim",
+      "de": "n3",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          284,
+          272
+        ],
+        [
+          400,
+          272
+        ]
+      ],
+      "seta": "fim",
+      "de": "n4",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          284,
+          324
+        ],
+        [
+          400,
+          324
+        ]
+      ],
+      "seta": "fim",
+      "de": "n5",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k6",
+      "pontos": [
+        [
+          284,
+          408
+        ],
+        [
+          400,
+          408
+        ]
+      ],
+      "seta": "fim",
+      "de": "n6",
+      "ladoDe": "direita",
+      "para": "n8",
+      "ladoPara": "esquerda"
+    }
+  ]
+}

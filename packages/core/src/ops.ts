@@ -23,7 +23,7 @@ function deslocar(e: Elemento, dx: number, dy: number): Elemento {
 
 const dentro = (a: Caixa, b: Caixa) => a.x >= b.x && a.y >= b.y && a.x + a.w <= b.x + b.w && a.y + a.h <= b.y + b.h;
 
-/** Ids que se movem junto: os próprios, mais o conteúdo de grupos e raias movidos. */
+/** Ids que se movem junto: os próprios, mais o conteúdo de grupos e raias e os textos soltos dentro de caixas. */
 export function comConteudo(d: Diagrama, ids: string[]): Set<string> {
   const mover = new Set(ids);
   for (const id of ids) {
@@ -32,6 +32,10 @@ export function comConteudo(d: Diagrama, ids: string[]): Set<string> {
       const caixa = limites(e);
       for (const f of d.elementos) if (f.id !== id && dentro(limites(f), caixa)) mover.add(f.id);
       e.forma === "grupo" && e.filhos?.forEach((f) => mover.add(f));
+    } else if (e && (e.forma === "caixa" || e.forma === "decisao" || e.forma === "nota")) {
+      // Textos soltos que estão dentro da caixa (rótulos de modelos importados) acompanham o movimento.
+      const caixa = limites(e);
+      for (const f of d.elementos) if (f.forma === "texto" && dentro(limites(f), caixa)) mover.add(f.id);
     }
   }
   return mover;

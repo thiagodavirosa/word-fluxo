@@ -1,0 +1,232 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-13",
+  "tipo": "estrela",
+  "titulo": "Função de cada registro no modelo de operação",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 336
+  },
+  "elementos": [
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 128,
+      "w": 264,
+      "h": 112,
+      "estilo": "destaque"
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 156,
+      "y": 164,
+      "texto": "CDE da Agência",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 156,
+      "y": 188,
+      "texto": "fonte primária da informação técnica",
+      "tamanho": 11.5,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 156,
+      "y": 206,
+      "texto": "contêineres, revisões, estados e trilha",
+      "tamanho": 11.5,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 448,
+      "y": 56,
+      "w": 288,
+      "h": 72
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 592,
+      "y": 80,
+      "texto": "Diário de Projetos",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 592,
+      "y": 100,
+      "texto": "registro oficial das comunicações",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x6",
+      "forma": "texto",
+      "x": 592,
+      "y": 116,
+      "texto": "recebe as notificações de entrega e devolutiva",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 448,
+      "y": 148,
+      "w": 288,
+      "h": 72
+    },
+    {
+      "id": "x7",
+      "forma": "texto",
+      "x": 592,
+      "y": 172,
+      "texto": "Processo arquivo do SEI",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x8",
+      "forma": "texto",
+      "x": 592,
+      "y": 192,
+      "texto": "registro formal dos produtos aceitos",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x9",
+      "forma": "texto",
+      "x": 592,
+      "y": 208,
+      "texto": "etapas concluídas, volumes finais e Termos",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 448,
+      "y": 240,
+      "w": 288,
+      "h": 72
+    },
+    {
+      "id": "x10",
+      "forma": "texto",
+      "x": 592,
+      "y": 264,
+      "texto": "Sistema de gestão de demandas",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x11",
+      "forma": "texto",
+      "x": 592,
+      "y": 284,
+      "texto": "organização da tarefa de análise",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x12",
+      "forma": "texto",
+      "x": 592,
+      "y": 300,
+      "texto": "reflete estados e eventos do CDE",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          288,
+          160
+        ],
+        [
+          368,
+          160
+        ],
+        [
+          368,
+          92
+        ],
+        [
+          448,
+          92
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n2",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          288,
+          184
+        ],
+        [
+          448,
+          184
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          288,
+          208
+        ],
+        [
+          368,
+          208
+        ],
+        [
+          368,
+          276
+        ],
+        [
+          448,
+          276
+        ]
+      ],
+      "seta": "ambas",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n4",
+      "ladoPara": "esquerda"
+    }
+  ]
+}

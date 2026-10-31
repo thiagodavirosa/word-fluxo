@@ -1,0 +1,289 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-07",
+  "tipo": "faixas-marcos",
+  "titulo": "Versões internas e revisões compartilhadas de um contêiner",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 332
+  },
+  "elementos": [
+    {
+      "id": "g1",
+      "forma": "grupo",
+      "x": 24,
+      "y": 56,
+      "w": 712,
+      "h": 100,
+      "texto": "Versões (ambiente da projetista)",
+      "alinhamento": "fim"
+    },
+    {
+      "id": "g2",
+      "forma": "grupo",
+      "x": 24,
+      "y": 188,
+      "w": 712,
+      "h": 100,
+      "texto": "Revisões (CDE da Agência)"
+    },
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 48,
+      "y": 96,
+      "w": 64,
+      "h": 36,
+      "fundo": "branco",
+      "raio": 6,
+      "texto": "01.01"
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 128,
+      "y": 96,
+      "w": 64,
+      "h": 36,
+      "fundo": "branco",
+      "raio": 6,
+      "texto": "01.02"
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 208,
+      "y": 96,
+      "w": 64,
+      "h": 36,
+      "fundo": "branco",
+      "raio": 6,
+      "texto": "01.03"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 432,
+      "y": 96,
+      "w": 64,
+      "h": 36,
+      "fundo": "branco",
+      "raio": 6,
+      "texto": "02.01"
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 512,
+      "y": 96,
+      "w": 64,
+      "h": 36,
+      "fundo": "branco",
+      "raio": 6,
+      "texto": "02.02"
+    },
+    {
+      "id": "n6",
+      "forma": "caixa",
+      "x": 180,
+      "y": 220,
+      "w": 120,
+      "h": 48,
+      "fundo": "branco",
+      "texto": "Revisão 01",
+      "negrito": true
+    },
+    {
+      "id": "n7",
+      "forma": "caixa",
+      "x": 484,
+      "y": 220,
+      "w": 120,
+      "h": 48,
+      "fundo": "branco",
+      "texto": "Revisão 02",
+      "negrito": true
+    },
+    {
+      "id": "n8",
+      "forma": "caixa",
+      "x": 636,
+      "y": 220,
+      "w": 88,
+      "h": 48,
+      "estilo": "destaque",
+      "texto": "Publicado",
+      "negrito": true
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 248,
+      "y": 176,
+      "texto": "compartilhamento",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 382,
+      "y": 236,
+      "texto": "devolução com pendências",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 552,
+      "y": 176,
+      "texto": "compartilhamento",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 24,
+      "y": 316,
+      "texto": "A Agência recebe e contabiliza apenas as revisões, e as versões permanecem no ambiente da projetista.",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          112,
+          114
+        ],
+        [
+          128,
+          114
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n2",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          192,
+          114
+        ],
+        [
+          208,
+          114
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          496,
+          114
+        ],
+        [
+          512,
+          114
+        ]
+      ],
+      "seta": "fim",
+      "de": "n4",
+      "ladoDe": "direita",
+      "para": "n5",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          240,
+          132
+        ],
+        [
+          240,
+          220
+        ]
+      ],
+      "seta": "fim",
+      "de": "n3",
+      "ladoDe": "baixo",
+      "para": "n6",
+      "ladoPara": "cima"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          544,
+          132
+        ],
+        [
+          544,
+          220
+        ]
+      ],
+      "seta": "fim",
+      "de": "n5",
+      "ladoDe": "baixo",
+      "para": "n7",
+      "ladoPara": "cima"
+    },
+    {
+      "id": "k6",
+      "pontos": [
+        [
+          300,
+          244
+        ],
+        [
+          464,
+          244
+        ],
+        [
+          464,
+          132
+        ]
+      ],
+      "seta": "fim",
+      "de": "n6",
+      "ladoDe": "direita",
+      "para": "n4",
+      "ladoPara": "baixo"
+    },
+    {
+      "id": "k7",
+      "pontos": [
+        [
+          604,
+          244
+        ],
+        [
+          636,
+          244
+        ]
+      ],
+      "seta": "fim",
+      "de": "n7",
+      "ladoDe": "direita",
+      "para": "n8",
+      "ladoPara": "esquerda"
+    }
+  ]
+}

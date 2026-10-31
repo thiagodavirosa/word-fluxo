@@ -1,0 +1,322 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-02",
+  "tipo": "blocos-agrupados",
+  "titulo": "Circulação da informação entre projetista, CDE da Agência e sistemas associados",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 372
+  },
+  "elementos": [
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 100,
+      "w": 176,
+      "h": 72,
+      "texto": "Projetista",
+      "subtitulo": "Trabalho em andamento\nchecar, revisar, aprovar",
+      "espacamento": 16
+    },
+    {
+      "id": "g1",
+      "forma": "grupo",
+      "x": 264,
+      "y": 64,
+      "w": 468,
+      "h": 136,
+      "texto": "CDE da Agência (fonte acordada)"
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 280,
+      "y": 108,
+      "w": 124,
+      "h": 56,
+      "texto": "Compartilhado",
+      "subtitulo": "aguarda análise",
+      "espacamento": 16
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 436,
+      "y": 108,
+      "w": 124,
+      "h": 56,
+      "estilo": "destaque",
+      "texto": "Publicado",
+      "subtitulo": "valor contratual",
+      "espacamento": 16
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 592,
+      "y": 108,
+      "w": 124,
+      "h": 56,
+      "texto": "Arquivado",
+      "subtitulo": "trilha auditável",
+      "espacamento": 16
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 24,
+      "y": 272,
+      "w": 188,
+      "h": 72,
+      "texto": "Verificação assistida",
+      "subtitulo": "componente externo\nsubsidia o analista",
+      "espacamento": 16
+    },
+    {
+      "id": "n6",
+      "forma": "caixa",
+      "x": 236,
+      "y": 272,
+      "w": 188,
+      "h": 72,
+      "texto": "Gestão de demandas",
+      "subtitulo": "dono da tarefa de análise\num cartão por entrega",
+      "espacamento": 16
+    },
+    {
+      "id": "n7",
+      "forma": "caixa",
+      "x": 448,
+      "y": 272,
+      "w": 150,
+      "h": 72,
+      "texto": "SEI",
+      "subtitulo": "registro formal\nde cada etapa aceita",
+      "espacamento": 16
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 236,
+      "y": 116,
+      "texto": "submissão",
+      "tamanho": 11,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 236,
+      "y": 168,
+      "texto": "devolução",
+      "tamanho": 11,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 420,
+      "y": 184,
+      "texto": "aceitação",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 576,
+      "y": 184,
+      "texto": "arquivamento",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 350,
+      "y": 244,
+      "texto": "eventos e decisões",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x6",
+      "forma": "texto",
+      "x": 215,
+      "y": 220,
+      "texto": "leitura por interface",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x7",
+      "forma": "texto",
+      "x": 506,
+      "y": 244,
+      "texto": "na aceitação da etapa",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          200,
+          124
+        ],
+        [
+          280,
+          124
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n2",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          280,
+          152
+        ],
+        [
+          200,
+          152
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "esquerda",
+      "para": "n1",
+      "ladoPara": "direita"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          404,
+          136
+        ],
+        [
+          436,
+          136
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          560,
+          136
+        ],
+        [
+          592,
+          136
+        ]
+      ],
+      "seta": "fim",
+      "de": "n3",
+      "ladoDe": "direita",
+      "para": "n4",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          342,
+          164
+        ],
+        [
+          342,
+          272
+        ]
+      ],
+      "seta": "ambas",
+      "de": "n2",
+      "ladoDe": "baixo",
+      "para": "n6",
+      "ladoPara": "cima"
+    },
+    {
+      "id": "k6",
+      "pontos": [
+        [
+          312,
+          164
+        ],
+        [
+          312,
+          228
+        ],
+        [
+          118,
+          228
+        ],
+        [
+          118,
+          272
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "baixo",
+      "para": "n5",
+      "ladoPara": "cima"
+    },
+    {
+      "id": "k7",
+      "pontos": [
+        [
+          212,
+          308
+        ],
+        [
+          236,
+          308
+        ]
+      ],
+      "seta": "fim",
+      "de": "n5",
+      "ladoDe": "direita",
+      "para": "n6",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k8",
+      "pontos": [
+        [
+          498,
+          164
+        ],
+        [
+          498,
+          272
+        ]
+      ],
+      "seta": "fim",
+      "de": "n3",
+      "ladoDe": "baixo",
+      "para": "n7",
+      "ladoPara": "cima"
+    }
+  ]
+}

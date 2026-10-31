@@ -16,10 +16,12 @@ import {
   mover,
   organizar,
   remover,
+  renderSvg,
   validar,
   type Diagrama,
   type Forma,
 } from "@word-fluxo/core";
+import { svgParaPng } from "../render";
 import { useHistorico } from "./historico";
 import { Propriedades } from "./Propriedades";
 import { Tela, type Alvo, type Selecao } from "./Tela";
@@ -158,6 +160,45 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
   };
 
   const ordem = (modo: ModoOrdem) => selecao.ids.length > 0 && h.aplicar((x) => reordenar(x, selecao.ids, modo));
+
+  function baixar(nome: string, blob: Blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nome;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  const exportar = async (formato: string) => {
+    if (!formato) return;
+    const base = d.id;
+    try {
+      if (formato === "svg") baixar(`${base}.svg`, new Blob([renderSvg(d)], { type: "image/svg+xml" }));
+      else if (formato === "json") baixar(`${base}.json`, new Blob([JSON.stringify(d, null, 2)], { type: "application/json" }));
+      else {
+        const png = await svgParaPng(renderSvg(d), d.tela.largura, d.tela.altura);
+        const bin = atob(png);
+        baixar(`${base}.png`, new Blob([Uint8Array.from(bin, (c) => c.charCodeAt(0))], { type: "image/png" }));
+      }
+    } catch (e) {
+      setErro(`Exportação indisponível neste ambiente: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  };
+
+  const importar = async (arquivo?: File) => {
+    if (!arquivo) return;
+    try {
+      const novo = validar(JSON.parse(await arquivo.text()));
+      h.aplicar(() => ({ ...novo, id: d.id, revisao: d.revisao }));
+      setSelecao({ ids: [], conector: null });
+      setErro("");
+      setInfo("JSON importado. Ctrl+Z desfaz.");
+      setTimeout(() => setInfo(""), 6000);
+    } catch (e) {
+      setErro(`JSON inválido: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  };
 
   const aplicarAoDocumento = () => {
     try {
@@ -314,6 +355,18 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
           <Button size="small" onClick={ajustarZoom}>
             Ajustar
           </Button>
+        </div>
+        <div className={s.grupo}>
+          <Select size="small" value="" onChange={(_, v) => exportar(v.value)} aria-label="Exportar">
+            <option value="">Exportar…</option>
+            <option value="svg">SVG</option>
+            <option value="png">PNG</option>
+            <option value="json">JSON (fonte)</option>
+          </Select>
+          <label>
+            <Text size={200}>Importar JSON </Text>
+            <input type="file" accept="application/json,.json" onChange={(e) => { importar(e.target.files?.[0]); e.target.value = ""; }} />
+          </label>
         </div>
         <div className={s.espaco} />
         {(dica || erro || info) && (

@@ -5,6 +5,7 @@ import {
   atualizarElemento,
   avisosDeTexto,
   inverterConector,
+  NOMES_TEMAS,
   quebrarLinhas,
   reordenar,
   temCaixa,
@@ -123,7 +124,7 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
       <SeletorCor valor={e.cor} onChange={(cor) => mudar({ cor })} />
 
       {(e.forma === "caixa" || e.forma === "decisao") && (
-        <Opcoes rotulo="Fundo" valor={e.fundo ?? "nenhum"} opcoes={[["nenhum", "Transparente"], ["branco", "Branco"]]} onChange={(v) => mudar({ fundo: v })} />
+        <Opcoes rotulo="Fundo" valor={e.fundo ?? "nenhum"} opcoes={[["nenhum", "Transparente"], ["branco", "Branco"], ["grupo", "Cinza do tema"]]} onChange={(v) => mudar({ fundo: v })} />
       )}
       {(e.forma === "caixa" || e.forma === "texto") && (
         <>
@@ -245,6 +246,15 @@ function PropDiagrama({ d, aplicar, onAjustarTela }: { d: Diagrama; aplicar: Apl
       <Button size="small" onClick={onAjustarTela}>
         Ajustar tela ao conteúdo
       </Button>
+      <Field label="Tema visual" size="small">
+        <Select size="small" value={d.tema ?? "tecnico"} onChange={(_, v) => aplicar((x) => ({ ...x, tema: v.value }), "tema")}>
+          {NOMES_TEMAS.map(([id, nome]) => (
+            <option key={id} value={id}>
+              {nome}
+            </option>
+          ))}
+        </Select>
+      </Field>
       <Divider />
       <Text weight="semibold">Legenda</Text>
       <Field label="Título da legenda" size="small">

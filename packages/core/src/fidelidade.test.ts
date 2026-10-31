@@ -9,7 +9,7 @@ import { renderSvg, validar } from "./index";
  * dentro de uma tolerância de posição.
  */
 interface Prim {
-  tipo: "rect" | "poly" | "path" | "text";
+  tipo: "rect" | "poly" | "path" | "text" | "circle";
   geo: number[];
   attrs: Record<string, string>;
   rotulo: string;
@@ -63,6 +63,9 @@ function extrair(svg: string, ignorarFundo: boolean): Prim[] {
       a["fill-opacity"] = el.getAttribute("fill-opacity") ?? "1";
       a.stroke = a.stroke || "none";
       prims.push({ tipo: "rect", geo: g, attrs: a, rotulo: "rect " + g.join(",") });
+    } else if (nome === "circle") {
+      const g = ["cx", "cy", "r"].map((a) => +(el.getAttribute(a) ?? 0));
+      prims.push({ tipo: "circle", geo: g, attrs: atributos(el, ["fill"]), rotulo: "circle " + g.join(",") });
     } else if (nome === "polygon") {
       prims.push({ tipo: "poly", geo: numeros(el.getAttribute("points")!), attrs: atributos(el, ["fill", "stroke", "stroke-width"]), rotulo: "polygon" });
     } else if (nome === "path" && el.parentNode && (el.parentNode as Element).nodeName !== "marker") {
@@ -117,7 +120,7 @@ function comparar(ref: Prim[], mine: Prim[]) {
   return { faltando, sobrando: livres.map((m) => `${m.rotulo} ${JSON.stringify(m.attrs)}`) };
 }
 
-const MODELOS = ["01", "06", "11", "14", "17"];
+const MODELOS = Array.from({ length: 17 }, (_, i) => String(i + 1).padStart(2, "0"));
 
 describe("fidelidade aos exemplos do item 5", () => {
   for (const n of MODELOS) {

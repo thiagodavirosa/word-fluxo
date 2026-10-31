@@ -1,0 +1,328 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-12",
+  "tipo": "grupo-saidas",
+  "titulo": "A etapa conclui com todas as disciplinas publicadas, sem travar as demais",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 372
+  },
+  "elementos": [
+    {
+      "id": "g1",
+      "forma": "grupo",
+      "x": 24,
+      "y": 56,
+      "w": 500,
+      "h": 244,
+      "texto": "Etapa de Acompanhamento (agrupamento, sem bloqueio de submissões)"
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 40,
+      "y": 120,
+      "texto": "Disciplina A"
+    },
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 150,
+      "y": 96,
+      "w": 120,
+      "h": 40,
+      "fundo": "branco",
+      "texto": "Compartilhado"
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 330,
+      "y": 96,
+      "w": 120,
+      "h": 40,
+      "estilo": "destaque",
+      "texto": "Publicado",
+      "negrito": true
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 40,
+      "y": 184,
+      "texto": "Disciplina B"
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 150,
+      "y": 160,
+      "w": 120,
+      "h": 40,
+      "fundo": "branco",
+      "texto": "Compartilhado"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 330,
+      "y": 160,
+      "w": 120,
+      "h": 40,
+      "estilo": "destaque",
+      "texto": "Publicado",
+      "negrito": true
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 40,
+      "y": 248,
+      "texto": "Disciplina C"
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 150,
+      "y": 224,
+      "w": 120,
+      "h": 40,
+      "fundo": "branco",
+      "texto": "Compartilhado"
+    },
+    {
+      "id": "n6",
+      "forma": "caixa",
+      "x": 330,
+      "y": 224,
+      "w": 120,
+      "h": 40,
+      "fundo": "branco",
+      "texto": "Devolvida"
+    },
+    {
+      "id": "n7",
+      "forma": "caixa",
+      "x": 572,
+      "y": 148,
+      "w": 164,
+      "h": 48,
+      "fundo": "branco",
+      "texto": "Etapa concluída",
+      "subtitulo": "todas publicadas",
+      "espacamento": 18
+    },
+    {
+      "id": "n8",
+      "forma": "caixa",
+      "x": 572,
+      "y": 228,
+      "w": 164,
+      "h": 44,
+      "fundo": "branco",
+      "texto": "Registro no processo\narquivo (SEI)"
+    },
+    {
+      "id": "n9",
+      "forma": "caixa",
+      "x": 572,
+      "y": 300,
+      "w": 164,
+      "h": 40,
+      "fundo": "branco",
+      "texto": "Cartão de gestão"
+    },
+    {
+      "id": "n10",
+      "forma": "caixa",
+      "x": 24,
+      "y": 316,
+      "w": 500,
+      "h": 40,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 274,
+      "y": 341,
+      "texto": "Trilha paralela de OAE: a partir da 3ª etapa, concluída até a 5ª",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 300,
+      "y": 297,
+      "texto": "nova revisão",
+      "tamanho": 11.5,
+      "alinhamento": "meio",
+      "estilo": "secundario"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          270,
+          116
+        ],
+        [
+          330,
+          116
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n2",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          270,
+          180
+        ],
+        [
+          330,
+          180
+        ]
+      ],
+      "seta": "fim",
+      "de": "n3",
+      "ladoDe": "direita",
+      "para": "n4",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          270,
+          244
+        ],
+        [
+          330,
+          244
+        ]
+      ],
+      "seta": "fim",
+      "de": "n5",
+      "ladoDe": "direita",
+      "para": "n6",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          390,
+          264
+        ],
+        [
+          390,
+          284
+        ],
+        [
+          210,
+          284
+        ],
+        [
+          210,
+          264
+        ]
+      ],
+      "seta": "fim",
+      "de": "n6",
+      "ladoDe": "baixo",
+      "para": "n5",
+      "ladoPara": "baixo"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          450,
+          116
+        ],
+        [
+          540,
+          116
+        ],
+        [
+          540,
+          160
+        ],
+        [
+          572,
+          160
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k6",
+      "pontos": [
+        [
+          450,
+          180
+        ],
+        [
+          572,
+          180
+        ]
+      ],
+      "seta": "fim",
+      "de": "n4",
+      "ladoDe": "direita",
+      "para": "n7",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k7",
+      "pontos": [
+        [
+          654,
+          196
+        ],
+        [
+          654,
+          228
+        ]
+      ],
+      "seta": "fim",
+      "de": "n7",
+      "ladoDe": "baixo",
+      "para": "n8",
+      "ladoPara": "cima"
+    },
+    {
+      "id": "k8",
+      "pontos": [
+        [
+          654,
+          272
+        ],
+        [
+          654,
+          300
+        ]
+      ],
+      "seta": "fim",
+      "de": "n8",
+      "ladoDe": "baixo",
+      "para": "n9",
+      "ladoPara": "cima"
+    }
+  ]
+}

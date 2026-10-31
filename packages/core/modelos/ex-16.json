@@ -1,0 +1,433 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-16",
+  "tipo": "leque",
+  "titulo": "Ganchos da verificação assistida acoplados à submissão do pacote",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 360,
+    "fonteBase": 12
+  },
+  "elementos": [
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 170,
+      "w": 152,
+      "h": 56,
+      "texto": "E1 Submissão",
+      "tamanho": 13,
+      "subtitulo": "do pacote",
+      "espacamento": 18
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 216,
+      "y": 64,
+      "w": 300,
+      "h": 32,
+      "raio": 6
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 232,
+      "y": 84,
+      "texto": "G1 Completude e conformidade formal"
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 216,
+      "y": 104,
+      "w": 300,
+      "h": 32,
+      "raio": 6
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 232,
+      "y": 124,
+      "texto": "G2 Conferência do checklist"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 216,
+      "y": 144,
+      "w": 300,
+      "h": 32,
+      "raio": 6
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 232,
+      "y": 164,
+      "texto": "G3 Integridade das planilhas"
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 216,
+      "y": 184,
+      "w": 300,
+      "h": 32,
+      "raio": 6
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 232,
+      "y": 204,
+      "texto": "G4 Habilitação de segundo nível"
+    },
+    {
+      "id": "n6",
+      "forma": "caixa",
+      "x": 216,
+      "y": 224,
+      "w": 300,
+      "h": 32,
+      "raio": 6
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 232,
+      "y": 244,
+      "texto": "G5 Atendimento às pendências (Rev. 01+)"
+    },
+    {
+      "id": "n7",
+      "forma": "caixa",
+      "x": 216,
+      "y": 264,
+      "w": 300,
+      "h": 32,
+      "raio": 6
+    },
+    {
+      "id": "x6",
+      "forma": "texto",
+      "x": 232,
+      "y": 284,
+      "texto": "G6 Anexos fotográficos"
+    },
+    {
+      "id": "n8",
+      "forma": "caixa",
+      "x": 216,
+      "y": 304,
+      "w": 300,
+      "h": 32,
+      "estilo": "secundario",
+      "raio": 6
+    },
+    {
+      "id": "x7",
+      "forma": "texto",
+      "x": 232,
+      "y": 324,
+      "texto": "G7 Modelos de informação (Etapa 2)",
+      "estilo": "secundario"
+    },
+    {
+      "id": "n9",
+      "forma": "caixa",
+      "x": 560,
+      "y": 162,
+      "w": 176,
+      "h": 72,
+      "estilo": "destaque"
+    },
+    {
+      "id": "x8",
+      "forma": "texto",
+      "x": 648,
+      "y": 186,
+      "texto": "Parecer ao analista",
+      "tamanho": 13,
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x9",
+      "forma": "texto",
+      "x": 648,
+      "y": 206,
+      "texto": "não impede a transição",
+      "tamanho": 11.5,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x10",
+      "forma": "texto",
+      "x": 648,
+      "y": 222,
+      "texto": "reflete no cartão",
+      "tamanho": 11.5,
+      "alinhamento": "meio"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          176,
+          198
+        ],
+        [
+          196,
+          198
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          196,
+          80
+        ],
+        [
+          196,
+          320
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          196,
+          80
+        ],
+        [
+          216,
+          80
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          196,
+          120
+        ],
+        [
+          216,
+          120
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          196,
+          160
+        ],
+        [
+          216,
+          160
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k6",
+      "pontos": [
+        [
+          196,
+          200
+        ],
+        [
+          216,
+          200
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k7",
+      "pontos": [
+        [
+          196,
+          240
+        ],
+        [
+          216,
+          240
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k8",
+      "pontos": [
+        [
+          196,
+          280
+        ],
+        [
+          216,
+          280
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k9",
+      "pontos": [
+        [
+          196,
+          320
+        ],
+        [
+          216,
+          320
+        ]
+      ],
+      "seta": "fim",
+      "estilo": "tracejado"
+    },
+    {
+      "id": "k10",
+      "pontos": [
+        [
+          516,
+          80
+        ],
+        [
+          536,
+          80
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k11",
+      "pontos": [
+        [
+          516,
+          120
+        ],
+        [
+          536,
+          120
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k12",
+      "pontos": [
+        [
+          516,
+          160
+        ],
+        [
+          536,
+          160
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k13",
+      "pontos": [
+        [
+          516,
+          200
+        ],
+        [
+          536,
+          200
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k14",
+      "pontos": [
+        [
+          516,
+          240
+        ],
+        [
+          536,
+          240
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k15",
+      "pontos": [
+        [
+          516,
+          280
+        ],
+        [
+          536,
+          280
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k16",
+      "pontos": [
+        [
+          516,
+          320
+        ],
+        [
+          536,
+          320
+        ]
+      ],
+      "seta": "nenhuma",
+      "estilo": "tracejado"
+    },
+    {
+      "id": "k17",
+      "pontos": [
+        [
+          536,
+          80
+        ],
+        [
+          536,
+          320
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k18",
+      "pontos": [
+        [
+          536,
+          198
+        ],
+        [
+          560,
+          198
+        ]
+      ],
+      "seta": "fim"
+    }
+  ]
+}

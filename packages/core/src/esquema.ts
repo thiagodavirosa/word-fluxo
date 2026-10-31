@@ -6,6 +6,7 @@ export const ESQUEMA = "fluxo-word/1.0";
 const Estilo = z.enum(["normal", "destaque", "secundario", "atenuado"]);
 const Cor = z.string().regex(/^#[0-9a-fA-F]{6}$/, "cor deve ser #rrggbb");
 const Alinhamento = z.enum(["inicio", "meio", "fim"]);
+const Fundo = z.enum(["nenhum", "branco", "grupo"]);
 const Ponto = z.tuple([z.number(), z.number()]);
 export const Lado = z.enum(["auto", "cima", "baixo", "esquerda", "direita"]);
 export type Lado = z.infer<typeof Lado>;
@@ -28,7 +29,9 @@ const Caixa = z.object({
   negrito: z.boolean().optional(),
   tamanho: z.number().positive().optional(),
   espacamento: z.number().positive().optional(),
-  fundo: z.enum(["nenhum", "branco"]).optional(),
+  fundo: Fundo.optional(),
+  /** Raio dos cantos; padrão do tema (8). */
+  raio: z.number().min(0).optional(),
 });
 
 const Decisao = z.object({
@@ -38,7 +41,7 @@ const Decisao = z.object({
   texto: z.string().default(""),
   tamanho: z.number().positive().optional(),
   espacamento: z.number().positive().optional(),
-  fundo: z.enum(["nenhum", "branco"]).optional(),
+  fundo: Fundo.optional(),
 });
 
 const Marcador = z.object({
@@ -56,6 +59,7 @@ const Grupo = z.object({
   ...Retangular,
   texto: z.string().default(""),
   alinhamento: Alinhamento.optional(),
+  fundo: Fundo.optional(),
   filhos: z.array(z.string()).optional(),
 });
 

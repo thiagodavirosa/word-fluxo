@@ -1,0 +1,225 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-03",
+  "tipo": "categorias",
+  "titulo": "Categorias de contêiner de informação e etapa de entrada no fluxo",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 344
+  },
+  "elementos": [
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 260,
+      "y": 64,
+      "w": 240,
+      "h": 48,
+      "estilo": "destaque",
+      "texto": "Contêiner de informação",
+      "negrito": true
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 24,
+      "y": 160,
+      "w": 216,
+      "h": 96
+    },
+    {
+      "id": "x1",
+      "forma": "texto",
+      "x": 132,
+      "y": 184,
+      "texto": "Informação gráfica",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x2",
+      "forma": "texto",
+      "x": 40,
+      "y": 208,
+      "texto": "Desenhos e pranchas (DWG, PDF)",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x3",
+      "forma": "texto",
+      "x": 40,
+      "y": 224,
+      "texto": "Modelos IFC e nativos (Etapa 2)",
+      "tamanho": 11.5
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 260,
+      "y": 160,
+      "w": 216,
+      "h": 96
+    },
+    {
+      "id": "x4",
+      "forma": "texto",
+      "x": 368,
+      "y": 184,
+      "texto": "Informação não gráfica",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x5",
+      "forma": "texto",
+      "x": 276,
+      "y": 208,
+      "texto": "Planilhas de quantitativos",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x6",
+      "forma": "texto",
+      "x": 276,
+      "y": 224,
+      "texto": "Especificações e memoriais",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 496,
+      "y": 160,
+      "w": 216,
+      "h": 96
+    },
+    {
+      "id": "x7",
+      "forma": "texto",
+      "x": 604,
+      "y": 184,
+      "texto": "Documentos associados",
+      "negrito": true,
+      "alinhamento": "meio"
+    },
+    {
+      "id": "x8",
+      "forma": "texto",
+      "x": 512,
+      "y": 208,
+      "texto": "Relatórios e notas técnicas",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x9",
+      "forma": "texto",
+      "x": 512,
+      "y": 224,
+      "texto": "Checklist da projetista (PDF)",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "x10",
+      "forma": "texto",
+      "x": 512,
+      "y": 240,
+      "texto": "Declaração de entrega",
+      "tamanho": 11.5,
+      "estilo": "secundario"
+    },
+    {
+      "id": "g1",
+      "forma": "grupo",
+      "x": 24,
+      "y": 280,
+      "w": 688,
+      "h": 40
+    },
+    {
+      "id": "x11",
+      "forma": "texto",
+      "x": 368,
+      "y": 305,
+      "texto": "A Etapa 1 gere desenhos, planilhas e documentos, enquanto a Etapa 2 inclui os modelos BIM.",
+      "alinhamento": "meio"
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          380,
+          112
+        ],
+        [
+          380,
+          136
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          132,
+          136
+        ],
+        [
+          604,
+          136
+        ]
+      ],
+      "seta": "nenhuma"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          132,
+          136
+        ],
+        [
+          132,
+          160
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          368,
+          136
+        ],
+        [
+          368,
+          160
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          604,
+          136
+        ],
+        [
+          604,
+          160
+        ]
+      ],
+      "seta": "fim"
+    }
+  ]
+}

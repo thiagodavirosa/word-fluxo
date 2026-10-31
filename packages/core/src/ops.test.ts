@@ -25,6 +25,21 @@ describe("operações", () => {
     expect(d.conectores[0].pontos).toEqual([[130, 65], [210, 65]]);
   });
 
+  it("textos soltos dentro de uma caixa acompanham a caixa", () => {
+    const d = validar({
+      ...base(),
+      conectores: [],
+      elementos: [
+        { id: "c", forma: "caixa", x: 0, y: 0, w: 100, h: 60, texto: "" },
+        { id: "t", forma: "texto", x: 10, y: 30, texto: "dentro" },
+        { id: "f", forma: "texto", x: 300, y: 30, texto: "fora" },
+      ],
+    });
+    const r = mover(d, ["c"], 5, 5);
+    expect(r.elementos.find((e) => e.id === "t")).toMatchObject({ x: 15, y: 35 });
+    expect(r.elementos.find((e) => e.id === "f")).toMatchObject({ x: 300, y: 30 });
+  });
+
   it("mover só uma ponta devolve o conector à rota automática", () => {
     expect(mover(base(), ["a"], 0, 30).conectores[0].pontos).toBeUndefined();
   });

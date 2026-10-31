@@ -1,0 +1,180 @@
+{
+  "schema": "fluxo-word/1.0",
+  "id": "modelo-ex-10",
+  "tipo": "fluxo-grade",
+  "titulo": "Abordagem voltada à segurança aplicada ao CDE da GOINFRA",
+  "revisao": 1,
+  "tela": {
+    "largura": 760,
+    "altura": 264
+  },
+  "elementos": [
+    {
+      "id": "n1",
+      "forma": "caixa",
+      "x": 24,
+      "y": 64,
+      "w": 224,
+      "h": 64,
+      "texto": "Avaliação de sensibilidade",
+      "subtitulo": "itens 4.2 a 4.4",
+      "espacamento": 20
+    },
+    {
+      "id": "n2",
+      "forma": "caixa",
+      "x": 268,
+      "y": 64,
+      "w": 224,
+      "h": 64,
+      "texto": "Triagem e registro",
+      "subtitulo": "itens 4.7 e 4.8",
+      "espacamento": 20
+    },
+    {
+      "id": "n3",
+      "forma": "caixa",
+      "x": 512,
+      "y": 64,
+      "w": 224,
+      "h": 64,
+      "texto": "Estratégia e plano de gestão",
+      "subtitulo": "Seções 6 e 7",
+      "espacamento": 20
+    },
+    {
+      "id": "n4",
+      "forma": "caixa",
+      "x": 24,
+      "y": 176,
+      "w": 224,
+      "h": 64,
+      "estilo": "destaque",
+      "texto": "Medidas no CDE",
+      "subtitulo": "acesso restrito e registro de acessos",
+      "espacamento": 20
+    },
+    {
+      "id": "n5",
+      "forma": "caixa",
+      "x": 268,
+      "y": 176,
+      "w": 224,
+      "h": 64,
+      "texto": "Avaliação de publicação",
+      "subtitulo": "item 7.2, inclusive para o SEI",
+      "espacamento": 20
+    },
+    {
+      "id": "n6",
+      "forma": "caixa",
+      "x": 512,
+      "y": 176,
+      "w": 224,
+      "h": 64,
+      "texto": "Encerramento",
+      "subtitulo": "item 9.2.8, remoção de acessos",
+      "espacamento": 20
+    }
+  ],
+  "conectores": [
+    {
+      "id": "k1",
+      "pontos": [
+        [
+          248,
+          96
+        ],
+        [
+          268,
+          96
+        ]
+      ],
+      "seta": "fim",
+      "de": "n1",
+      "ladoDe": "direita",
+      "para": "n2",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k2",
+      "pontos": [
+        [
+          492,
+          96
+        ],
+        [
+          512,
+          96
+        ]
+      ],
+      "seta": "fim",
+      "de": "n2",
+      "ladoDe": "direita",
+      "para": "n3",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k3",
+      "pontos": [
+        [
+          624,
+          128
+        ],
+        [
+          624,
+          152
+        ],
+        [
+          136,
+          152
+        ],
+        [
+          136,
+          176
+        ]
+      ],
+      "seta": "fim",
+      "de": "n3",
+      "ladoDe": "baixo",
+      "para": "n4",
+      "ladoPara": "cima"
+    },
+    {
+      "id": "k4",
+      "pontos": [
+        [
+          248,
+          208
+        ],
+        [
+          268,
+          208
+        ]
+      ],
+      "seta": "fim",
+      "de": "n4",
+      "ladoDe": "direita",
+      "para": "n5",
+      "ladoPara": "esquerda"
+    },
+    {
+      "id": "k5",
+      "pontos": [
+        [
+          492,
+          208
+        ],
+        [
+          512,
+          208
+        ]
+      ],
+      "seta": "fim",
+      "de": "n5",
+      "ladoDe": "direita",
+      "para": "n6",
+      "ladoPara": "esquerda"
+    }
+  ]
+}

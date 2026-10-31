@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { Button, Text, makeStyles, tokens } from "@fluentui/react-components";
-import { fonteExemplo, type Fonte } from "./fonte";
+import { Button, Tab, TabList, Text, makeStyles, tokens } from "@fluentui/react-components";
+import { type Fonte } from "./fonte";
 import { abrirEditor, aoMudarSelecao, atualizarFigura, inserirFigura, lerSelecao, type FiguraLida } from "./word";
+import { Galeria } from "./painel/Galeria";
+import { Figuras } from "./painel/Figuras";
+import { Ferramentas } from "./painel/Ferramentas";
 
 const useStyles = makeStyles({
   raiz: {
@@ -12,11 +15,14 @@ const useStyles = makeStyles({
   },
 });
 
+type Aba = "galeria" | "figuras" | "ferramentas";
+
 export function App() {
   const s = useStyles();
   const [status, setStatus] = useState("");
   const [lida, setLida] = useState<FiguraLida | null>(null);
   const [ocupado, setOcupado] = useState(false);
+  const [aba, setAba] = useState<Aba>("galeria");
 
   useEffect(() => {
     let lendo = false;
@@ -46,12 +52,12 @@ export function App() {
     }
   }
 
-  const novo = () =>
+  const criar = (fonte: Fonte) =>
     executar(async () => {
-      const editado = await abrirEditor(fonteExemplo("Novo diagrama"), "Inserir no documento");
+      const editado = await abrirEditor(fonte, "Inserir no documento");
       if (!editado) return "Cancelado.";
       await inserirFigura(editado);
-      return "Figura inserida.";
+      return "Figura inserida com legenda.";
     });
 
   const editar = (figura: FiguraLida) =>
@@ -66,11 +72,8 @@ export function App() {
   return (
     <div className={s.raiz}>
       <Text size={500} weight="semibold">Fluxos</Text>
-      <Button appearance="primary" disabled={ocupado} onClick={novo}>
-        Novo diagrama
-      </Button>
 
-      {lida ? (
+      {lida && (
         <>
           <Text weight="semibold">{lida.fonte.titulo}</Text>
           <Text size={200}>
@@ -80,9 +83,18 @@ export function App() {
             Editar fluxo
           </Button>
         </>
-      ) : (
-        <Text>Clique em uma figura do suplemento para editá-la.</Text>
       )}
+
+      <TabList selectedValue={aba} onTabSelect={(_, d) => setAba(d.value as Aba)} size="small">
+        <Tab value="galeria">Novo</Tab>
+        <Tab value="figuras">Figuras</Tab>
+        <Tab value="ferramentas">Ferramentas</Tab>
+      </TabList>
+
+      {aba === "galeria" && <Galeria desabilitado={ocupado} onEscolher={criar} />}
+      {aba === "figuras" && <Figuras desabilitado={ocupado} onExecutar={executar} />}
+      {aba === "ferramentas" && <Ferramentas desabilitado={ocupado} onExecutar={executar} />}
+
       {status && <Text role="status">{status}</Text>}
     </div>
   );

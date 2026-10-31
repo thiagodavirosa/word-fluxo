@@ -28,8 +28,11 @@ interface Pintura {
 type Alinh = "inicio" | "meio" | "fim";
 const ancora = (a: Alinh = "meio") => ({ inicio: "start", meio: "middle", fim: "end" })[a];
 
+const corDoFundo = (fundo: string | undefined, t: Tema, padrao: "none" | "grupo" = "none") =>
+  ({ nenhum: "none", branco: t.fundo, grupo: t.fundoGrupo })[fundo ?? padrao] ?? "none";
+
 function pintura(e: { estilo?: string; cor?: string; fundo?: string }, t: Tema): Pintura {
-  const fundo = e.fundo === "branco" ? t.fundo : "none";
+  const fundo = corDoFundo(e.fundo, t);
   switch (e.estilo) {
     case "destaque": {
       const cor = e.cor ?? t.destaque;
@@ -90,7 +93,7 @@ function renderElemento(e: Elemento, d: Diagrama, t: Tema): string {
       const p = pintura(e.forma === "nota" ? { ...e, estilo: e.estilo ?? "secundario" } : e, t);
       const { linhas, passo } = rotulos(e, p, t, base);
       return (
-        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="${t.raio}" ${attrsPintura(p)}/>` +
+        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="${"raio" in e && e.raio !== undefined ? e.raio : t.raio}" ${attrsPintura(p)}/>` +
         blocoCentrado(linhas, e.x + e.w / 2, e.y + e.h / 2, passo)
       );
     }
@@ -109,15 +112,15 @@ function renderElemento(e: Elemento, d: Diagrama, t: Tema): string {
       );
     }
     case "marcador": {
-      const p = pintura({ ...e, estilo: e.estilo ?? "destaque" }, t);
-      const { linhas } = rotulos({ texto: e.texto, negrito: true, tamanho: 11 }, p, t, base);
-      return `<circle cx="${num(e.x)}" cy="${num(e.y)}" r="${e.raio ?? 11}" ${attrsPintura(p)}/>` + blocoCentrado(linhas, e.x, e.y, 15);
+      const cor = e.cor ?? t.destaque;
+      const linhas = linhasDe(e.texto).map((s) => ({ t: s, tam: 10, negrito: true, cor: t.textoInverso }));
+      return `<circle cx="${num(e.x)}" cy="${num(e.y)}" r="${e.raio ?? 11}" fill="${cor}"/>` + blocoCentrado(linhas, e.x, e.y, 15);
     }
     case "grupo": {
       const a = e.alinhamento ?? "inicio";
       const x = a === "fim" ? e.x + e.w - 16 : e.x + 16;
       return (
-        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="${t.raio}" fill="${t.fundoGrupo}" stroke="${e.cor ?? t.linha}" stroke-width="${t.espLinha}"/>` +
+        `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="${t.raio}" fill="${corDoFundo(e.fundo, t, "grupo")}" stroke="${e.cor ?? t.linha}" stroke-width="${t.espLinha}"/>` +
         linhasDe(e.texto).map((s, i) => textoSvg(x, e.y + 24 + i * 15, s, base, t.texto, true, a)).join("")
       );
     }

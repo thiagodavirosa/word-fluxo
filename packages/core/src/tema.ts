@@ -6,6 +6,7 @@ export interface Tema {
   destaque: string;
   texto: string;
   textoSec: string;
+  textoInverso: string;
   fundoGrupo: string;
   fundo: string;
   espLinha: number;
@@ -25,6 +26,7 @@ export const tecnico: Tema = {
   destaque: "#2f6fdc",
   texto: "#1d2a33",
   textoSec: "#56636d",
+  textoInverso: "white",
   fundoGrupo: "#f1f0ec",
   fundo: "#ffffff",
   espLinha: 1.25,
@@ -37,4 +39,19 @@ export const tecnico: Tema = {
   tracejado: "4 3",
 };
 
-export const temas: Record<string, Tema> = { tecnico };
+/** Tema para impressão em preto e branco (RF-52): sem azul, destaque por traço escuro e fundo cinza claro. */
+export const monocromatico: Tema = {
+  ...tecnico,
+  nome: "monocromatico",
+  linha: "#5f6368",
+  destaque: "#1a1a1a",
+  texto: "#000000",
+  textoSec: "#3c4043",
+  fundoGrupo: "#ececec",
+};
+
+export const temas: Record<string, Tema> = { tecnico, monocromatico };
+export const NOMES_TEMAS: [string, string][] = [
+  ["tecnico", "Técnico (padrão)"],
+  ["monocromatico", "Monocromático (impressão)"],
+];
