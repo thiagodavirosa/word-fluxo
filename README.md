@@ -84,3 +84,14 @@ Abrir http://localhost:3101/editor.html?demo=11 (qualquer modelo `ex-NN` de `pac
 3. Altere um texto e clique em **Atualizar figura**: imagem e fonte são trocadas no mesmo lugar (a revisão sobe de 1 para 2).
 4. Salve, feche, reabra (idealmente em outra máquina) e repita o passo 2.
 5. Coedição: com o arquivo no OneDrive, duas pessoas abrem a mesma figura; a segunda a atualizar recebe aviso de conflito.
+
+## Instalar no Word (sem npm, sem Docker)
+
+O painel é publicado automaticamente no GitHub Pages a cada push na `main`: https://thiagodavirosa.github.io/word-fluxo/
+
+1. Baixe o manifesto: https://thiagodavirosa.github.io/word-fluxo/manifest.xml (salve como `manifest.xml`).
+2. **Word para Windows:** coloque o arquivo numa pasta, compartilhe-a (clique direito → Propriedades → Compartilhamento) e, em Arquivo → Opções → Central de Confiabilidade → Configurações → Catálogos de Suplementos Confiáveis, adicione o caminho de rede dessa pasta e marque "Mostrar no Menu". Reinicie o Word e abra Inserir → Meus Suplementos → Pasta Compartilhada → Fluxos.
+3. **Word na web ou Mac:** Inserir → Suplementos → Meus suplementos → Carregar meu suplemento → escolha o `manifest.xml`.
+4. **Organização:** o administrador do Microsoft 365 envia o `manifest.xml` em Centro de administração → Configurações → Aplicativos integrados e libera para os usuários.
+
+Para publicar uma nova versão, basta `git push`; quem já instalou recebe a atualização ao reabrir o painel.
