@@ -132,10 +132,10 @@ export function Propriedades({ diagrama: d, selecao, aplicar, onAjustarTela }: P
           <Num rotulo="Tamanho da fonte" valor={e.tamanho ?? d.tela.fonteBase ?? 13} onChange={(tamanho) => mudar({ tamanho }, "tam")} />
         </>
       )}
-      {(e.forma === "grupo" || e.forma === "texto") && (
+      {(e.forma === "grupo" || e.forma === "texto" || e.forma === "caixa") && (
         <Opcoes
           rotulo="Alinhamento"
-          valor={e.alinhamento ?? "inicio"}
+          valor={e.alinhamento ?? (e.forma === "caixa" ? "meio" : "inicio")}
           opcoes={[["inicio", "À esquerda"], ["meio", "Centro"], ["fim", "À direita"]]}
           onChange={(v) => mudar({ alinhamento: v })}
         />

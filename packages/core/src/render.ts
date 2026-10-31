@@ -73,6 +73,12 @@ function blocoCentrado(linhas: Linha[], cx: number, cy: number, passo: number, a
   return linhas.map((l, i) => textoSvg(cx, y0 + i * passo, l.t, l.tam, l.cor, l.negrito, a)).join("");
 }
 
+/** Ponto de ancoragem do texto de uma caixa conforme o alinhamento (margem de 16 px, como nos grupos). */
+function posTexto(e: { x: number; y: number; w: number; h: number; alinhamento?: Alinh }): [number, number] {
+  const x = e.alinhamento === "inicio" ? e.x + 16 : e.alinhamento === "fim" ? e.x + e.w - 16 : e.x + e.w / 2;
+  return [x, e.y + e.h / 2];
+}
+
 function rotulos(
   e: { texto: string; subtitulo?: string; negrito?: boolean; tamanho?: number; espacamento?: number },
   p: Pintura,
@@ -94,7 +100,7 @@ function renderElemento(e: Elemento, d: Diagrama, t: Tema): string {
       const { linhas, passo } = rotulos(e, p, t, base);
       return (
         `<rect x="${num(e.x)}" y="${num(e.y)}" width="${num(e.w)}" height="${num(e.h)}" rx="${"raio" in e && e.raio !== undefined ? e.raio : t.raio}" ${attrsPintura(p)}/>` +
-        blocoCentrado(linhas, e.x + e.w / 2, e.y + e.h / 2, passo)
+        blocoCentrado(linhas, ...posTexto(e), passo, "alinhamento" in e && e.alinhamento ? e.alinhamento : "meio")
       );
     }
     case "decisao": {
@@ -194,6 +200,17 @@ function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema)
   return svg;
 }
 
+/** Ordem de desenho: elementos na ordem do array, com cada conector logo após o elemento indicado em `depois`. */
+export function camadas(d: Diagrama): (Diagrama["elementos"][number] | Diagrama["conectores"][number])[] {
+  const ids = new Set(d.elementos.map((e) => e.id));
+  const apos = (id: string) => d.conectores.filter((c) => c.depois === id);
+  return [
+    ...d.conectores.filter((c) => c.depois === ""),
+    ...d.elementos.flatMap((e) => [e, ...apos(e.id)]),
+    ...d.conectores.filter((c) => c.depois !== "" && (c.depois === undefined || !ids.has(c.depois))),
+  ];
+}
+
 /** JSON do diagrama -> SVG autônomo. Os elementos saem na ordem do array (grupos antes dos filhos). */
 export function renderSvg(d: Diagrama, tema?: Tema): string {
   const t = tema ?? temas[d.tema ?? ""] ?? tecnico;
@@ -204,8 +221,9 @@ export function renderSvg(d: Diagrama, tema?: Tema): string {
     `<defs><marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${t.linha}"/></marker></defs>` +
     `<rect width="${largura}" height="${altura}" fill="${t.fundo}" data-fundo="1"/>` +
     textoSvg(24, 34, d.titulo, t.tamTitulo, t.texto, true, "inicio") +
-    d.elementos.map((e) => renderElemento(e, d, t)).join("") +
-    d.conectores.map((c) => renderConector(d, c, t)).join("") +
+    camadas(d)
+      .map((i) => ("forma" in i ? renderElemento(i, d, t) : renderConector(d, i, t)))
+      .join("") +
     `</svg>`
   );
 }

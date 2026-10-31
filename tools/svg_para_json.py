@@ -168,22 +168,30 @@ class Conversor:
         return f"{prefixo}{self.contadores[prefixo]}"
 
     # ---- textos ---------------------------------------------------------------------------
-    def candidatos(self, f: Forma, centro: bool):
+    def candidatos(self, f: Forma, centro: bool, alinh: str = "meio"):
+        ancora, x = {"meio": ("middle", f.x + f.w / 2), "inicio": ("start", f.x + 16), "fim": ("end", f.x + f.w - 16)}[alinh]
         saida = []
         for b in self.blocos:
             if b.usado:
                 continue
             if all(dentro(f, ln.x, ln.y, 0.5) for ln in b.linhas):
-                if not centro or (b.ancora == "middle" and all(abs(ln.x - (f.x + f.w / 2)) <= 1 for ln in b.linhas)):
+                if not centro or (b.ancora == ancora and all(abs(ln.x - x) <= 1 for ln in b.linhas)):
                     saida.append(b)
         return saida
 
     def anexar_rotulo(self, f: Forma, el: dict, estilo: str | None) -> None:
-        """Rótulo + subtítulo de caixa/decisão, se o layout previsto reproduz as posições originais."""
-        blocos = sorted(self.candidatos(f, True), key=lambda b: b.linhas[0].y)
+        """Rótulo + subtítulo de caixa/decisão, em qualquer alinhamento (caixas), se o layout previsto reproduz o original."""
+        for alinh in ("meio", "inicio", "fim") if el["forma"] == "caixa" else ("meio",):
+            if self._rotulo(f, el, estilo, alinh):
+                if alinh != "meio":
+                    el["alinhamento"] = alinh
+                return
+
+    def _rotulo(self, f: Forma, el: dict, estilo: str | None, alinh: str) -> bool:
+        blocos = sorted(self.candidatos(f, True, alinh), key=lambda b: b.linhas[0].y)
         linhas = [(ln, b) for b in blocos for ln in b.linhas]
         if not linhas:
-            return
+            return False
         cor_titulo = SEC if estilo == "secundario" else TEXTO
         cor_sub = TEXTO if estilo == "destaque" else SEC
         eh_sub = lambda b: abs(b.tam - 11.5) < 0.01 and b.peso != "600" and b.cor == cor_sub  # noqa: E731
@@ -192,19 +200,19 @@ class Conversor:
             n_titulo -= 1
         titulo, sub = linhas[:n_titulo], linhas[n_titulo:]
         if not titulo:  # só subtítulo: não é um rótulo no nosso layout
-            return
+            return False
         tams = {b.tam for _, b in titulo}
         pesos = {b.peso for _, b in titulo}
         if len(tams) != 1 or len(pesos) != 1 or any(b.cor != cor_titulo for _, b in titulo):
-            return
+            return False
         ys = [ln.y for ln, _ in linhas]
         passos = {round(b - a, 2) for a, b in zip(ys, ys[1:])}
         if len(passos) > 1:
-            return
+            return False
         passo = passos.pop() if passos else (17 if sub else 15)
         previsto = f.y + f.h / 2 - (len(ys) - 1) * passo / 2 + 4
         if abs(ys[0] - previsto) > TOL_Y:
-            return
+            return False
         tam, peso = tams.pop(), pesos.pop()
         el["texto"] = "\n".join(ln.s for ln, _ in titulo)
         if abs(tam - self.base) > 0.01:
@@ -219,6 +227,7 @@ class Conversor:
             el["espacamento"] = limpo(passo)
         for _, b in linhas:
             b.usado = True
+        return True
 
     def anexar_grupo(self, f: Forma, el: dict) -> None:
         for b in self.candidatos(f, False):
@@ -366,12 +375,109 @@ class Conversor:
                 el.update({"de": de[1], "ladoDe": de[2], "para": para[1], "ladoPara": para[2]})
             self.conectores.append((ordem, el))
 
+    def barramentos(self) -> None:
+        """Conectores soltos que se encontram (tronco compartilhado) viram ligações reais origem -> destino.
+
+        Cada trecho ligado a formas forma um componente; as extremidades com seta são destinos e as demais
+        extremidades tocando formas são origens. O desenho original é mantido em `pontos` (caminho pelo tronco)
+        até a forma ser movida, quando a rota automática assume.
+        """
+        soltos = [(o, c) for o, c in self.conectores if "de" not in c]
+        if len(soltos) < 2:
+            return
+
+        def sobre(p, a, b):  # ponto p sobre o segmento ab (ortogonal)
+            return min(a[0], b[0]) - 0.6 <= p[0] <= max(a[0], b[0]) + 0.6 and min(a[1], b[1]) - 0.6 <= p[1] <= max(a[1], b[1]) + 0.6
+
+        pai = list(range(len(soltos)))
+
+        def raiz(i):
+            while pai[i] != i:
+                pai[i] = pai[pai[i]]
+                i = pai[i]
+            return i
+
+        def segs(c):
+            return list(zip(c["pontos"], c["pontos"][1:]))
+
+        for i, (_, a) in enumerate(soltos):
+            for j in range(i + 1, len(soltos)):
+                b = soltos[j][1]
+                if any(sobre(q, *sb) for sa in segs(a) for q in sa for sb in segs(b)) or any(sobre(q, *sa) for sb in segs(b) for q in sb for sa in segs(a)):
+                    pai[raiz(i)] = raiz(j)
+        grupos: dict[int, list[int]] = {}
+        for i in range(len(soltos)):
+            grupos.setdefault(raiz(i), []).append(i)
+
+        consumidos: set[int] = set()
+        novos: list[tuple[int, dict]] = []
+        for membros in grupos.values():
+            if len(membros) < 2:
+                continue
+            origens, destinos = [], []  # (id, lado, ponto, tracejado)
+            for i in membros:
+                c = soltos[i][1]
+                tr = c.get("estilo") == "tracejado"
+                for ponto, seta in ((c["pontos"][0], c["seta"] in ("inicio", "ambas")), (c["pontos"][-1], c["seta"] in ("fim", "ambas"))):
+                    lig = self.ligar(*ponto)
+                    if lig:
+                        (destinos if seta else origens).append((lig[1], lig[2], ponto, tr))
+            if not origens or not destinos:
+                continue
+            pontos_tronco = [pt for i in membros for pt in soltos[i][1]["pontos"]]
+            for o_id, o_lado, o_pt, o_tr in origens:
+                for d_id, d_lado, d_pt, d_tr in destinos:
+                    if o_id == d_id:
+                        continue
+                    caminho = self.trilha(o_pt, d_pt, [soltos[i][1]["pontos"] for i in membros])
+                    if not caminho:
+                        continue
+                    el = {"id": self.id("k"), "de": o_id, "para": d_id, "ladoDe": o_lado, "ladoPara": d_lado, "pontos": caminho, "seta": "fim"}
+                    if o_tr or d_tr:
+                        el["estilo"] = "tracejado"
+                    novos.append((min(soltos[i][0] for i in membros), el))
+            consumidos.update(membros)
+        if not novos:
+            return
+        mantidos = [(o, c) for k, (o, c) in enumerate(soltos) if k not in consumidos]
+        self.conectores = [(o, c) for o, c in self.conectores if "de" in c] + mantidos + novos
+
+    def trilha(self, ini, fim, linhas):
+        """Menor caminho ortogonal de ini a fim percorrendo apenas os trechos dados (junções em T incluídas)."""
+        nos = {tuple(p) for ln in linhas for p in ln} | {tuple(ini), tuple(fim)}
+        arestas: dict[tuple, set] = {n: set() for n in nos}
+        for ln in linhas:
+            seg = list(zip(ln, ln[1:]))
+            for a, b in seg:
+                a, b = tuple(a), tuple(b)
+                no_seg = sorted((n for n in nos if min(a[0], b[0]) - 0.01 <= n[0] <= max(a[0], b[0]) + 0.01 and min(a[1], b[1]) - 0.01 <= n[1] <= max(a[1], b[1]) + 0.01 and (a[0] == b[0] == n[0] or a[1] == b[1] == n[1])), key=lambda n: abs(n[0] - a[0]) + abs(n[1] - a[1]))
+                for u, v in zip(no_seg, no_seg[1:]):
+                    arestas[u].add(v)
+                    arestas[v].add(u)
+        fila, vistos = [[tuple(ini)]], {tuple(ini)}
+        while fila:
+            cam = fila.pop(0)
+            if cam[-1] == tuple(fim):
+                saida = [list(p) for p in cam]
+                limpo_ = [saida[0]]
+                for k in range(1, len(saida) - 1):
+                    a, b, c = limpo_[-1], saida[k], saida[k + 1]
+                    if not ((a[0] == b[0] == c[0]) or (a[1] == b[1] == c[1])):
+                        limpo_.append(b)
+                return limpo_ + [saida[-1]]
+            for v in arestas[cam[-1]]:
+                if v not in vistos:
+                    vistos.add(v)
+                    fila.append([*cam, v])
+        return None
+
     def converter(self) -> dict:
         self.titulo = ""
         self.conectores: list[tuple[int, dict]] = []
         self.converter_formas()
         self.converter_textos()
         self.converter_caminhos()
+        self.barramentos()
         tela = {"largura": limpo(self.vb[2]), "altura": limpo(self.vb[3])}
         if abs(self.base - 13) > 0.01:
             tela["fonteBase"] = limpo(self.base)

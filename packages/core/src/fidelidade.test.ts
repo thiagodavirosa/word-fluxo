@@ -53,6 +53,7 @@ function extrair(svg: string, ignorarFundo: boolean): Prim[] {
     return r;
   };
 
+  const trechos: Trecho[] = [];
   const visitar = (el: Element) => {
     if (el.nodeName === "defs") return;
     const nome = el.nodeName;
@@ -73,7 +74,9 @@ function extrair(svg: string, ignorarFundo: boolean): Prim[] {
       a["marker-start"] = el.getAttribute("marker-start") ? "sim" : "";
       a["marker-end"] = el.getAttribute("marker-end") ? "sim" : "";
       const geo = caminhoParaPontos(el.getAttribute("d")!);
-      prims.push({ tipo: "path", geo, attrs: a, rotulo: "path " + geo.join(",") });
+      for (let i = 0; i + 3 < geo.length; i += 2) {
+        trechos.push({ g: [geo[i], geo[i + 1], geo[i + 2], geo[i + 3]], a: { ...a, "marker-start": i === 0 ? a["marker-start"] : "", "marker-end": i + 4 >= geo.length ? a["marker-end"] : "" } });
+      }
     } else if (nome === "text") {
       const a = atributos(el, ["fill", "font-size", "text-anchor", "font-weight"]);
       const x0 = +(el.getAttribute("x") ?? 0);
@@ -94,7 +97,41 @@ function extrair(svg: string, ignorarFundo: boolean): Prim[] {
     for (const filho of Array.from(el.childNodes)) if (filho.nodeType === 1) visitar(filho as Element);
   };
   visitar(raiz);
-  return prims;
+  return [...prims, ...unirTrechos(trechos)];
+}
+
+interface Trecho {
+  g: number[];
+  a: Record<string, string>;
+}
+
+/**
+ * Conectores ortogonais que compartilham um tronco (barramento) são desenhados como vários caminhos
+ * sobrepostos. Para comparar o que aparece, cada caminho vira trechos retos; trechos sem seta sobre a
+ * mesma reta são fundidos e trechos idênticos são contados uma vez.
+ */
+function unirTrechos(ts: Trecho[]): Prim[] {
+  const chave = (t: Trecho) => JSON.stringify(t.a);
+  const saida: Trecho[] = [];
+  for (const t of ts) {
+    const [x1, y1, x2, y2] = t.g;
+    const norm: Trecho = x1 > x2 || (x1 === x2 && y1 > y2) ? { g: [x2, y2, x1, y1], a: { ...t.a, "marker-start": t.a["marker-end"], "marker-end": t.a["marker-start"] } } : t;
+    const marcado = norm.a["marker-start"] || norm.a["marker-end"];
+    const vizinho = saida.find((o) => {
+      if (chave(o) !== chave(norm) || (o.a["marker-start"] || o.a["marker-end"]) !== marcado) return false;
+      const [a1, b1, a2, b2] = o.g;
+      const [c1, d1, c2, d2] = norm.g;
+      if (marcado) return a1 === c1 && b1 === d1 && a2 === c2 && b2 === d2;
+      const horiz = b1 === b2 && d1 === d2 && b1 === d1;
+      const vert = a1 === a2 && c1 === c2 && a1 === c1;
+      return (horiz && c1 <= a2 && a1 <= c2) || (vert && d1 <= b2 && b1 <= d2);
+    });
+    if (!vizinho) saida.push({ g: [...norm.g], a: norm.a });
+    else if (!marcado) {
+      vizinho.g = [Math.min(vizinho.g[0], norm.g[0]), Math.min(vizinho.g[1], norm.g[1]), Math.max(vizinho.g[2], norm.g[2]), Math.max(vizinho.g[3], norm.g[3])];
+    }
+  }
+  return saida.map((t) => ({ tipo: "path" as const, geo: t.g, attrs: t.a, rotulo: "trecho " + t.g.join(",") }));
 }
 
 function igual(a: Prim, b: Prim): boolean {

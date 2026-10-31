@@ -88,7 +88,7 @@ export function App() {
       <TabList selectedValue={aba} onTabSelect={(_, d) => setAba(d.value as Aba)} size="small">
         <Tab value="galeria">Novo</Tab>
         <Tab value="figuras">Figuras</Tab>
-        <Tab value="ferramentas">Ferramentas</Tab>
+        <Tab value="ferramentas">Substituir</Tab>
       </TabList>
 
       {aba === "galeria" && <Galeria desabilitado={ocupado} onEscolher={criar} />}

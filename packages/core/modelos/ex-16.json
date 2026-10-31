@@ -29,14 +29,9 @@
       "y": 64,
       "w": 300,
       "h": 32,
-      "raio": 6
-    },
-    {
-      "id": "x1",
-      "forma": "texto",
-      "x": 232,
-      "y": 84,
-      "texto": "G1 Completude e conformidade formal"
+      "raio": 6,
+      "texto": "G1 Completude e conformidade formal",
+      "alinhamento": "inicio"
     },
     {
       "id": "n3",
@@ -45,14 +40,9 @@
       "y": 104,
       "w": 300,
       "h": 32,
-      "raio": 6
-    },
-    {
-      "id": "x2",
-      "forma": "texto",
-      "x": 232,
-      "y": 124,
-      "texto": "G2 Conferência do checklist"
+      "raio": 6,
+      "texto": "G2 Conferência do checklist",
+      "alinhamento": "inicio"
     },
     {
       "id": "n4",
@@ -61,14 +51,9 @@
       "y": 144,
       "w": 300,
       "h": 32,
-      "raio": 6
-    },
-    {
-      "id": "x3",
-      "forma": "texto",
-      "x": 232,
-      "y": 164,
-      "texto": "G3 Integridade das planilhas"
+      "raio": 6,
+      "texto": "G3 Integridade das planilhas",
+      "alinhamento": "inicio"
     },
     {
       "id": "n5",
@@ -77,14 +62,9 @@
       "y": 184,
       "w": 300,
       "h": 32,
-      "raio": 6
-    },
-    {
-      "id": "x4",
-      "forma": "texto",
-      "x": 232,
-      "y": 204,
-      "texto": "G4 Habilitação de segundo nível"
+      "raio": 6,
+      "texto": "G4 Habilitação de segundo nível",
+      "alinhamento": "inicio"
     },
     {
       "id": "n6",
@@ -93,14 +73,9 @@
       "y": 224,
       "w": 300,
       "h": 32,
-      "raio": 6
-    },
-    {
-      "id": "x5",
-      "forma": "texto",
-      "x": 232,
-      "y": 244,
-      "texto": "G5 Atendimento às pendências (Rev. 01+)"
+      "raio": 6,
+      "texto": "G5 Atendimento às pendências (Rev. 01+)",
+      "alinhamento": "inicio"
     },
     {
       "id": "n7",
@@ -109,14 +84,9 @@
       "y": 264,
       "w": 300,
       "h": 32,
-      "raio": 6
-    },
-    {
-      "id": "x6",
-      "forma": "texto",
-      "x": 232,
-      "y": 284,
-      "texto": "G6 Anexos fotográficos"
+      "raio": 6,
+      "texto": "G6 Anexos fotográficos",
+      "alinhamento": "inicio"
     },
     {
       "id": "n8",
@@ -126,15 +96,9 @@
       "w": 300,
       "h": 32,
       "estilo": "secundario",
-      "raio": 6
-    },
-    {
-      "id": "x7",
-      "forma": "texto",
-      "x": 232,
-      "y": 324,
+      "raio": 6,
       "texto": "G7 Modelos de informação (Etapa 2)",
-      "estilo": "secundario"
+      "alinhamento": "inicio"
     },
     {
       "id": "n9",
@@ -146,7 +110,7 @@
       "estilo": "destaque"
     },
     {
-      "id": "x8",
+      "id": "x1",
       "forma": "texto",
       "x": 648,
       "y": 186,
@@ -156,7 +120,7 @@
       "alinhamento": "meio"
     },
     {
-      "id": "x9",
+      "id": "x2",
       "forma": "texto",
       "x": 648,
       "y": 206,
@@ -165,7 +129,7 @@
       "alinhamento": "meio"
     },
     {
-      "id": "x10",
+      "id": "x3",
       "forma": "texto",
       "x": 648,
       "y": 222,
@@ -176,7 +140,11 @@
   ],
   "conectores": [
     {
-      "id": "k1",
+      "id": "k19",
+      "de": "n1",
+      "para": "n2",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
         [
           176,
@@ -185,27 +153,7 @@
         [
           196,
           198
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k2",
-      "pontos": [
-        [
-          196,
-          80
         ],
-        [
-          196,
-          320
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k3",
-      "pontos": [
         [
           196,
           80
@@ -218,8 +166,20 @@
       "seta": "fim"
     },
     {
-      "id": "k4",
+      "id": "k20",
+      "de": "n1",
+      "para": "n3",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          176,
+          198
+        ],
+        [
+          196,
+          198
+        ],
         [
           196,
           120
@@ -232,8 +192,20 @@
       "seta": "fim"
     },
     {
-      "id": "k5",
+      "id": "k21",
+      "de": "n1",
+      "para": "n4",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          176,
+          198
+        ],
+        [
+          196,
+          198
+        ],
         [
           196,
           160
@@ -246,8 +218,20 @@
       "seta": "fim"
     },
     {
-      "id": "k6",
+      "id": "k22",
+      "de": "n1",
+      "para": "n5",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          176,
+          198
+        ],
+        [
+          196,
+          198
+        ],
         [
           196,
           200
@@ -260,8 +244,20 @@
       "seta": "fim"
     },
     {
-      "id": "k7",
+      "id": "k23",
+      "de": "n1",
+      "para": "n6",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          176,
+          198
+        ],
+        [
+          196,
+          198
+        ],
         [
           196,
           240
@@ -274,8 +270,20 @@
       "seta": "fim"
     },
     {
-      "id": "k8",
+      "id": "k24",
+      "de": "n1",
+      "para": "n7",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          176,
+          198
+        ],
+        [
+          196,
+          198
+        ],
         [
           196,
           280
@@ -288,8 +296,20 @@
       "seta": "fim"
     },
     {
-      "id": "k9",
+      "id": "k25",
+      "de": "n1",
+      "para": "n8",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
+        [
+          176,
+          198
+        ],
+        [
+          196,
+          198
+        ],
         [
           196,
           320
@@ -303,7 +323,11 @@
       "estilo": "tracejado"
     },
     {
-      "id": "k10",
+      "id": "k26",
+      "de": "n2",
+      "para": "n9",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
       "pontos": [
         [
           516,
@@ -312,112 +336,7 @@
         [
           536,
           80
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k11",
-      "pontos": [
-        [
-          516,
-          120
         ],
-        [
-          536,
-          120
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k12",
-      "pontos": [
-        [
-          516,
-          160
-        ],
-        [
-          536,
-          160
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k13",
-      "pontos": [
-        [
-          516,
-          200
-        ],
-        [
-          536,
-          200
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k14",
-      "pontos": [
-        [
-          516,
-          240
-        ],
-        [
-          536,
-          240
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k15",
-      "pontos": [
-        [
-          516,
-          280
-        ],
-        [
-          536,
-          280
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k16",
-      "pontos": [
-        [
-          516,
-          320
-        ],
-        [
-          536,
-          320
-        ]
-      ],
-      "seta": "nenhuma",
-      "estilo": "tracejado"
-    },
-    {
-      "id": "k17",
-      "pontos": [
-        [
-          536,
-          80
-        ],
-        [
-          536,
-          320
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k18",
-      "pontos": [
         [
           536,
           198
@@ -428,6 +347,163 @@
         ]
       ],
       "seta": "fim"
+    },
+    {
+      "id": "k27",
+      "de": "n3",
+      "para": "n9",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
+      "pontos": [
+        [
+          516,
+          120
+        ],
+        [
+          536,
+          120
+        ],
+        [
+          536,
+          198
+        ],
+        [
+          560,
+          198
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k28",
+      "de": "n4",
+      "para": "n9",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
+      "pontos": [
+        [
+          516,
+          160
+        ],
+        [
+          536,
+          160
+        ],
+        [
+          536,
+          198
+        ],
+        [
+          560,
+          198
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k29",
+      "de": "n5",
+      "para": "n9",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
+      "pontos": [
+        [
+          516,
+          200
+        ],
+        [
+          536,
+          200
+        ],
+        [
+          536,
+          198
+        ],
+        [
+          560,
+          198
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k30",
+      "de": "n6",
+      "para": "n9",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
+      "pontos": [
+        [
+          516,
+          240
+        ],
+        [
+          536,
+          240
+        ],
+        [
+          536,
+          198
+        ],
+        [
+          560,
+          198
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k31",
+      "de": "n7",
+      "para": "n9",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
+      "pontos": [
+        [
+          516,
+          280
+        ],
+        [
+          536,
+          280
+        ],
+        [
+          536,
+          198
+        ],
+        [
+          560,
+          198
+        ]
+      ],
+      "seta": "fim"
+    },
+    {
+      "id": "k32",
+      "de": "n8",
+      "para": "n9",
+      "ladoDe": "direita",
+      "ladoPara": "esquerda",
+      "pontos": [
+        [
+          516,
+          320
+        ],
+        [
+          536,
+          320
+        ],
+        [
+          536,
+          198
+        ],
+        [
+          560,
+          198
+        ]
+      ],
+      "seta": "fim",
+      "estilo": "tracejado"
     }
   ]
 }

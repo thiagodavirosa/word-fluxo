@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector } from "./index";
 
 const base = () =>
   validar({
@@ -130,4 +130,25 @@ describe("empilhamento, alinhamento e distribuição", () => {
     const r = distribuir(d, ["p", "q", "r"], "horizontal");
     expect(r.elementos.map((e) => (e as { x: number }).x)).toEqual([0, 150, 300]);
   });
+});
+
+describe("camada dos conectores", () => {
+  const base = validar({
+    schema: "fluxo-word/1.0",
+    id: "t",
+    tipo: "livre",
+    titulo: "t",
+    tela: { largura: 400, altura: 200 },
+    elementos: [
+      { id: "a", forma: "caixa", x: 0, y: 0, w: 100, h: 40, texto: "A" },
+      { id: "b", forma: "caixa", x: 200, y: 0, w: 100, h: 40, texto: "B" },
+      { id: "c", forma: "caixa", x: 100, y: 0, w: 100, h: 40, texto: "C" },
+    ],
+    conectores: [{ id: "k", de: "a", para: "b" }],
+  });
+  const ordemDeDesenho = (d: typeof base) => camadas(d).map((i) => i.id).join("");
+
+  it("começa acima de tudo", () => expect(ordemDeDesenho(base)).toBe("abck"));
+  it("elemento levado à frente cobre o conector", () => expect(ordemDeDesenho(reordenar(base, ["a"], "frente"))).toBe("bcka"));
+  it("conector enviado para trás fica sob os elementos", () => expect(ordemDeDesenho(reordenarConector(base, "k", "tras"))).toBe("kabc"));
 });

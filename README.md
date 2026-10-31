@@ -65,7 +65,7 @@ Abrir http://localhost:3101/editor.html?demo=11 (qualquer modelo `ex-NN` de `pac
 - **Novo**: galeria com os 17 modelos (EX-01 a EX-17), diagrama em branco e fluxo simples; ao escolher, abre o editor e insere figura + legenda.
 - **Legenda**: "Figura N – Título. Fonte: …" com campo SEQ nativo do Word (estilo Legenda); atualizada junto com a figura.
 - **Figuras**: lista das figuras do documento, navegação por clique, "Inserir legenda" onde faltar.
-- **Ferramentas**: localizar/substituir em todos os diagramas (conta antes de substituir) e troca de tema do documento inteiro.
+- **Substituir**: localizar/substituir em todos os diagramas (conta antes de substituir) e troca de tema do documento inteiro.
 - **Editor**: seletor de tema, exportar SVG/PNG/JSON e importar JSON.
 - Pendente de teste no Word: numeração SEQ, legendas e operações em lote (dependem de WordApi 1.5).
 

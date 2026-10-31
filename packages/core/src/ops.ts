@@ -1,6 +1,7 @@
 import dagre from "@dagrejs/dagre";
 import type { Conector, Diagrama, Elemento } from "./esquema";
 import { limites, type Caixa, type Ponto } from "./rotas";
+import { camadas } from "./render";
 
 /** Operações puras sobre o diagrama, usadas pelo editor (cada uma devolve um novo diagrama). */
 
@@ -157,14 +158,35 @@ export type ModoOrdem = "frente" | "tras" | "avancar" | "recuar";
 export function reordenar(d: Diagrama, ids: string[], modo: ModoOrdem): Diagrama {
   const sel = new Set(ids);
   const arr = [...d.elementos];
-  if (modo === "frente") return { ...d, elementos: [...arr.filter((e) => !sel.has(e.id)), ...arr.filter((e) => sel.has(e.id))] };
-  if (modo === "tras") return { ...d, elementos: [...arr.filter((e) => sel.has(e.id)), ...arr.filter((e) => !sel.has(e.id))] };
-  if (modo === "avancar") {
+  // Cada conector passa a apontar para o último elemento não movido que o precedia, para que
+  // "frente"/"trás" valham também em relação aos conectores.
+  const seq = camadas(d);
+  let ultimo = "";
+  const ancora = new Map<string, string>();
+  for (const i of seq) {
+    if ("forma" in i) {
+      if (!sel.has(i.id)) ultimo = i.id;
+    } else ancora.set(i.id, ultimo);
+  }
+  if (modo === "frente") arr.splice(0, arr.length, ...arr.filter((e) => !sel.has(e.id)), ...arr.filter((e) => sel.has(e.id)));
+  else if (modo === "tras") arr.splice(0, arr.length, ...arr.filter((e) => sel.has(e.id)), ...arr.filter((e) => !sel.has(e.id)));
+  else if (modo === "avancar") {
     for (let i = arr.length - 2; i >= 0; i--) if (sel.has(arr[i].id) && !sel.has(arr[i + 1].id)) [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
   } else {
     for (let i = 1; i < arr.length; i++) if (sel.has(arr[i].id) && !sel.has(arr[i - 1].id)) [arr[i], arr[i - 1]] = [arr[i - 1], arr[i]];
   }
-  return { ...d, elementos: arr };
+  return { ...d, elementos: arr, conectores: d.conectores.map((c) => ({ ...c, depois: ancora.get(c.id) })) };
+}
+
+/** Muda a camada de um conector: frente/trás (de tudo) ou um elemento acima/abaixo. */
+export function reordenarConector(d: Diagrama, id: string, modo: ModoOrdem): Diagrama {
+  const c = d.conectores.find((k) => k.id === id);
+  if (!c) return d;
+  const ids = d.elementos.map((e) => e.id);
+  const pos = c.depois === undefined || !ids.includes(c.depois) ? ids.length - 1 : ids.indexOf(c.depois === "" ? "" : c.depois);
+  const alvo = modo === "frente" ? ids.length - 1 : modo === "tras" ? -1 : modo === "avancar" ? Math.min(ids.length - 1, pos + 1) : Math.max(-1, pos - 1);
+  const depois = modo === "frente" ? undefined : alvo < 0 ? "" : ids[alvo];
+  return { ...d, conectores: d.conectores.map((k) => (k.id === id ? { ...k, depois } : k)) };
 }
 
 export type ModoAlinhar = "esquerda" | "centro" | "direita" | "topo" | "meio" | "base";

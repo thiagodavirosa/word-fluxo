@@ -29,6 +29,8 @@ const Caixa = z.object({
   negrito: z.boolean().optional(),
   tamanho: z.number().positive().optional(),
   espacamento: z.number().positive().optional(),
+  /** Posição do texto na caixa; padrão: centralizado. */
+  alinhamento: Alinhamento.optional(),
   fundo: Fundo.optional(),
   /** Raio dos cantos; padrão do tema (8). */
   raio: z.number().min(0).optional(),
@@ -140,6 +142,8 @@ export const Conector = z.object({
   /** Rota manual; sem ela o conector é roteado entre `de` e `para`. */
   pontos: z.array(Ponto).min(2).optional(),
   /** Lado de saída/chegada na rota automática; "auto" (padrão) escolhe pela posição relativa. */
+  /** Camada: desenhado logo após este elemento ("" = abaixo de tudo). Sem valor, fica acima de todos. */
+  depois: z.string().optional(),
   ladoDe: Lado.optional(),
   ladoPara: Lado.optional(),
   seta: z.enum(["fim", "inicio", "ambas", "nenhuma"]).default("fim"),

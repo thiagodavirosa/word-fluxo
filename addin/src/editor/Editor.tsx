@@ -6,6 +6,7 @@ import {
   alinhar,
   distribuir,
   reordenar,
+  reordenarConector,
   type ModoAlinhar,
   type ModoOrdem,
   atualizarConector,
@@ -159,7 +160,11 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
     setSelecao({ ids: r.ids, conector: null });
   };
 
-  const ordem = (modo: ModoOrdem) => selecao.ids.length > 0 && h.aplicar((x) => reordenar(x, selecao.ids, modo));
+  const ordem = (modo: ModoOrdem) => {
+    if (selecao.ids.length > 0) h.aplicar((x) => reordenar(x, selecao.ids, modo));
+    else if (selecao.conector) h.aplicar((x) => reordenarConector(x, selecao.conector!, modo));
+  };
+  const semOrdem = selecao.ids.length === 0 && !selecao.conector;
 
   function baixar(nome: string, blob: Blob) {
     const url = URL.createObjectURL(blob);
@@ -285,16 +290,16 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
         <div className={s.grupo}>
           <Tooltip content="Ctrl+Shift+] / Ctrl+Shift+[" relationship="description">
             <span style={{ display: "flex", gap: 2 }}>
-              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("frente")}>
+              <Button size="small" disabled={semOrdem} onClick={() => ordem("frente")}>
                 Frente
               </Button>
-              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("tras")}>
+              <Button size="small" disabled={semOrdem} onClick={() => ordem("tras")}>
                 Trás
               </Button>
-              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("avancar")}>
+              <Button size="small" disabled={semOrdem} onClick={() => ordem("avancar")}>
                 +1
               </Button>
-              <Button size="small" disabled={selecao.ids.length === 0} onClick={() => ordem("recuar")}>
+              <Button size="small" disabled={semOrdem} onClick={() => ordem("recuar")}>
                 −1
               </Button>
             </span>

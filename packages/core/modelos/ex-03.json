@@ -152,7 +152,11 @@
   ],
   "conectores": [
     {
-      "id": "k1",
+      "id": "k6",
+      "de": "n1",
+      "para": "n2",
+      "ladoDe": "baixo",
+      "ladoPara": "cima",
       "pontos": [
         [
           380,
@@ -161,27 +165,7 @@
         [
           380,
           136
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k2",
-      "pontos": [
-        [
-          132,
-          136
         ],
-        [
-          604,
-          136
-        ]
-      ],
-      "seta": "nenhuma"
-    },
-    {
-      "id": "k3",
-      "pontos": [
         [
           132,
           136
@@ -194,8 +178,20 @@
       "seta": "fim"
     },
     {
-      "id": "k4",
+      "id": "k7",
+      "de": "n1",
+      "para": "n3",
+      "ladoDe": "baixo",
+      "ladoPara": "cima",
       "pontos": [
+        [
+          380,
+          112
+        ],
+        [
+          380,
+          136
+        ],
         [
           368,
           136
@@ -208,8 +204,20 @@
       "seta": "fim"
     },
     {
-      "id": "k5",
+      "id": "k8",
+      "de": "n1",
+      "para": "n4",
+      "ladoDe": "baixo",
+      "ladoPara": "cima",
       "pontos": [
+        [
+          380,
+          112
+        ],
+        [
+          380,
+          136
+        ],
         [
           604,
           136
