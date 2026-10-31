@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+           xsi:type="TaskPaneApp">
+  <Id>36548362-6ac5-436a-8d08-c8794c4e296e</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Thiago</ProviderName>
+  <DefaultLocale>pt-BR</DefaultLocale>
+  <DisplayName DefaultValue="Fluxos"/>
+  <Description DefaultValue="Criação e edição de fluxos e diagramas técnicos no Word."/>
+  <IconUrl DefaultValue="https://localhost:3000/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/icon-64.png"/>
+  <SupportUrl DefaultValue="https://localhost:3000/taskpane.html"/>
+  <AppDomains>
+    <AppDomain>https://localhost:3000</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="Titulo"/>
+            <Description resid="Descricao"/>
+            <LearnMoreUrl resid="Url"/>
+          </GetStarted>
+          <FunctionFile resid="Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="GrupoFluxos">
+                <Label resid="Titulo"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icone16"/>
+                  <bt:Image size="32" resid="Icone32"/>
+                  <bt:Image size="80" resid="Icone80"/>
+                </Icon>
+                <Control xsi:type="Button" id="AbrirPainel">
+                  <Label resid="Titulo"/>
+                  <Supertip>
+                    <Title resid="Titulo"/>
+                    <Description resid="Descricao"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icone16"/>
+                    <bt:Image size="32" resid="Icone32"/>
+                    <bt:Image size="80" resid="Icone80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>PainelFluxos</TaskpaneId>
+                    <SourceLocation resid="Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icone16" DefaultValue="https://localhost:3000/icon-16.png"/>
+        <bt:Image id="Icone32" DefaultValue="https://localhost:3000/icon-32.png"/>
+        <bt:Image id="Icone80" DefaultValue="https://localhost:3000/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Url" DefaultValue="https://localhost:3000/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="Titulo" DefaultValue="Fluxos"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="Descricao" DefaultValue="Abre o painel de criação e edição de fluxos."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
