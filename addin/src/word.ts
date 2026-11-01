@@ -243,7 +243,8 @@ export function aoMudarSelecao(cb: () => void): () => void {
  */
 export function abrirEditor(fonte: Fonte, rotuloAplicar: string): Promise<Fonte | null> {
   return new Promise((resolve, reject) => {
-    const url = new URL(`${import.meta.env.BASE_URL}editor.html`, location.origin).href;
+    // O parâmetro t evita que o Word reuse uma cópia antiga da página do editor (o GitHub Pages permite cache de 10 min).
+    const url = new URL(`${import.meta.env.BASE_URL}editor.html?t=${Date.now()}`, location.origin).href;
     Office.context.ui.displayDialogAsync(url, { height: 92, width: 92, displayInIframe: false }, (r) => {
       if (r.status !== Office.AsyncResultStatus.Succeeded) return reject(new Error(r.error.message));
       const dialogo = r.value;
