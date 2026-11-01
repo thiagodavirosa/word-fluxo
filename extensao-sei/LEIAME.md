@@ -19,3 +19,7 @@ Figura nova começa por uma galeria de modelos e insere a legenda "Figura N – 
 - Documentos assinados não podem ser alterados; testar em minuta.
 
 Não reaproveita código do SEI Pro (AGPL).
+
+## Publicar
+
+Ver `docs/extensao-sei-loja.md` (Chrome Web Store, visibilidade "não listada") e `bash tools/empacotar_extensao.sh` para gerar o ZIP.
