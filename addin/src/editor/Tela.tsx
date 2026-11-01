@@ -1,11 +1,13 @@
 import { useMemo, useRef, useState, type PointerEvent as PE } from "react";
 import {
+  caixaDoRotulo,
   caminhoDoConector,
   elementoNoPonto,
   ligarExtremidade,
   limites,
   moverConector,
   moverExtremidade,
+  moverRotulo,
   moverSegmento,
   mover,
   pontosDoConector,
@@ -87,6 +89,7 @@ type Gesto =
   | { tipo: "mover"; ids: string[]; conector: string | null; inicio: [number, number]; base: Diagrama; movido: boolean; tela: [number, number] }
   | { tipo: "laco"; inicio: [number, number]; somar: string[] }
   | { tipo: "ponta"; id: string; ponta: "de" | "para"; base: Diagrama; ultimo: [number, number] }
+  | { tipo: "rotulo"; id: string; inicio: [number, number]; base: Diagrama; movido: boolean; tela: [number, number] }
   | { tipo: "segmento"; id: string; i: number; inicio: [number, number]; base: Diagrama }
   | { tipo: "redim"; id: string; alca: Alca; inicio: [number, number]; base: Diagrama; caixa: Caixa };
 
@@ -120,6 +123,7 @@ export function Tela(p: Props) {
     if (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
     return [((cx - r.left) / r.width) * largura, ((cy - r.top) / r.height) * altura];
   };
+  const caixaRotulo = (c: Diagrama["conectores"][number]) => caixaDoRotulo(d, c);
   const encaixar = (v: number) => (p.grade ? Math.round(v / GRADE) * GRADE : v);
 
   function capturar(e: PE) {
@@ -161,6 +165,16 @@ export function Tela(p: Props) {
     if (d.conectores.find((c) => c.id === id)?.pontos) iniciarMover(e, [], id);
   }
 
+  function aoPressionarRotulo(e: PE, id: string) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (p.ferramenta !== "selecionar") return;
+    p.onSelecionar({ ids: [], conector: id });
+    gesto.current = { tipo: "rotulo", id, inicio: ponto(e), base: d, movido: false, tela: [e.clientX, e.clientY] };
+    p.onGestoInicio();
+    capturar(e);
+  }
+
   function aoPressionarPonta(e: PE, id: string, ponta: "de" | "para") {
     e.stopPropagation();
     e.preventDefault();
@@ -196,6 +210,14 @@ export function Tela(p: Props) {
     }
     let dx = x - g.inicio[0];
     let dy = y - g.inicio[1];
+    if (g.tipo === "rotulo") {
+      if (!g.movido) {
+        if (Math.hypot(e.clientX - g.tela[0], e.clientY - g.tela[1]) < 4) return;
+        g.movido = true;
+      }
+      p.onPrever(moverRotulo(g.base, g.id, encaixar(dx), encaixar(dy)));
+      return;
+    }
     if (g.tipo === "segmento") {
       p.onPrever(moverSegmento(g.base, g.id, g.i, encaixar(dx), encaixar(dy)));
       return;
@@ -353,6 +375,23 @@ export function Tela(p: Props) {
                 onPointerDown={(e) => aoPressionarConector(e, c.id)}
                 onDoubleClick={() => p.onEditar({ tipo: "c", id: c.id })}
               />
+              {c.rotulo && caixaRotulo(c) && (
+                <rect
+                  x={caixaRotulo(c)!.x}
+                  y={caixaRotulo(c)!.y}
+                  width={caixaRotulo(c)!.w}
+                  height={caixaRotulo(c)!.h}
+                  fill="transparent"
+                  stroke={sel ? AZUL : "none"}
+                  strokeWidth={1 / zoom}
+                  strokeDasharray={`${3 / zoom} ${2 / zoom}`}
+                  style={{ cursor: p.ferramenta === "selecionar" ? "move" : "default" }}
+                  role="button"
+                  aria-label={`Texto do conector ${c.id}: arraste para reposicionar`}
+                  onPointerDown={(e) => aoPressionarRotulo(e, c.id)}
+                  onDoubleClick={() => p.ferramenta === "selecionar" && p.onEditar({ tipo: "c", id: c.id })}
+                />
+              )}
               {pontas.map(([ponta, [x, y], ligada]) =>
                 !ligada || sel ? (
                   <circle

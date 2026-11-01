@@ -272,6 +272,33 @@ export function caminhoDoConector(d: Diagrama, c: Diagrama["conectores"][number]
 
 const idSeta = (cor?: string) => (cor ? `seta-${cor.slice(1).toLowerCase()}` : "seta");
 
+/** Ponto de ancoragem do texto do conector (centro do trecho do meio, mais o deslocamento do usuário). */
+export function ancoraDoRotulo(d: Diagrama, c: Diagrama["conectores"][number]): [number, number] | null {
+  const r = c.rotulo;
+  const pts = pontosDoConector(d, c);
+  if (!r || pts.length < 2) return null;
+  const meio = pts[Math.floor((pts.length - 1) / 2)];
+  const prox = pts[Math.floor((pts.length - 1) / 2) + 1];
+  return [(r.x ?? (meio[0] + prox[0]) / 2) + (r.dx ?? 0), (r.y ?? (meio[1] + prox[1]) / 2 - 6) + (r.dy ?? 0)];
+}
+
+/** Retângulo aproximado do texto do conector, para selecioná-lo e arrastá-lo na tela. */
+export function caixaDoRotulo(d: Diagrama, c: Diagrama["conectores"][number]): { x: number; y: number; w: number; h: number } | null {
+  const r = c.rotulo;
+  const a = ancoraDoRotulo(d, c);
+  if (!r || !a) return null;
+  const t = temas[d.tema ?? ""] ?? tecnico;
+  const base = d.tela.fonteBase ?? t.tamRotulo;
+  const tam = r.tamanho ?? (base === t.tamRotulo ? t.tamSub : base);
+  const passo = r.espacamento ?? 14;
+  const linhas = linhasDe(r.texto);
+  const w = Math.max(16, Math.max(...linhas.map((s) => s.length)) * tam * 0.56);
+  const h = tam + (linhas.length - 1) * passo + 4;
+  const alin = r.alinhamento ?? "meio";
+  const x = alin === "meio" ? a[0] - w / 2 : alin === "fim" ? a[0] - w : a[0];
+  return { x: x - 2, y: a[1] - tam + 1, w: w + 4, h };
+}
+
 function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema): string {
   const pts = pontosDoConector(d, c);
   if (pts.length < 2) return "";
@@ -285,10 +312,7 @@ function renderConector(d: Diagrama, c: Diagrama["conectores"][number], t: Tema)
 
   if (c.rotulo) {
     const r = c.rotulo;
-    const meio = pts[Math.floor((pts.length - 1) / 2)];
-    const prox = pts[Math.floor((pts.length - 1) / 2) + 1];
-    const x = r.x ?? (meio[0] + prox[0]) / 2;
-    const y = r.y ?? (meio[1] + prox[1]) / 2 - 6;
+    const [x, y] = ancoraDoRotulo(d, c)!;
     svg += linhasDe(r.texto)
       .map((s, i) => textoSvg(x, y + i * (r.espacamento ?? 14), s, r.tamanho ?? (base === t.tamRotulo ? t.tamSub : base), t.textoSec, false, r.alinhamento ?? "meio"))
       .join("");

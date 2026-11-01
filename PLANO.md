@@ -95,6 +95,9 @@ Do Miro não adotado: sticky notes, cards e widgets colaborativos (enquetes, vot
 Entregue: formas arrastadas do painel direto para a tela (ou clique e clique); barra com ícones (desfazer/refazer, selecionar, duplicar, excluir), menu Organizar (camada, alinhar, distribuir, automático), zoom compacto, Grade como alternador, menu Mais (exportar/importar, posição do painel), barra de status e abas Propriedades | Verificar. Visual inspirado em eis-ds: neutros frios, linhas de 1px, rótulos em mono, sem sombras.
 Verificações: conectores soltos, texto que não cabe, contraste ≥ 4,5:1 (RF-53), vocabulário controlado (RF-61), remissões a capítulos/itens/tabelas/figuras (RF-60) e numeração/citação de legendas (RF-62). No editor valem para a figura; a aba Verificar do painel confere o documento todo (vocabulário configurável, "evitar → usar").
 
+### Fase 4f – Ajustes de uso
+Entregue: legenda com fonte opcional (interruptor; em branco também omite) e, quando existe, na linha de baixo da própria legenda; texto dos conectores selecionável e arrastável na tela (deslocamento relativo gravado em `rotulo.dx/dy`, acompanha o conector; "Posicionar rótulo automaticamente" desfaz); Ctrl + roda do mouse e Ctrl +/−/0 mudam só o zoom do desenho, nunca o da janela; painéis de formas e de propriedades redimensionáveis (arrastar ou setas do teclado), recolhíveis em faixa e com a largura lembrada.
+
 ### Fase 5 – IA (opcional)
 `ia-proxy` FastAPI + prompts com saída JSON validada, edição incremental preservando IDs, preview com resumo de mudanças, verificação RF-60 a RF-62 (esta última roda local, sem IA).
 

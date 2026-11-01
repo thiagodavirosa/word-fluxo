@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Button, Checkbox, Field, Input, Select, Textarea, Text, Divider, makeStyles, tokens } from "@fluentui/react-components";
+import { Button, Checkbox, Field, Input, Select, Switch, Textarea, Text, Divider, makeStyles, tokens } from "@fluentui/react-components";
 import {
   atualizarConector,
   atualizarElemento,
@@ -8,6 +8,7 @@ import {
   desconectados,
   inverterConector,
   ligarPorProximidade,
+  reiniciarRotulo,
   type LinhaTexto,
   NOMES_TEMAS,
   quebrarLinhas,
@@ -271,9 +272,12 @@ function PropConector({ c, d, aplicar }: { c: Conector; d: Diagrama; aplicar: Ap
         />
       </Field>
       {c.rotulo && (
-        <Button size="small" onClick={() => mudar({ rotulo: { texto: c.rotulo!.texto } })}>
-          Posicionar rótulo automaticamente
-        </Button>
+        <>
+          <Text size={200}>Arraste o texto na tela para tirá-lo de cima da linha.</Text>
+          <Button size="small" disabled={c.rotulo.x === undefined && !c.rotulo.dx && !c.rotulo.dy} onClick={() => aplicar((x) => reiniciarRotulo(x, c.id))}>
+            Posicionar rótulo automaticamente
+          </Button>
+        </>
       )}
       <Text size={200}>{d.conectores.length} conectores no diagrama.</Text>
     </div>
@@ -317,9 +321,12 @@ function PropDiagrama({ d, aplicar, onAjustarTela }: { d: Diagrama; aplicar: Apl
       <Field label="Título da legenda" size="small">
         <Input size="small" value={d.legenda?.titulo ?? d.titulo} onChange={(_, v) => legenda({ titulo: v.value })} />
       </Field>
-      <Field label="Fonte" size="small">
-        <Input size="small" value={d.legenda?.fonte ?? "Elaboração própria"} onChange={(_, v) => legenda({ fonte: v.value })} />
-      </Field>
+      <Switch label="Mostrar a fonte (linha abaixo da legenda)" checked={d.legenda?.mostrarFonte !== false} onChange={(_, v) => legenda({ mostrarFonte: v.checked })} />
+      {d.legenda?.mostrarFonte !== false && (
+        <Field label="Fonte" size="small" hint="Em branco, a linha de fonte não aparece.">
+          <Input size="small" value={d.legenda?.fonte ?? "Elaboração própria"} onChange={(_, v) => legenda({ fonte: v.value })} />
+        </Field>
+      )}
       <Divider />
       <Text weight="semibold">Verificações</Text>
       {soltos.length > 0 && (

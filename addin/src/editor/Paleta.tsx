@@ -73,7 +73,7 @@ export function miniatura(forma: string): string {
 }
 
 const useStyles = makeStyles({
-  lateral: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalXS, padding: tokens.spacingHorizontalS, overflowY: "auto", overflowX: "hidden", width: "208px", background: tokens.colorNeutralBackground1, borderRight: `1px solid ${tokens.colorNeutralStroke2}` },
+  lateral: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalXS, padding: tokens.spacingHorizontalS, overflowY: "auto", overflowX: "hidden", width: "100%", boxSizing: "border-box", minHeight: 0, background: tokens.colorNeutralBackground1, borderRight: `1px solid ${tokens.colorNeutralStroke2}` },
   superior: { display: "flex", flexWrap: "wrap", rowGap: tokens.spacingVerticalS, gap: tokens.spacingHorizontalM, padding: tokens.spacingHorizontalS, background: tokens.colorNeutralBackground1, borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
   secaoH: { display: "flex", flexDirection: "column", gap: "4px", maxWidth: "100%" },
   cabeca: {
@@ -92,7 +92,7 @@ const useStyles = makeStyles({
     letterSpacing: "0.04em",
     ":hover": { color: tokens.colorNeutralForeground1 },
   },
-  grade: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" },
+  grade: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(84px, 1fr))", gap: "6px" },
   linhaH: { display: "flex", flexWrap: "wrap", gap: "6px" },
   item: {
     display: "flex",

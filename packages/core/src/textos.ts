@@ -18,7 +18,7 @@ function mapearTextos(d: Diagrama, fn: (s: string) => string): Diagrama {
   return {
     ...d,
     titulo: fn(d.titulo),
-    legenda: d.legenda && { titulo: fn(d.legenda.titulo), fonte: fn(d.legenda.fonte) },
+    legenda: d.legenda && { ...d.legenda, titulo: fn(d.legenda.titulo), fonte: fn(d.legenda.fonte) },
     elementos,
     conectores: d.conectores.map((c) => (c.rotulo ? { ...c, rotulo: { ...c.rotulo, texto: fn(c.rotulo.texto) } } : c)),
   };
@@ -42,9 +42,18 @@ export function contarOcorrencias(d: Diagrama, achar: string, op: OpcoesBusca = 
   return substituirTexto(d, achar, "", op).ocorrencias;
 }
 
-/** Texto da legenda após "Figura N": " – Título. Fonte: …." (RF-40). */
+/** Quebra de linha manual do Word (mantém a fonte no mesmo parágrafo da legenda). */
+export const QUEBRA_LINHA = "";
+
+/** Fonte da legenda a mostrar, ou "" quando oculta ou em branco. */
+export function fonteDaLegenda(d: Diagrama): string {
+  if (d.legenda?.mostrarFonte === false) return "";
+  return (d.legenda?.fonte ?? "Elaboração própria").trim().replace(/\.+$/, "");
+}
+
+/** Texto da legenda após "Figura N": " – Título." e, na linha de baixo, "Fonte: …." quando houver (RF-40). */
 export function textoLegenda(d: Diagrama): string {
   const titulo = (d.legenda?.titulo ?? d.titulo).replace(/\.+$/, "");
-  const fonte = (d.legenda?.fonte ?? "Elaboração própria").replace(/\.+$/, "");
-  return ` – ${titulo}. Fonte: ${fonte}.`;
+  const fonte = fonteDaLegenda(d);
+  return ` – ${titulo}.` + (fonte ? `${QUEBRA_LINHA}Fonte: ${fonte}.` : "");
 }

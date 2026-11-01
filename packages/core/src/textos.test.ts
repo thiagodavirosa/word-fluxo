@@ -35,10 +35,12 @@ describe("localizar e substituir", () => {
 
 describe("legenda, catálogo e temas", () => {
   it("monta a legenda no padrão Figura N – Título. Fonte: …", () => {
-    expect(textoLegenda(d)).toBe(" – Implantação. Fonte: Elaboração própria.");
+    expect(textoLegenda(d)).toBe(" – Implantação.Fonte: Elaboração própria.");
     expect(textoLegenda(validar({ ...d, legenda: { titulo: "Fluxo.", fonte: "Elaboração própria, com base em X." } }))).toBe(
-      " – Fluxo. Fonte: Elaboração própria, com base em X.",
+      " – Fluxo.Fonte: Elaboração própria, com base em X.",
     );
+    expect(textoLegenda(validar({ ...d, legenda: { titulo: "Fluxo", fonte: "   " } }))).toBe(" – Fluxo.");
+    expect(textoLegenda(validar({ ...d, legenda: { titulo: "Fluxo", fonte: "X", mostrarFonte: false } }))).toBe(" – Fluxo.");
   });
 
   it("tem 17 modelos, cada um com JSON válido", async () => {

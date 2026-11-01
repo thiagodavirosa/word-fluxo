@@ -71,6 +71,30 @@ export function moverConector(d: Diagrama, id: string, dx: number, dy: number): 
   };
 }
 
+/** Desloca o texto de um conector (dx/dy relativos à posição automática, ou x/y se o rótulo já os fixa). */
+export function moverRotulo(d: Diagrama, id: string, dx: number, dy: number): Diagrama {
+  return {
+    ...d,
+    conectores: d.conectores.map((c) => {
+      if (c.id !== id || !c.rotulo) return c;
+      const r = c.rotulo;
+      return { ...c, rotulo: { ...r, dx: (r.dx ?? 0) + dx, dy: (r.dy ?? 0) + dy } };
+    }),
+  };
+}
+
+/** Devolve o texto do conector à posição automática. */
+export function reiniciarRotulo(d: Diagrama, id: string): Diagrama {
+  return {
+    ...d,
+    conectores: d.conectores.map((c) => {
+      if (c.id !== id || !c.rotulo) return c;
+      const { x: _x, y: _y, dx: _dx, dy: _dy, ...resto } = c.rotulo;
+      return { ...c, rotulo: resto };
+    }),
+  };
+}
+
 const TAMANHO_MINIMO = 16;
 
 export function redimensionar(d: Diagrama, id: string, caixa: Caixa): Diagrama {

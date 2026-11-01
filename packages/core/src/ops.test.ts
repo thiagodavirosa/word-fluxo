@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo, definirEstilo, aplicarEstiloNomeado, removerEstilo, FIGURAS, contraste, verificar, lerVocabulario, referenciasEm, conferirLegendas } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo, definirEstilo, aplicarEstiloNomeado, removerEstilo, FIGURAS, contraste, verificar, lerVocabulario, referenciasEm, conferirLegendas, moverRotulo, reiniciarRotulo, ancoraDoRotulo, caixaDoRotulo } from "./index";
 
 const base = () =>
   validar({
@@ -317,5 +317,37 @@ describe("verificações", () => {
     const a = conferirLegendas([1, 3], new Set(["1"]));
     expect(a.map((x) => x.mensagem).join("|")).toContain("Figura 3 não é citada");
     expect(conferirLegendas([1, 2], new Set(["1", "2"]))).toEqual([]);
+  });
+});
+
+describe("texto do conector", () => {
+  const base = validar({
+    schema: "fluxo-word/1.0",
+    id: "r",
+    tipo: "livre",
+    titulo: "",
+    tela: { largura: 400, altura: 120 },
+    elementos: [
+      { id: "a", forma: "caixa", x: 10, y: 40, w: 80, h: 40, texto: "A" },
+      { id: "b", forma: "caixa", x: 250, y: 40, w: 80, h: 40, texto: "B" },
+    ],
+    conectores: [{ id: "k", de: "a", para: "b", rotulo: { texto: "sim" } }],
+  });
+
+  it("arrastar desloca o texto e o reinício devolve à posição automática", () => {
+    const [x0, y0] = ancoraDoRotulo(base, base.conectores[0])!;
+    const movido = moverRotulo(base, "k", 12, -20);
+    const [x1, y1] = ancoraDoRotulo(movido, movido.conectores[0])!;
+    expect([x1 - x0, y1 - y0]).toEqual([12, -20]);
+    expect(renderSvg(movido)).toContain(`x="${x1}"`);
+    const volta = reiniciarRotulo(movido, "k");
+    expect(ancoraDoRotulo(volta, volta.conectores[0])).toEqual([x0, y0]);
+    expect(caixaDoRotulo(volta, volta.conectores[0])!.w).toBeGreaterThan(10);
+  });
+
+  it("o deslocamento acompanha o conector quando as formas mudam de lugar", () => {
+    const movido = moverRotulo(base, "k", 0, -15);
+    const maisLonge = mover(movido, ["b"], 100, 0);
+    expect(ancoraDoRotulo(maisLonge, maisLonge.conectores[0])![0]).toBeGreaterThan(ancoraDoRotulo(movido, movido.conectores[0])![0]);
   });
 });

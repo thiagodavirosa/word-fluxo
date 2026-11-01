@@ -63,6 +63,7 @@ import { useHistorico } from "./historico";
 import { Propriedades } from "./Propriedades";
 import { Paleta, type InfoArrasto } from "./Paleta";
 import { Verificacao } from "./Verificacao";
+import { Divisor, Faixa, LARGURA_FAIXA, useLarguraGuardada } from "./Divisor";
 import { vocabularioAtual } from "../vocabulario";
 import { Tela, type Alvo, type Selecao } from "./Tela";
 
@@ -127,6 +128,10 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
   const [zoom, setZoom] = useState(1);
   const [grade, setGrade] = useState(true);
   const [paleta, setPaleta] = useState<"lateral" | "superior" | "oculta">("lateral");
+  const [larguraPaleta, setLarguraPaleta] = useLarguraGuardada("fluxo-word:larg-formas", 208);
+  const [larguraPainel, setLarguraPainel] = useLarguraGuardada("fluxo-word:larg-propriedades", 320);
+  const [paletaFechada, setPaletaFechada] = useState(false);
+  const [painelFechado, setPainelFechado] = useState(false);
   const [aba, setAba] = useState<"propriedades" | "verificar">("propriedades");
   const [fantasma, setFantasma] = useState<InfoArrasto | null>(null);
   const conversorRef = useRef<((cx: number, cy: number) => [number, number] | null) | null>(null);
@@ -296,6 +301,30 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
     }
   };
 
+  // Ctrl + roda do mouse e Ctrl +/−/0 mexem só no zoom do desenho, nunca no zoom da janela inteira.
+  useEffect(() => {
+    const limitar = (z: number) => Math.min(3, Math.max(0.25, +z.toFixed(2)));
+    function roda(e: WheelEvent) {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      if (areaRef.current?.contains(e.target as Node)) setZoom((z) => limitar(z * Math.exp(-e.deltaY * 0.0015)));
+    }
+    function atalho(e: KeyboardEvent) {
+      if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
+      if (e.key === "+" || e.key === "=") setZoom((z) => limitar(z + 0.1));
+      else if (e.key === "-" || e.key === "_") setZoom((z) => limitar(z - 0.1));
+      else if (e.key === "0") setZoom(1);
+      else return;
+      e.preventDefault();
+    }
+    window.addEventListener("wheel", roda, { passive: false });
+    window.addEventListener("keydown", atalho, true);
+    return () => {
+      window.removeEventListener("wheel", roda);
+      window.removeEventListener("keydown", atalho, true);
+    };
+  }, []);
+
   useEffect(() => {
     function teclado(e: KeyboardEvent) {
       const alvo = e.target as HTMLElement;
@@ -445,16 +474,16 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
           </Menu>
         </div>
         <div className={s.grupo}>
-          <Icone dica="Diminuir zoom" onClick={() => setZoom((z) => Math.max(0.25, +(z - 0.1).toFixed(2)))}>
+          <Icone dica="Diminuir zoom (Ctrl −)" onClick={() => setZoom((z) => Math.max(0.25, +(z - 0.1).toFixed(2)))}>
             <ZoomOut20Regular />
           </Icone>
           <Text size={200} style={{ minWidth: 38, textAlign: "center" }}>
             {Math.round(zoom * 100)}%
           </Text>
-          <Icone dica="Aumentar zoom" onClick={() => setZoom((z) => Math.min(3, +(z + 0.1).toFixed(2)))}>
+          <Icone dica="Aumentar zoom (Ctrl +)" onClick={() => setZoom((z) => Math.min(3, +(z + 0.1).toFixed(2)))}>
             <ZoomIn20Regular />
           </Icone>
-          <Icone dica="Ajustar à janela" onClick={ajustarZoom}>
+          <Icone dica="Ajustar à janela (Ctrl 0 = 100%)" onClick={ajustarZoom}>
             <ZoomFit20Regular />
           </Icone>
         </div>
@@ -517,8 +546,22 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
       </div>
 
       <div style={{ minWidth: 0 }}>{paleta === "superior" && <Paleta posicao="superior" ativa={ferramenta} onEscolher={escolherFerramenta} onArrastar={arrastarForma} />}</div>
-      <div className={s.corpo} style={{ gridTemplateColumns: paleta === "lateral" ? "auto 1fr 320px" : "1fr 320px" }}>
-        {paleta === "lateral" && <Paleta posicao="lateral" ativa={ferramenta} onEscolher={escolherFerramenta} onArrastar={arrastarForma} />}
+      <div
+        className={s.corpo}
+        style={{
+          gridTemplateColumns: `${paleta === "lateral" ? `${paletaFechada ? LARGURA_FAIXA : larguraPaleta}px 6px ` : ""}minmax(0, 1fr) 6px ${painelFechado ? LARGURA_FAIXA : larguraPainel}px`,
+        }}
+      >
+        {paleta === "lateral" && (
+          <>
+            {paletaFechada ? (
+              <Faixa nome="Formas" lado="esquerdo" onExpandir={() => setPaletaFechada(false)} />
+            ) : (
+              <Paleta posicao="lateral" ativa={ferramenta} onEscolher={escolherFerramenta} onArrastar={arrastarForma} />
+            )}
+            <Divisor lado="esquerdo" nome="painel de formas" largura={larguraPaleta} min={140} max={420} onLargura={setLarguraPaleta} recolhido={paletaFechada} onAlternar={() => setPaletaFechada((v) => !v)} />
+          </>
+        )}
         <div className={s.area} ref={areaRef}>
           <Tela
             diagrama={d}
@@ -542,6 +585,10 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
             onCancelarEdicao={() => setEditando(null)}
           />
         </div>
+        <Divisor lado="direito" nome="painel de propriedades" largura={larguraPainel} min={240} max={560} onLargura={setLarguraPainel} recolhido={painelFechado} onAlternar={() => setPainelFechado((v) => !v)} />
+        {painelFechado ? (
+          <Faixa nome="Propriedades" lado="direito" onExpandir={() => setPainelFechado(false)} />
+        ) : (
         <aside className={s.painel} aria-label="Painel lateral">
           <div className={s.abas}>
             <TabList size="small" selectedValue={aba} onTabSelect={(_, v) => setAba(v.value as typeof aba)}>
@@ -564,6 +611,7 @@ export function Editor({ inicial, rotuloAplicar, onAplicar, onCancelar }: Props)
             )}
           </div>
         </aside>
+        )}
       </div>
 
       <div className={s.rodape} role="status">

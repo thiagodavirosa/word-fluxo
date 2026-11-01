@@ -201,6 +201,9 @@ const Rotulo = z.object({
   alinhamento: Alinhamento.optional(),
   tamanho: z.number().positive().optional(),
   espacamento: z.number().positive().optional(),
+  /** Deslocamento em relação à posição automática (quando `x`/`y` não são fixos); gravado ao arrastar o rótulo. */
+  dx: z.number().optional(),
+  dy: z.number().optional(),
 });
 
 export const Conector = z.object({
@@ -232,7 +235,7 @@ export const Diagrama = z
     tema: z.string().optional(),
     titulo: z.string(),
     revisao: z.number().int().nonnegative().default(1),
-    legenda: z.object({ titulo: z.string(), fonte: z.string() }).optional(),
+    legenda: z.object({ titulo: z.string(), fonte: z.string(), /** false oculta a linha "Fonte:"; em branco também a omite. */ mostrarFonte: z.boolean().optional() }).optional(),
     tela: z.object({
       largura: z.number().positive(),
       altura: z.number().positive(),
