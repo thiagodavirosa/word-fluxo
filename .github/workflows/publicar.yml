@@ -3,6 +3,13 @@ name: Publicar no GitHub Pages
 on:
   push:
     branches: [main, master]
+    # Mudanças só da extensão do SEI não mudam o suplemento do Word: não republicar.
+    paths-ignore:
+      - 'extensao-sei/**'
+      - 'addin/sei-editor.html'
+      - 'addin/vite.sei.config.ts'
+      - 'addin/src/sei-main.tsx'
+      - 'addin/public/sei-editor.css'
   workflow_dispatch:
 
 permissions:
