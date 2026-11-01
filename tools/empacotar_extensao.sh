@@ -7,5 +7,5 @@ versao=$(node -p "require('./extensao-sei/manifest.json').version")
 mkdir -p dist-extensao
 saida="dist-extensao/fluxos-sei-$versao.zip"
 rm -f "$saida"
-(cd extensao-sei && tar -a -c -f "../$saida" manifest.json ponte.js fluxo-sei.js icons editor)
+python tools/zipar_extensao.py "$saida"
 echo "Gerado: $saida"
