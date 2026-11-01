@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Fluxos para o SEI",
+  "version": "0.1.0",
+  "description": "Desenhe fluxogramas e fluxos técnicos e insira no editor de textos do SEI.",
+  "content_scripts": [
+    { "matches": ["https://sei.dnit.gov.br/*"], "js": ["ponte.js"], "all_frames": true, "run_at": "document_start" },
+    { "matches": ["https://sei.dnit.gov.br/*"], "js": ["fluxo-sei.js"], "all_frames": true, "run_at": "document_idle", "world": "MAIN" }
+  ],
+  "web_accessible_resources": [
+    { "resources": ["editor/*"], "matches": ["https://sei.dnit.gov.br/*"] }
+  ]
+}
