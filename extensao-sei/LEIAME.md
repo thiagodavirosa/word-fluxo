@@ -2,7 +2,8 @@
 
 Adiciona o botão **Fluxo** na barra do editor de textos do SEI (CKEditor 4) em `https://sei.dnit.gov.br`.
 O editor é o mesmo do suplemento do Word. A figura entra como imagem PNG e guarda a fonte editável
-no texto alternativo (`alt`), então basta **selecionar a imagem e clicar em Fluxo** para editá-la de novo.
+no texto alternativo (`alt`), então basta **dar duplo clique na imagem** (ou selecioná-la e clicar em Fluxo) para editá-la de novo.
+Figura nova começa por uma galeria de modelos e insere a legenda "Figura N – Título." com a fonte na linha de baixo; ao atualizar, a legenda é atualizada.
 
 ## Instalar (modo desenvolvedor)
 
