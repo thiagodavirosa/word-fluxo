@@ -124,12 +124,14 @@
     botao.title = "Fluxograma: inserir um fluxo ou editar o selecionado (também por duplo clique na figura)";
     botao.setAttribute("role", "button");
     botao.setAttribute("aria-label", "Inserir ou editar fluxograma");
-    botao.style.cssText = "cursor:pointer;display:inline-block;padding:4px 6px";
+    botao.style.cssText = "cursor:pointer;display:inline-block;padding:4px 5px;line-height:0";
     var icone = document.createElement("img");
     icone.src = document.documentElement.dataset.fluxoSeIcone || "";
     icone.alt = "";
-    icone.width = icone.height = 22;
-    icone.style.cssText = "display:block;border:0";
+    // o CSS do SEI mexe em imagens: força o tamanho com !important
+    [["width", "20px"], ["height", "20px"], ["max-width", "20px"], ["min-width", "20px"], ["margin", "0"], ["padding", "0"], ["border", "0"], ["display", "block"]].forEach(function (r) {
+      icone.style.setProperty(r[0], r[1], "important");
+    });
     botao.appendChild(icone);
     botao.addEventListener("mousedown", function (e) { e.preventDefault(); });
     botao.addEventListener("click", function (e) { e.preventDefault(); abrirEditor(editor); });
