@@ -37,8 +37,9 @@
     return null;
   }
 
-  function abrirEditor(editor) {
-    var existente = figuraSelecionada(editor);
+  function abrirEditor(editor, figura) {
+    var existente = figura || figuraSelecionada(editor);
+    var altOriginal = existente ? existente.getAttribute("alt") : "";
     var frame = document.createElement("iframe");
     frame.src = URL_EDITOR;
     frame.title = "Editor de fluxo";
@@ -62,6 +63,10 @@
         var altura = Math.round((m.altura * largura) / m.largura);
         var src = "data:image/png;base64," + m.png;
         var legenda = m.legenda || "";
+        if (existente && !existente.$.isConnected) {
+          // o elemento foi trocado pelo editor enquanto o diálogo estava aberto: procura a mesma figura
+          existente = editor.editable().find("img").toArray().filter(function (i) { return i.getAttribute("alt") === altOriginal; })[0] || null;
+        }
         if (existente) {
           existente.setAttribute("src", src);
           existente.setAttribute("data-cke-saved-src", src);
@@ -71,6 +76,7 @@
           existente.removeStyle("width");
           existente.removeStyle("height");
           atualizarLegenda(editor, existente.$, legenda);
+          editor.getSelection().selectElement(existente);
           editor.fire("saveSnapshot");
         } else {
           var n = editor.editable().find("img").toArray().filter(ehFluxo).length + 1;
@@ -94,9 +100,11 @@
     var botao = document.createElement("a");
     botao.className = "cke_button";
     botao.href = "javascript:void(0)";
-    botao.title = "Inserir ou editar fluxo (selecione uma figura para editá-la)";
-    botao.style.cssText = "cursor:pointer;padding:2px 8px;font:bold 12px Arial,sans-serif;color:#333;display:inline-block;line-height:22px";
-    botao.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" style="vertical-align:middle;margin-right:4px" fill="none" stroke="#333" stroke-width="1.4"><rect x="1" y="2" width="6" height="4" rx="1"/><rect x="11" y="2" width="6" height="4" rx="1"/><rect x="6" y="12" width="6" height="4" rx="1"/><path d="M7 4h4M14 6v2H9v4"/></svg>Fluxo';
+    botao.title = "Fluxograma: inserir um fluxo ou editar o selecionado (também por duplo clique na figura)";
+    botao.setAttribute("role", "button");
+    botao.setAttribute("aria-label", "Inserir ou editar fluxograma");
+    botao.style.cssText = "cursor:pointer;display:inline-block;padding:3px 4px";
+    botao.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" style="display:block" fill="none" stroke-width="1.4"><rect x="2" y="2.5" width="7" height="5" rx="1.2" fill="#dbeafe" stroke="#1d4ed8"/><rect x="13" y="2.5" width="7" height="5" rx="1.2" fill="#dbeafe" stroke="#1d4ed8"/><rect x="7.5" y="14.5" width="7" height="5" rx="1.2" fill="#fde68a" stroke="#b45309"/><path d="M9 5h4M16.5 7.5v3H11v4" stroke="#475569"/><path d="M9.5 12.5L11 14.5l1.5-2" stroke="#475569"/></svg>';
     botao.addEventListener("mousedown", function (e) { e.preventDefault(); });
     botao.addEventListener("click", function (e) { e.preventDefault(); abrirEditor(editor); });
     grupo.appendChild(botao);
@@ -107,9 +115,12 @@
     editor.on("doubleclick", function (e) {
       var el = e.data.element;
       if (el && el.getName && el.getName() === "img" && ehFluxo(el)) {
-        editor.getSelection().selectElement(el);
-        abrirEditor(editor);
         e.stop();
+        editor.fire("saveSnapshot");
+        setTimeout(function () {
+          editor.getSelection().selectElement(el);
+          abrirEditor(editor, el);
+        }, 50);
       }
     }, null, null, 1);
     if (editor.status === "ready") colocarBotao(editor);
