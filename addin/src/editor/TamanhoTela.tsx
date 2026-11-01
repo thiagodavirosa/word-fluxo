@@ -19,7 +19,8 @@ import {
 import type { ModoTamanho } from "@word-fluxo/core";
 
 const useStyles = makeStyles({
-  linha: { display: "flex", gap: tokens.spacingHorizontalS },
+  linha: { display: "flex", gap: tokens.spacingHorizontalS, minWidth: 0 },
+  campo: { flex: "1 1 0", minWidth: 0 },
   coluna: { display: "flex", flexDirection: "column", gap: tokens.spacingVerticalS },
   opcao: { display: "flex", flexDirection: "column" },
   nota: { color: tokens.colorNeutralForeground3, marginLeft: "28px" },
@@ -72,11 +73,11 @@ export function TamanhoTela({ largura, altura, onAplicar, rotuloBotao = "Aplicar
   return (
     <div className={s.coluna}>
       <div className={s.linha}>
-        <Field label="Largura (px)" size="small">
-          <Input type="number" size="small" value={textoL} onChange={(_, d) => digitarL(d.value)} onBlur={() => !mudou && limpar()} />
+        <Field label="Largura (px)" size="small" className={s.campo}>
+          <Input type="number" size="small" style={{ minWidth: 0, width: "100%" }} value={textoL} onChange={(_, d) => digitarL(d.value)} onBlur={() => !mudou && limpar()} />
         </Field>
-        <Field label="Altura (px)" size="small">
-          <Input type="number" size="small" value={textoA} onChange={(_, d) => digitarA(d.value)} onBlur={() => !mudou && limpar()} />
+        <Field label="Altura (px)" size="small" className={s.campo}>
+          <Input type="number" size="small" style={{ minWidth: 0, width: "100%" }} value={textoA} onChange={(_, d) => digitarA(d.value)} onBlur={() => !mudou && limpar()} />
         </Field>
       </div>
       <Checkbox checked={travar} onChange={(_, d) => setTravar(!!d.checked)} label="Manter a proporção ao digitar" size="medium" />

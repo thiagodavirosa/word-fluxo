@@ -36,9 +36,18 @@ async function preparar(fonte: Fonte) {
   return { png, empacotado, alt: paraAlt(fonte, empacotado) };
 }
 
+/** Largura de referência da tela (px) que ocupa a largura útil da página; telas menores geram figuras menores. */
+const TELA_REFERENCIA_PX = 760;
+
+/** Tamanho da figura na página: proporcional à tela (mesmo px → mesmo pt em todas as figuras), até a largura útil. */
+export function larguraNaPagina(fonte: Fonte): number {
+  return Math.min(LARGURA_PT, (LARGURA_PT * fonte.tela.largura) / TELA_REFERENCIA_PX);
+}
+
 function dimensionar(pic: Word.InlinePicture, fonte: Fonte, alt: string) {
-  pic.width = LARGURA_PT;
-  pic.height = (LARGURA_PT * fonte.tela.altura) / fonte.tela.largura;
+  const largura = larguraNaPagina(fonte);
+  pic.width = largura;
+  pic.height = (largura * fonte.tela.altura) / fonte.tela.largura;
   pic.altTextTitle = fonte.titulo;
   pic.altTextDescription = alt;
 }

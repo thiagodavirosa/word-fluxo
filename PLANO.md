@@ -100,7 +100,7 @@ Entregue: legenda com fonte opcional (interruptor; em branco também omite) e, q
 
 ### Fase 4g – Dados da figura e tamanho da tela
 Entregue: ao clicar na figura no Word, o painel mostra nome, revisão, tamanho da tela, legenda e alertas, com o botão Editar fluxo (a detecção da seleção também olha os controles dentro da seleção e o texto alternativo da imagem); largura/altura editáveis no painel e no editor, com "manter a proporção" e a pergunta "redimensionar todo o fluxo (formas, textos, linhas — `tela.escala`) ou manter o tamanho dele". No painel a mudança grava direto na figura do documento (revisão + 1).
-Observação: no Word a figura entra sempre com a mesma largura de página; por isso redimensionar o fluxo não muda o tamanho do texto na página, enquanto "manter" deixa o texto proporcionalmente menor.
+Tamanho na página: a figura entra com largura proporcional à tela (760 px = largura útil, 451 pt; mesma regra px→pt em todas as figuras, limitada à largura útil). Reduzir a tela encolhe a figura no documento; "redimensionar" mantém o desenho todo, "manter" deixa o desenho do mesmo tamanho numa tela menor ou maior.
 
 ### Fase 5 – IA (opcional)
 `ia-proxy` FastAPI + prompts com saída JSON validada, edição incremental preservando IDs, preview com resumo de mudanças, verificação RF-60 a RF-62 (esta última roda local, sem IA).
