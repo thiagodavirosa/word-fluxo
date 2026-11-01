@@ -125,7 +125,12 @@
     botao.setAttribute("role", "button");
     botao.setAttribute("aria-label", "Inserir ou editar fluxograma");
     botao.style.cssText = "cursor:pointer;display:inline-block;padding:4px 6px";
-    botao.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" style="display:block" fill="none" stroke-width="1.4"><rect x="2" y="2.5" width="7" height="5" rx="1.2" fill="#dbeafe" stroke="#1d4ed8"/><rect x="13" y="2.5" width="7" height="5" rx="1.2" fill="#dbeafe" stroke="#1d4ed8"/><rect x="7.5" y="14.5" width="7" height="5" rx="1.2" fill="#fde68a" stroke="#b45309"/><path d="M9 5h4M16.5 7.5v3H11v4" stroke="#475569"/><path d="M9.5 12.5L11 14.5l1.5-2" stroke="#475569"/></svg>';
+    var icone = document.createElement("img");
+    icone.src = document.documentElement.dataset.fluxoSeIcone || "";
+    icone.alt = "";
+    icone.width = icone.height = 22;
+    icone.style.cssText = "display:block;border:0";
+    botao.appendChild(icone);
     botao.addEventListener("mousedown", function (e) { e.preventDefault(); });
     botao.addEventListener("click", function (e) { e.preventDefault(); abrirEditor(editor); });
     moldura.appendChild(botao);
