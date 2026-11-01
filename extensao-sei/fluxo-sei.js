@@ -18,16 +18,29 @@
     return '<p class="Texto_Centralizado fluxo-legenda" style="text-align:center"><b>Figura ' + n + "</b>" + esc(legenda).replace(/\u000b/g, "<br />") + "</p>";
   }
 
+  function ehLegenda(el) {
+    return !!el && /^Figura\s+\d+\s*[–-]/.test(el.textContent.trim());
+  }
+
+  // Remove a(s) legenda(s) que seguem a figura (pulando parágrafos vazios que o editor deixa entre elas) e põe uma só.
   function atualizarLegenda(editor, img, legenda) {
     var imgs = editor.editable().find("img").toArray().filter(ehFluxo);
     var n = imgs.findIndex(function (i) { return i.$ === img; }) + 1;
     var par = img.closest("p") || img;
-    var prox = par.nextElementSibling;
-    var tem = !!prox && /^Figura\s+\d+\s*[–-]/.test(prox.textContent.trim());
-    if (!legenda) { if (tem) prox.remove(); return; }
-    var novo = CKEDITOR.dom.element.createFromHtml(htmlLegenda(n, legenda));
-    if (tem) prox.replaceWith(novo.$);
-    else par.insertAdjacentElement("afterend", novo.$);
+    var antigas = [];
+    var el = par.nextElementSibling;
+    var vazios = 0;
+    while (el && el.tagName === "P" && !el.querySelector("img")) {
+      if (ehLegenda(el)) antigas.push(el);
+      else if (el.textContent.trim() === "" && vazios < 2 && antigas.length === 0) vazios++;
+      else break;
+      el = el.nextElementSibling;
+    }
+    var ref = antigas[0] || null;
+    var novo = legenda ? CKEDITOR.dom.element.createFromHtml(htmlLegenda(n, legenda)) : null;
+    if (novo && ref) ref.parentNode.insertBefore(novo.$, ref);
+    else if (novo) par.insertAdjacentElement("afterend", novo.$);
+    antigas.forEach(function (x) { x.remove(); });
   }
 
   function figuraSelecionada(editor) {
@@ -47,6 +60,7 @@
     var origem = new URL(URL_EDITOR).origin;
 
     function fechar() {
+      clearInterval(foco);
       window.removeEventListener("message", ouvir);
       frame.remove();
       editor.focus();
@@ -88,6 +102,10 @@
         fechar();
       }
     }
+    // O SEI tira o foco do diálogo (salvamento automático etc.); sem foco as teclas, como Delete, não chegam ao editor.
+    var foco = setInterval(function () {
+      if (document.activeElement !== frame) frame.contentWindow.focus();
+    }, 300);
     window.addEventListener("message", ouvir);
     document.body.appendChild(frame);
   }
@@ -97,18 +115,26 @@
     if (!caixa || caixa.querySelector(".fluxo-sei")) return;
     var grupo = document.createElement("span");
     grupo.className = "cke_toolbar fluxo-sei";
+    var moldura = document.createElement("span");
+    moldura.className = "cke_toolgroup";
+    moldura.setAttribute("role", "presentation");
     var botao = document.createElement("a");
     botao.className = "cke_button";
     botao.href = "javascript:void(0)";
     botao.title = "Fluxograma: inserir um fluxo ou editar o selecionado (também por duplo clique na figura)";
     botao.setAttribute("role", "button");
     botao.setAttribute("aria-label", "Inserir ou editar fluxograma");
-    botao.style.cssText = "cursor:pointer;display:inline-block;padding:3px 4px";
+    botao.style.cssText = "cursor:pointer;display:inline-block;padding:4px 6px";
     botao.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" style="display:block" fill="none" stroke-width="1.4"><rect x="2" y="2.5" width="7" height="5" rx="1.2" fill="#dbeafe" stroke="#1d4ed8"/><rect x="13" y="2.5" width="7" height="5" rx="1.2" fill="#dbeafe" stroke="#1d4ed8"/><rect x="7.5" y="14.5" width="7" height="5" rx="1.2" fill="#fde68a" stroke="#b45309"/><path d="M9 5h4M16.5 7.5v3H11v4" stroke="#475569"/><path d="M9.5 12.5L11 14.5l1.5-2" stroke="#475569"/></svg>';
     botao.addEventListener("mousedown", function (e) { e.preventDefault(); });
     botao.addEventListener("click", function (e) { e.preventDefault(); abrirEditor(editor); });
-    grupo.appendChild(botao);
+    moldura.appendChild(botao);
+    grupo.appendChild(moldura);
     caixa.appendChild(grupo);
+    // Se o tema do SEI não desenha a moldura do grupo, desenha uma igual à dos outros grupos.
+    if (parseFloat(getComputedStyle(moldura).borderTopWidth) === 0) {
+      moldura.style.cssText = "display:inline-block;border:1px solid #b6b6b6;border-radius:3px;background:linear-gradient(#fff,#e4e4e4);padding:0 1px";
+    }
   }
 
   function ligar(editor) {
