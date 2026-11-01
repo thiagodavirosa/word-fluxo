@@ -3,7 +3,7 @@ export * from "./tema";
 export * from "./rotas";
 export * from "./medidas";
 export * from "./ops";
-export { renderSvg, caminho, camadas, caminhoDoConector, elementoEfetivo, corDoTexto, ancoraDoRotulo, caixaDoRotulo } from "./render";
+export { renderSvg, caminho, camadas, caminhoDoConector, elementoEfetivo, corDoTexto, ancoraDoRotulo, caixaDoRotulo, areaDoDesenho } from "./render";
 export * from "./catalogo";
 export * from "./textos";
 export * from "./conexoes";

@@ -98,6 +98,10 @@ Verificações: conectores soltos, texto que não cabe, contraste ≥ 4,5:1 (RF-
 ### Fase 4f – Ajustes de uso
 Entregue: legenda com fonte opcional (interruptor; em branco também omite) e, quando existe, na linha de baixo da própria legenda; texto dos conectores selecionável e arrastável na tela (deslocamento relativo gravado em `rotulo.dx/dy`, acompanha o conector; "Posicionar rótulo automaticamente" desfaz); Ctrl + roda do mouse e Ctrl +/−/0 mudam só o zoom do desenho, nunca o da janela; painéis de formas e de propriedades redimensionáveis (arrastar ou setas do teclado), recolhíveis em faixa e com a largura lembrada.
 
+### Fase 4g – Dados da figura e tamanho da tela
+Entregue: ao clicar na figura no Word, o painel mostra nome, revisão, tamanho da tela, legenda e alertas, com o botão Editar fluxo (a detecção da seleção também olha os controles dentro da seleção e o texto alternativo da imagem); largura/altura editáveis no painel e no editor, com "manter a proporção" e a pergunta "redimensionar todo o fluxo (formas, textos, linhas — `tela.escala`) ou manter o tamanho dele". No painel a mudança grava direto na figura do documento (revisão + 1).
+Observação: no Word a figura entra sempre com a mesma largura de página; por isso redimensionar o fluxo não muda o tamanho do texto na página, enquanto "manter" deixa o texto proporcionalmente menor.
+
 ### Fase 5 – IA (opcional)
 `ia-proxy` FastAPI + prompts com saída JSON validada, edição incremental preservando IDs, preview com resumo de mudanças, verificação RF-60 a RF-62 (esta última roda local, sem IA).
 

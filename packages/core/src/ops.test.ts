@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo, definirEstilo, aplicarEstiloNomeado, removerEstilo, FIGURAS, contraste, verificar, lerVocabulario, referenciasEm, conferirLegendas, moverRotulo, reiniciarRotulo, ancoraDoRotulo, caixaDoRotulo } from "./index";
+import { adicionar, alinhar, distribuir, reordenar, avisosDeTexto, conectar, duplicar, inverterConector, mover, organizar, quebrarLinhas, remover, rotaAuto, validar, redimensionar, camadas, reordenarConector, desconectados, ligarPorProximidade, moverExtremidade, renderSvg, aplicarEstilo, estiloDe, limparEstilo, definirEstilo, aplicarEstiloNomeado, removerEstilo, FIGURAS, contraste, verificar, lerVocabulario, referenciasEm, conferirLegendas, moverRotulo, reiniciarRotulo, ancoraDoRotulo, caixaDoRotulo, redimensionarTela, ajustarTela } from "./index";
 
 const base = () =>
   validar({
@@ -349,5 +349,41 @@ describe("texto do conector", () => {
     const movido = moverRotulo(base, "k", 0, -15);
     const maisLonge = mover(movido, ["b"], 100, 0);
     expect(ancoraDoRotulo(maisLonge, maisLonge.conectores[0])![0]).toBeGreaterThan(ancoraDoRotulo(movido, movido.conectores[0])![0]);
+  });
+});
+
+describe("tamanho da tela", () => {
+  const d0 = validar({
+    schema: "fluxo-word/1.0",
+    id: "t",
+    tipo: "livre",
+    titulo: "T",
+    tela: { largura: 400, altura: 200 },
+    elementos: [{ id: "a", forma: "caixa", x: 20, y: 40, w: 100, h: 40, texto: "A" }],
+    conectores: [],
+  });
+
+  it("escalar amplia o desenho todo pela mesma proporção e mantém a posição dos elementos", () => {
+    const d = redimensionarTela(d0, 800, 400, "escalar");
+    expect(d.tela).toMatchObject({ largura: 800, altura: 400, escala: 2 });
+    expect(d.elementos[0]).toMatchObject({ x: 20, w: 100 });
+    expect(renderSvg(d)).toContain('viewBox="0 0 400 200" width="800" height="400"');
+  });
+
+  it("escalar usa o menor fator quando a proporção muda, e voltar ao original remove a escala", () => {
+    expect(redimensionarTela(d0, 800, 300, "escalar").tela.escala).toBe(1.5);
+    const volta = redimensionarTela(redimensionarTela(d0, 800, 400, "escalar"), 400, 200, "escalar");
+    expect(volta.tela.escala).toBeUndefined();
+  });
+
+  it("manter só muda a tela", () => {
+    const d = redimensionarTela(d0, 800, 400, "manter");
+    expect(d.tela).toEqual({ largura: 800, altura: 400 });
+    expect(renderSvg(d)).toContain('viewBox="0 0 800 400"');
+  });
+
+  it("ajustar tela ao conteúdo respeita a escala", () => {
+    const d = ajustarTela(redimensionarTela(d0, 800, 400, "escalar"));
+    expect(d.tela.largura).toBe((20 + 100 + 24) * 2);
   });
 });

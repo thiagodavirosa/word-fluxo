@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import { TamanhoTela } from "./TamanhoTela";
 import { Button, Checkbox, Field, Input, Select, Switch, Textarea, Text, Divider, makeStyles, tokens } from "@fluentui/react-components";
 import {
   atualizarConector,
@@ -9,6 +10,7 @@ import {
   inverterConector,
   ligarPorProximidade,
   reiniciarRotulo,
+  redimensionarTela,
   type LinhaTexto,
   NOMES_TEMAS,
   quebrarLinhas,
@@ -300,10 +302,11 @@ function PropDiagrama({ d, aplicar, onAjustarTela }: { d: Diagrama; aplicar: Apl
     <div className={s.raiz}>
       <Text weight="semibold">Diagrama</Text>
       {cabecalho}
-      <div className={s.linha}>
-        <Num rotulo="Largura da tela" valor={d.tela.largura} min={200} onChange={(largura) => tela({ largura })} />
-        <Num rotulo="Altura da tela" valor={d.tela.altura} min={100} onChange={(altura) => tela({ altura })} />
-      </div>
+      <TamanhoTela
+        largura={d.tela.largura}
+        altura={d.tela.altura}
+        onAplicar={(largura, altura, modo) => aplicar((x) => redimensionarTela(x, largura, altura, modo), "tamanho")}
+      />
       <Button size="small" onClick={onAjustarTela}>
         Ajustar tela ao conteúdo
       </Button>

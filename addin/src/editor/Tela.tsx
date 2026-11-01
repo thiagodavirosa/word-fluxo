@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState, type PointerEvent as PE } from "react";
 import {
+  areaDoDesenho,
   caixaDoRotulo,
   caminhoDoConector,
   elementoNoPonto,
@@ -104,6 +105,8 @@ export function Tela(p: Props) {
     setLacoEstado(c);
   };
   const { largura, altura } = d.tela;
+  const { w: vw, h: vh, k } = areaDoDesenho(d);
+  const zk = zoom * k;
 
   // O SVG exibido é o mesmo que será inserido no Word; só a camada de interação é desenhada à parte.
   const html = useMemo(() => renderSvg(d), [d]);
@@ -121,7 +124,7 @@ export function Tela(p: Props) {
     if (!svg) return null;
     const r = svg.getBoundingClientRect();
     if (cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
-    return [((cx - r.left) / r.width) * largura, ((cy - r.top) / r.height) * altura];
+    return [((cx - r.left) / r.width) * vw, ((cy - r.top) / r.height) * vh];
   };
   const caixaRotulo = (c: Diagrama["conectores"][number]) => caixaDoRotulo(d, c);
   const encaixar = (v: number) => (p.grade ? Math.round(v / GRADE) * GRADE : v);
@@ -288,7 +291,7 @@ export function Tela(p: Props) {
   }
 
   const unico = p.selecao.ids.length === 1 ? d.elementos.find((e) => e.id === p.selecao.ids[0]) : undefined;
-  const lh = 8 / zoom;
+  const lh = 8 / zk;
   const editandoEl = p.editando?.alvo.tipo === "e" ? d.elementos.find((e) => e.id === p.editando!.alvo.id) : undefined;
   const editandoCon = p.editando?.alvo.tipo === "c" ? d.conectores.find((c) => c.id === p.editando!.alvo.id) : undefined;
   let caixaEdicao: Caixa | null = null;
@@ -306,7 +309,7 @@ export function Tela(p: Props) {
       <style>{`.fluxo-svg > svg { width: 100%; height: 100%; display: block; }`}</style>
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${largura} ${altura}`}
+        viewBox={`0 0 ${vw} ${vh}`}
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", cursor: p.ferramenta === "selecionar" ? "default" : "crosshair", touchAction: "none" }}
         onPointerDown={aoPressionarFundo}
         onPointerMove={aoMover}
@@ -320,7 +323,7 @@ export function Tela(p: Props) {
                 <path d={`M${GRADE * 5} 0H0V${GRADE * 5}`} fill="none" stroke="#2f6fdc" strokeOpacity={0.32} strokeWidth={0.8} />
               </pattern>
             </defs>
-            <rect width={largura} height={altura} fill="url(#fluxo-grade)" pointerEvents="none" />
+            <rect width={vw} height={vh} fill="url(#fluxo-grade)" pointerEvents="none" />
           </>
         )}
         {d.elementos.map((e) => {
@@ -361,7 +364,7 @@ export function Tela(p: Props) {
             ["de", pts[0], ligadoDe],
             ["para", pts[pts.length - 1], ligadoPara],
           ];
-          const r = 5 / zoom;
+          const r = 5 / zk;
           return (
             <g key={c.id}>
               {sel && <path d={trajeto} fill="none" stroke={AZUL} strokeWidth={4} strokeOpacity={0.35} />}
@@ -383,8 +386,8 @@ export function Tela(p: Props) {
                   height={caixaRotulo(c)!.h}
                   fill="transparent"
                   stroke={sel ? AZUL : "none"}
-                  strokeWidth={1 / zoom}
-                  strokeDasharray={`${3 / zoom} ${2 / zoom}`}
+                  strokeWidth={1 / zk}
+                  strokeDasharray={`${3 / zk} ${2 / zk}`}
                   style={{ cursor: p.ferramenta === "selecionar" ? "move" : "default" }}
                   role="button"
                   aria-label={`Texto do conector ${c.id}: arraste para reposicionar`}
@@ -401,7 +404,7 @@ export function Tela(p: Props) {
                     r={r}
                     fill={ligada ? "#fff" : "#d13438"}
                     stroke={ligada ? AZUL : "#fff"}
-                    strokeWidth={1.5 / zoom}
+                    strokeWidth={1.5 / zk}
                     style={{ cursor: "move" }}
                     aria-label={`${ligada ? "Ponta ligada" : "Ponta solta"} (${ponta === "de" ? "início" : "fim"}) do conector ${c.id}`}
                     onPointerDown={(e) => p.ferramenta === "selecionar" && (p.onSelecionar({ ids: [], conector: c.id }), aoPressionarPonta(e, c.id, ponta))}
@@ -433,7 +436,7 @@ export function Tela(p: Props) {
           );
         })}
 
-        {laco && <rect x={laco.x} y={laco.y} width={laco.w} height={laco.h} fill={AZUL} fillOpacity={0.08} stroke={AZUL} strokeWidth={1 / zoom} strokeDasharray={`${4 / zoom} ${3 / zoom}`} pointerEvents="none" />}
+        {laco && <rect x={laco.x} y={laco.y} width={laco.w} height={laco.h} fill={AZUL} fillOpacity={0.08} stroke={AZUL} strokeWidth={1 / zk} strokeDasharray={`${4 / zk} ${3 / zk}`} pointerEvents="none" />}
 
         {unico && temCaixa(unico) && p.ferramenta === "selecionar" &&
           ALCAS.map((a) => {
@@ -447,7 +450,7 @@ export function Tela(p: Props) {
                 height={lh}
                 fill="#fff"
                 stroke={AZUL}
-                strokeWidth={1.5 / zoom}
+                strokeWidth={1.5 / zk}
                 style={{ cursor: `${a}-resize` }}
                 onPointerDown={(ev) => aoPressionarAlca(ev, unico.id, a)}
               />
@@ -471,11 +474,11 @@ export function Tela(p: Props) {
           }}
           style={{
             position: "absolute",
-            left: caixaEdicao.x * zoom,
-            top: caixaEdicao.y * zoom,
-            width: Math.max(caixaEdicao.w, 120) * zoom,
-            minHeight: Math.max(caixaEdicao.h, 28) * zoom,
-            font: `${13 * zoom}px Arial, sans-serif`,
+            left: caixaEdicao.x * zk,
+            top: caixaEdicao.y * zk,
+            width: Math.max(caixaEdicao.w, 120) * zk,
+            minHeight: Math.max(caixaEdicao.h, 28) * zk,
+            font: `${13 * zk}px Arial, sans-serif`,
             textAlign: "center",
             border: `2px solid ${AZUL}`,
             borderRadius: 4,

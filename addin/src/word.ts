@@ -125,14 +125,30 @@ async function lerFontePorId(ctx: Word.RequestContext, id: string, cc: Word.Cont
   return null;
 }
 
-/** Figura sob a seleção. */
+/**
+ * Figura sob a seleção. Clicar na imagem seleciona o próprio content control (ou só a figura dentro dele),
+ * então procura primeiro o controle que contém a seleção, depois os controles dentro dela e, por fim,
+ * o texto alternativo da imagem selecionada.
+ */
 export async function lerSelecao(): Promise<FiguraLida | null> {
   return Word.run(async (ctx) => {
-    const cc = ctx.document.getSelection().parentContentControlOrNullObject;
-    cc.load("tag,isNullObject");
+    const sel = ctx.document.getSelection();
+    const pai = sel.parentContentControlOrNullObject;
+    const dentro = sel.contentControls;
+    const figuras = sel.inlinePictures;
+    pai.load("tag,isNullObject");
+    dentro.load("items/tag");
+    figuras.load("items/altTextDescription");
     await ctx.sync();
-    if (cc.isNullObject || !cc.tag.startsWith(TAG_PREFIXO)) return null;
-    return lerFontePorId(ctx, cc.tag.slice(TAG_PREFIXO.length), cc);
+
+    if (!pai.isNullObject && pai.tag.startsWith(TAG_PREFIXO)) return lerFontePorId(ctx, pai.tag.slice(TAG_PREFIXO.length), pai);
+    const achado = dentro.items.find((c) => c.tag.startsWith(TAG_PREFIXO));
+    if (achado) return lerFontePorId(ctx, achado.tag.slice(TAG_PREFIXO.length), achado);
+    for (const f of figuras.items) {
+      const doAlt = extrairDoAlt(f.altTextDescription);
+      if (doAlt) return { fonte: await desempacotar(doAlt), origem: "alt" };
+    }
+    return null;
   });
 }
 

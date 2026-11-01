@@ -240,6 +240,8 @@ export const Diagrama = z
       largura: z.number().positive(),
       altura: z.number().positive(),
       fonteBase: z.number().positive().optional(),
+      /** Fator em que todo o desenho (formas, textos, linhas) é ampliado dentro da tela; ausente = 1. */
+      escala: z.number().positive().optional(),
     }),
     /** Estilos nomeados usados nesta figura (cópia da biblioteca no momento do uso). */
     estilos: z.record(z.string(), EstiloNomeado).optional(),

@@ -6,6 +6,7 @@ import { Galeria } from "./painel/Galeria";
 import { Figuras } from "./painel/Figuras";
 import { Ferramentas } from "./painel/Ferramentas";
 import { Verificar } from "./painel/Verificar";
+import { FiguraSelecionada } from "./painel/FiguraSelecionada";
 
 const useStyles = makeStyles({
   raiz: {
@@ -74,17 +75,20 @@ export function App() {
     <div className={s.raiz}>
       <Text size={500} weight="semibold">Fluxos</Text>
 
-      {lida && (
-        <>
-          <Text weight="semibold">{lida.fonte.titulo}</Text>
-          <Text size={200}>
-            Figura {lida.fonte.id} · revisão {lida.fonte.revisao} · fonte do {lida.origem === "xml" ? "Custom XML" : "texto alternativo"}
-          </Text>
-          <Button appearance="primary" disabled={ocupado} onClick={() => editar(lida)}>
-            Editar fluxo
-          </Button>
-        </>
-      )}
+      <FiguraSelecionada
+        fonte={lida?.fonte ?? null}
+        origem={lida?.origem}
+        desabilitado={ocupado}
+        onEditar={() => lida && editar(lida)}
+        onTamanho={(nova) =>
+          lida &&
+          executar(async () => {
+            const gravada = await atualizarFigura(nova, lida.fonte.revisao);
+            setLida({ fonte: gravada, origem: "xml" });
+            return `Tamanho da tela alterado para ${Math.round(gravada.tela.largura)} × ${Math.round(gravada.tela.altura)} (revisão ${gravada.revisao}).`;
+          })
+        }
+      />
 
       <TabList selectedValue={aba} onTabSelect={(_, d) => setAba(d.value as Aba)} size="small">
         <Tab value="galeria">Novo</Tab>

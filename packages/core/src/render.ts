@@ -371,17 +371,24 @@ export function camadas(d: Diagrama): (Diagrama["elementos"][number] | Diagrama[
   ];
 }
 
+/** Tamanho da área de desenho nas coordenadas dos elementos: a tela dividida pela escala. */
+export function areaDoDesenho(d: Diagrama): { w: number; h: number; k: number } {
+  const k = d.tela.escala ?? 1;
+  return { w: d.tela.largura / k, h: d.tela.altura / k, k };
+}
+
 /** JSON do diagrama -> SVG autônomo. Os elementos saem na ordem do array (grupos antes dos filhos). */
 export function renderSvg(d: Diagrama, tema?: Tema): string {
   const t = tema ?? temas[d.tema ?? ""] ?? tecnico;
   const { largura, altura } = d.tela;
+  const { w: vw, h: vh } = areaDoDesenho(d);
   const base = d.tela.fonteBase ?? t.tamRotulo;
   return (
-    `<svg xmlns="http://www.w3.org/2000/svg" font-family="${t.fonte}" viewBox="0 0 ${largura} ${altura}" width="${largura}" height="${altura}" font-size="${base}">` +
+    `<svg xmlns="http://www.w3.org/2000/svg" font-family="${t.fonte}" viewBox="0 0 ${num(vw)} ${num(vh)}" width="${largura}" height="${altura}" font-size="${base}">` +
     `<defs>${[undefined, ...new Set(d.conectores.map((c) => c.cor).filter(Boolean))]
       .map((cor) => `<marker id="${idSeta(cor)}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${cor ?? t.linha}"/></marker>`)
       .join("")}</defs>` +
-    `<rect width="${largura}" height="${altura}" fill="${t.fundo}" data-fundo="1"/>` +
+    `<rect width="${num(vw)}" height="${num(vh)}" fill="${t.fundo}" data-fundo="1"/>` +
     textoSvg(24, 34, d.titulo, t.tamTitulo, t.texto, true, "inicio") +
     camadas(d)
       .map((i) => ("forma" in i ? renderElemento(i, d, t) : renderConector(d, i, t)))

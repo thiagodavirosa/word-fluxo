@@ -293,7 +293,23 @@ export function conteudo(d: Diagrama): Caixa {
 /** Ajusta a tela ao conteúdo, com margem de 24 px e título. */
 export function ajustarTela(d: Diagrama): Diagrama {
   const c = conteudo(d);
-  return { ...d, tela: { ...d.tela, largura: Math.max(200, Math.ceil(c.x + c.w + 24)), altura: Math.max(100, Math.ceil(c.y + c.h + 24)) } };
+  const k = d.tela.escala ?? 1;
+  return { ...d, tela: { ...d.tela, largura: Math.max(200, Math.ceil((c.x + c.w + 24) * k)), altura: Math.max(100, Math.ceil((c.y + c.h + 24) * k)) } };
+}
+
+export type ModoTamanho = "escalar" | "manter";
+
+/**
+ * Muda o tamanho da tela. "escalar" amplia ou reduz todo o desenho (formas, textos, linhas) junto,
+ * pelo menor dos fatores de largura e altura, para a proporção das formas não deformar; "manter" só muda a tela.
+ */
+export function redimensionarTela(d: Diagrama, largura: number, altura: number, modo: ModoTamanho): Diagrama {
+  const L = Math.max(1, Math.round(largura));
+  const A = Math.max(1, Math.round(altura));
+  if (modo === "manter") return { ...d, tela: { ...d.tela, largura: L, altura: A } };
+  const fator = Math.min(L / d.tela.largura, A / d.tela.altura);
+  const escala = +((d.tela.escala ?? 1) * fator).toFixed(4);
+  return { ...d, tela: { ...d.tela, largura: L, altura: A, escala: Math.abs(escala - 1) < 0.0001 ? undefined : escala } };
 }
 
 const NOS = new Set<Forma>(["caixa", "decisao", "marcador", "nota"]);
